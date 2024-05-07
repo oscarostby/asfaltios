@@ -169,7 +169,7 @@ const Header = () => {
   };
 
   const handlePluginClick = () => {
-    // Handle plugin button click
+    navigate('/PluginsList');
   };
 
   const handleServerClick = () => {

@@ -37,7 +37,7 @@ const CardContainer = styled.div`
 
 const Card = styled.div`
   width: 300px;
-  height: 400px;
+  height: 450px;
   margin: 20px;
   position: relative;
   overflow: hidden;
@@ -45,49 +45,35 @@ const Card = styled.div`
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: transform 0.3s ease;
+  background-color: white;
+  color: #070F2B;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 
   &:hover {
-    transform: translateY(-10px);
+    transform: scale(1.05);
   }
 
   img {
     width: 100%;
-    height: 100%;
+    height: 200px;
     object-fit: cover;
-    filter: brightness(0.7);
-    transition: filter 0.3s ease;
-  }
-
-  &:hover img {
-    filter: brightness(1);
   }
 
   div {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    padding: 20px;
     text-align: center;
-    color: white;
-    width: 80%;
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-
-  &:hover div {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1);
   }
 
   h3 {
     font-size: 24px;
     margin-bottom: 10px;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
 
   p {
     font-size: 16px;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
 `;
 
