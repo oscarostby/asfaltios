@@ -1,6 +1,9 @@
 import React from 'react';
 import HeaderComponent from '../components/header';
 import styled from 'styled-components';
+import card1 from '../bilder/card1.png';
+import card2 from '../bilder/card2.png';
+import card3 from '../bilder/card3.png';
 
 const PageWrapper = styled.div`
   background-color: #070F2B;
@@ -20,6 +23,7 @@ const HeaderTitle = styled.h1`
   color: white;
   font-size: 36px;
   margin-bottom: 10px;
+  margin-top: 150px;
 `;
 
 const Subtitle = styled.h2`
@@ -58,8 +62,8 @@ const Card = styled.div`
 
   img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: 150px;
+    object-fit: contain;
   }
 
   div {
@@ -86,21 +90,21 @@ const App = () => {
         <Subtitle>Asfaltios Firewall Plugins</Subtitle>
         <CardContainer>
           <Card>
-            <img src="card1.jpg" alt="Card 1" />
+            <img src={card1} alt="Card 1" />
             <div>
               <h3>Card 1</h3>
               <p>This is the information for Card 1.</p>
             </div>
           </Card>
           <Card>
-            <img src="card2.jpg" alt="Card 2" />
+            <img src={card2} alt="Card 2" />
             <div>
               <h3>Card 2</h3>
               <p>This is the information for Card 2.</p>
             </div>
           </Card>
           <Card>
-            <img src="card3.jpg" alt="Card 3" />
+            <img src={card3} alt="Card 3" />
             <div>
               <h3>Card 3</h3>
               <p>This is the information for Card 3.</p>

@@ -161,11 +161,11 @@ const Header = () => {
   };
 
   const handleLoginClick = () => {
-    // Handle login button click
+    navigate('/Login');
   };
 
   const handleRegisterClick = () => {
-    // Handle register button click
+    navigate('/Register');
   };
 
   const handlePluginClick = () => {
