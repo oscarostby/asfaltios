@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaCaretDown } from 'react-icons/fa';
 import TeslaFont from '../bilder/TESLA.ttf';
+import axios from 'axios';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -46,7 +47,6 @@ const SquareBrackets = styled.div`
   line-height: 1;
   height: 100%; /* Set height to 100% to align vertically */
 `;
-
 
 const SearchBarContainer = styled.div`
   position: relative;
@@ -99,6 +99,58 @@ const Button = styled.button`
   }
 `;
 
+const UserButton = styled.button`
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 2px;
+  border: 2px solid white;
+  transition: border 0.3s;
+
+  &:hover {
+    color: #333;
+    border: 2px solid black;
+  }
+`;
+
+const UserDropdown = styled.div`
+  position: absolute;
+  top: calc(10);
+  left: 80%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 150px; /* Adjust width if needed */
+  z-index: 1; /* Ensure the dropdown is above other elements */
+`;
+
+
+
+
+
+
+const UserDropdownItem = styled.div`
+  cursor: pointer;
+  padding: 5px;
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
+
+
+const CaretIcon = styled(FaCaretDown)`
+  margin-left: 5px;
+`;
+
 const deleteTextAnimation = keyframes`
   0% {
     content: "Asfaltios";
@@ -136,6 +188,9 @@ const Header = () => {
   const [smallHeader, setSmallHeader] = useState(false);
   const [textVisible, setTextVisible] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [loggedInUsername, setLoggedInUsername] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -146,11 +201,44 @@ const Header = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
+    fetchUserData();
+
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const fetchUserData = async () => {
+    const userId = getCookie('userId');
+    if (userId) {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
+        setLoggedInUsername(response.data.username);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    }
+  };
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${name}=`)) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return null;
+  };
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -159,52 +247,79 @@ const Header = () => {
   const handleSearchClick = () => {
     navigate(`/${searchTerm}`);
   };
-
   const handleLoginClick = () => {
-    navigate('/Login');
+  navigate('/Login');
   };
-
   const handleRegisterClick = () => {
-    navigate('/Register');
+  navigate('/Register');
   };
-
   const handlePluginClick = () => {
-    navigate('/PluginsList');
+  navigate('/PluginsList');
   };
-
   const handleServerClick = () => {
-    // Handle server button click
+  // Handle server button click
   };
-
   const handleDiscordClick = () => {
-    // Handle discord button click
+  // Handle discord button click
   };
-
+  const handleUserButtonClick = () => {
+  setShowDropdown(!showDropdown);
+  };
+  const handleSettingsClick = () => {
+  // Handle settings button click
+  console.log('Settings clicked');
+  };
+  const handleLogoutClick = () => {
+  // Handle logout button click
+  console.log('Logout clicked');
+  // Clear the userId cookie
+  document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  setLoggedInUsername(null);
+  };
   return (
-    <>
-      <GlobalStyle />
-      <HeaderContainer small={smallHeader}>
-        <SquareBrackets small={smallHeader}>
-          「<HeaderText visible={textVisible}> Asfaltios </HeaderText>」
-          <ButtonContainer>
-            <Button onClick={handlePluginClick}>Plugins</Button>
-            <Button onClick={handleServerClick}>server.js</Button>
-            <Button onClick={handleDiscordClick}>Discord</Button>
-          </ButtonContainer>
-        </SquareBrackets>
-        <ButtonContainer>
-          <Button onClick={handleLoginClick}>Login</Button>
-          <Button onClick={handleRegisterClick}>Register</Button>
-          <SearchBarContainer>
-            <SearchBar type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
-            <SearchButton onClick={handleSearchClick}>
-              <FaSearch />
-            </SearchButton>
-          </SearchBarContainer>
-        </ButtonContainer>
-      </HeaderContainer>
-    </>
+  <>
+  <GlobalStyle />
+  <HeaderContainer small={smallHeader}>
+  <SquareBrackets small={smallHeader}>
+  「<HeaderText visible={textVisible}> Asfaltios </HeaderText>」
+  <ButtonContainer>
+  <Button onClick={handlePluginClick}>Plugins</Button>
+  <Button onClick={handleServerClick}>server.js</Button>
+  <Button onClick={handleDiscordClick}>Discord</Button>
+  </ButtonContainer>
+  </SquareBrackets>
+  <ButtonContainer>
+  {loggedInUsername ? (
+  <div ref={dropdownRef}>
+  <UserButton onClick={handleUserButtonClick}>
+  {loggedInUsername} <CaretIcon />
+  </UserButton>
+  {showDropdown && (
+  <UserDropdown>
+  <UserDropdownItem onClick={handleSettingsClick}>
+  Settings Profile
+  </UserDropdownItem>
+  <UserDropdownItem onClick={handleLogoutClick}>
+  Logout
+  </UserDropdownItem>
+  </UserDropdown>
+  )}
+  </div>
+  ) : (
+  <>
+  <Button onClick={handleLoginClick}>Login</Button>
+  <Button onClick={handleRegisterClick}>Register</Button>
+  </>
+  )}
+  <SearchBarContainer>
+  <SearchBar type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
+  <SearchButton onClick={handleSearchClick}>
+  <FaSearch />
+  </SearchButton>
+  </SearchBarContainer>
+  </ButtonContainer>
+  </HeaderContainer>
+  </>
   );
-};
-
-export default Header;
+  };
+  export default Header;

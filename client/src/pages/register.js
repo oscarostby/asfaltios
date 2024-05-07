@@ -46,18 +46,18 @@ const Feedback = styled.div`
   font-size: 0.9rem;
 `;
 
-const Login = () => {
-  const [loginData, setLoginData] = useState({ username: '', password: '' });
+const Register = () => {
+  const [registerData, setRegisterData] = useState({ username: '', password: '', confirmPassword: '' });
   const [feedback, setFeedback] = useState('');
 
-  const handleLoginSubmit = async (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/login', loginData);
+      const response = await axios.post('http://localhost:5000/register', registerData);
       if (response && response.data && response.data.userId) {
-        // Store the user ID in a cookie upon successful login
+        // Store the user ID in a cookie upon successful registration
         document.cookie = `userId=${response.data.userId}`;
-        setFeedback('Login successful');
+        setFeedback('Registration successful');
         // Redirect to '/'
         window.location.href = '/';
       } else {
@@ -72,34 +72,40 @@ const Login = () => {
     }
   };
 
-  const handleLoginInputChange = (e) => {
+  const handleRegisterInputChange = (e) => {
     const { name, value } = e.target;
-    setLoginData({ ...loginData, [name]: value });
+    setRegisterData({ ...registerData, [name]: value });
   };
 
   return (
     <Container>
-      <Form onSubmit={handleLoginSubmit}>
+      <Form onSubmit={handleRegisterSubmit}>
         <Input
           type="text"
           name="username"
           placeholder="Username"
-          value={loginData.username}
-          onChange={handleLoginInputChange}
+          value={registerData.username}
+          onChange={handleRegisterInputChange}
         />
         <Input
           type="password"
           name="password"
           placeholder="Password"
-          value={loginData.password}
-          onChange={handleLoginInputChange}
+          value={registerData.password}
+          onChange={handleRegisterInputChange}
         />
-        <Button type="submit">Login</Button>
+        <Input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={registerData.confirmPassword}
+          onChange={handleRegisterInputChange}
+        />
+        <Button type="submit">Register</Button>
         {feedback && <Feedback>{feedback}</Feedback>}
       </Form>
     </Container>
   );
 };
 
-export default Login;
-
+export default Register;

@@ -4,9 +4,12 @@ import styled from 'styled-components';
 import card1 from '../bilder/card1.png';
 import card2 from '../bilder/card2.png';
 import card3 from '../bilder/card3.png';
+import logo from '../bilder/logo2.png';
+import Footer from '../components/footer';
+
 
 const PageWrapper = styled.div`
-  background-color: #070F2B;
+  background-color: #070b2e;
   min-height: 100vh;
   padding-top: 140px;
 `;
@@ -23,7 +26,7 @@ const HeaderTitle = styled.h1`
   color: white;
   font-size: 36px;
   margin-bottom: 10px;
-  margin-top: 150px;
+  margin-top: 110px;
 `;
 
 const Subtitle = styled.h2`
@@ -32,14 +35,15 @@ const Subtitle = styled.h2`
   margin-bottom: 40px;
 `;
 
-const CardContainer = styled.div`
+const ProductContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  margin-bottom: 40px;
 `;
 
-const Card = styled.div`
+const ProductCard = styled.div`
   width: 300px;
   height: 450px;
   margin: 20px;
@@ -62,8 +66,10 @@ const Card = styled.div`
 
   img {
     width: 100%;
-    height: 150px;
-    object-fit: contain;
+    height: 200px;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
   }
 
   div {
@@ -81,38 +87,114 @@ const Card = styled.div`
   }
 `;
 
+const ContactButton = styled.button`
+  background-color: #070b2e;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const AboutUsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px 40px;
+  background-color: #0b1240;
+`;
+
+const AboutUsText = styled.div`
+  flex: 1;
+  padding: 0 80px;
+  color: white;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+`;
+
+const AboutUsImage = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AboutUsLogo = styled.img`
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+`;
+
+const AboutUsTitle = styled.h2`
+  font-size: 32px;
+  margin-bottom: 20px;
+`;
+
+const AboutUsDescription = styled.p`
+  font-size: 18px;
+  margin-bottom: 30px;
+`;
+
 const App = () => {
   return (
     <PageWrapper>
       <HeaderComponent />
       <Container>
-        <HeaderTitle>AFP</HeaderTitle>
-        <Subtitle>Asfaltios Firewall Plugins</Subtitle>
-        <CardContainer>
-          <Card>
+        <HeaderTitle>Our most</HeaderTitle>
+        <Subtitle>Downloaded Plugins</Subtitle>
+        <ProductContainer>
+          <ProductCard>
             <img src={card1} alt="Card 1" />
             <div>
-              <h3>Card 1</h3>
-              <p>This is the information for Card 1.</p>
+              <h3>Plugin 1</h3>
+              <p>This is the information for Plugin 1. It provides advanced firewall protection and customizable settings to keep your network secure.</p>
             </div>
-          </Card>
-          <Card>
+          </ProductCard>
+          <ProductCard>
             <img src={card2} alt="Card 2" />
             <div>
-              <h3>Card 2</h3>
-              <p>This is the information for Card 2.</p>
+              <h3>Plugin 2</h3>
+              <p>This is the information for Plugin 2. It offers real-time threat detection and automatic updates to ensure your system is always protected.</p>
             </div>
-          </Card>
-          <Card>
+          </ProductCard>
+          <ProductCard>
             <img src={card3} alt="Card 3" />
             <div>
-              <h3>Card 3</h3>
-              <p>This is the information for Card 3.</p>
+              <h3>Plugin 3</h3>
+              <p>This is the information for Plugin 3. It provides comprehensive logging and reporting features to help you monitor your network's security.</p>
             </div>
-          </Card>
-        </CardContainer>
+          </ProductCard>
+        </ProductContainer>
+        <ContactButton onClick={() => window.location.href = '/contact'}>Contact us here!</ContactButton>
       </Container>
+      <AboutUsContainer>
+        <AboutUsImage>
+          <AboutUsLogo src={logo} alt="AFP Logo" />
+        </AboutUsImage>
+        <AboutUsText>
+          <AboutUsTitle>About Us</AboutUsTitle>
+          <AboutUsDescription>
+            We are a team of passionate developers who are dedicated to creating innovative and reliable firewall plugins. Our mission is to provide our customers with the best possible solutions to protect their networks and data.
+          </AboutUsDescription>
+          <p>
+            With years of experience in the cybersecurity industry, we have developed a deep understanding of the challenges faced by businesses and individuals in today's digital landscape. Our team of experts is committed to staying ahead of the curve, constantly researching and implementing the latest security technologies to ensure our customers' peace of mind.
+          </p>
+        </AboutUsText>
+      </AboutUsContainer>
+      <div style={{ height: '100px' }}></div> {/* Add more spacing */}
+      <Footer />
     </PageWrapper>
+    
   );
 };
 
