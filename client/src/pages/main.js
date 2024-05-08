@@ -7,7 +7,6 @@ import card3 from '../bilder/card3.png';
 import logo from '../bilder/logo2.png';
 import Footer from '../components/footer';
 
-
 const PageWrapper = styled.div`
   background-color: #070b2e;
   min-height: 100vh;
@@ -19,20 +18,35 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   height: calc(100vh - 140px);
-  padding: 20px;
+  padding: 40px;
+
+  @media (max-width: 768px) {
+    height: auto;
+    padding: 20px;
+  }
 `;
 
 const HeaderTitle = styled.h1`
   color: white;
-  font-size: 36px;
-  margin-bottom: 10px;
-  margin-top: 110px;
+  font-size: 48px;
+  margin-bottom: 20px;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 36px;
+  }
 `;
 
 const Subtitle = styled.h2`
   color: white;
-  font-size: 24px;
-  margin-bottom: 40px;
+  font-size: 32px;
+  margin-bottom: 60px;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin-bottom: 40px;
+  }
 `;
 
 const ProductContainer = styled.div`
@@ -40,12 +54,16 @@ const ProductContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 40px;
+  margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 40px;
+  }
 `;
 
 const ProductCard = styled.div`
   width: 300px;
-  height: 450px;
+  height: 500px;
   margin: 20px;
   position: relative;
   overflow: hidden;
@@ -75,6 +93,10 @@ const ProductCard = styled.div`
   div {
     padding: 20px;
     text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   h3 {
@@ -84,6 +106,19 @@ const ProductCard = styled.div`
 
   p {
     font-size: 16px;
+    margin-bottom: 20px;
+  }
+
+  .plugin-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #666;
+  }
+
+  .plugin-info i {
+    margin-right: 5px;
   }
 `;
 
@@ -102,14 +137,24 @@ const ContactButton = styled.button`
   &:hover {
     transform: scale(1.1);
   }
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    padding: 12px 24px;
+  }
 `;
 
 const AboutUsContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 80px 40px;
+  padding: 100px 40px;
   background-color: #0b1240;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 60px 20px;
+  }
 `;
 
 const AboutUsText = styled.div`
@@ -119,6 +164,11 @@ const AboutUsText = styled.div`
   font-size: 18px;
   line-height: 1.5;
   text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    margin-top: 40px;
+  }
 `;
 
 const AboutUsImage = styled.div`
@@ -136,8 +186,12 @@ const AboutUsLogo = styled.img`
 `;
 
 const AboutUsTitle = styled.h2`
-  font-size: 32px;
+  font-size: 36px;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 28px;
+  }
 `;
 
 const AboutUsDescription = styled.p`
@@ -150,14 +204,18 @@ const App = () => {
     <PageWrapper>
       <HeaderComponent />
       <Container>
-        <HeaderTitle>Our most</HeaderTitle>
-        <Subtitle>Downloaded Plugins</Subtitle>
+        <HeaderTitle>Our most Downloaded Plugins</HeaderTitle>
+        <Subtitle>Check out our top products</Subtitle>
         <ProductContainer>
           <ProductCard>
             <img src={card1} alt="Card 1" />
             <div>
               <h3>Plugin 1</h3>
               <p>This is the information for Plugin 1. It provides advanced firewall protection and customizable settings to keep your network secure.</p>
+              <div className="plugin-info">
+                <span><i className="fas fa-download"></i> 10,000+</span>
+                <span><i className="fas fa-star"></i> 4.8</span>
+              </div>
             </div>
           </ProductCard>
           <ProductCard>
@@ -165,6 +223,10 @@ const App = () => {
             <div>
               <h3>Plugin 2</h3>
               <p>This is the information for Plugin 2. It offers real-time threat detection and automatic updates to ensure your system is always protected.</p>
+              <div className="plugin-info">
+                <span><i className="fas fa-download"></i> 8,500+</span>
+                <span><i className="fas fa-star"></i> 4.6</span>
+              </div>
             </div>
           </ProductCard>
           <ProductCard>
@@ -172,6 +234,10 @@ const App = () => {
             <div>
               <h3>Plugin 3</h3>
               <p>This is the information for Plugin 3. It provides comprehensive logging and reporting features to help you monitor your network's security.</p>
+              <div className="plugin-info">
+                <span><i className="fas fa-download"></i> 12,000+</span>
+                <span><i className="fas fa-star"></i> 4.9</span>
+              </div>
             </div>
           </ProductCard>
         </ProductContainer>
@@ -191,10 +257,8 @@ const App = () => {
           </p>
         </AboutUsText>
       </AboutUsContainer>
-      <div style={{ height: '100px' }}></div> {/* Add more spacing */}
       <Footer />
     </PageWrapper>
-    
   );
 };
 
