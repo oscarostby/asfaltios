@@ -63,6 +63,7 @@ const SearchBar = styled.input`
   border-radius: 2px;
   transition: width 0.3s, padding 0.3s, font-size 0.3s, border 0.3s;
   position: relative; /* Change the position to relative */
+  
 `;
 
 const SearchButton = styled.button`
@@ -182,6 +183,7 @@ const HeaderText = styled.div`
   margin: 0 5px; /* Adjusted margin */
   animation: ${props => (props.visible ? appearTextAnimation : deleteTextAnimation)} 0.5s forwards;
   line-height: 1; /* Ensure text is vertically centered */
+  cursor: pointer;
 `;
 
 const Header = () => {
@@ -240,12 +242,22 @@ const Header = () => {
     return null;
   };
 
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleSearchClick();
+    }
+  };
+  
+
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
+  const handleLogoClick = () => {
+    navigate('/');
+  };
   const handleSearchClick = () => {
-    navigate(`/${searchTerm}`);
+    navigate(`/plugins/${searchTerm}`);
   };
   const handleLoginClick = () => {
   navigate('/Login');
@@ -254,7 +266,7 @@ const Header = () => {
   navigate('/Register');
   };
   const handlePluginClick = () => {
-  navigate('/PluginsList');
+  navigate('/Plugins');
   };
   const handleServerClick = () => {
   // Handle server button click
@@ -275,13 +287,16 @@ const Header = () => {
   // Clear the userId cookie
   document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   setLoggedInUsername(null);
+
+
+  
   };
   return (
   <>
   <GlobalStyle />
   <HeaderContainer small={smallHeader}>
   <SquareBrackets small={smallHeader}>
-  「<HeaderText visible={textVisible}> Asfaltios </HeaderText>」
+  「<HeaderText visible={textVisible } onClick={handleLogoClick}> Asfaltios </HeaderText>」
   <ButtonContainer>
   <Button onClick={handlePluginClick}>Plugins</Button>
   <Button onClick={handleServerClick}>server.js</Button>
@@ -312,8 +327,14 @@ const Header = () => {
   </>
   )}
   <SearchBarContainer>
-  <SearchBar type="text" placeholder="Search..." value={searchTerm} onChange={handleSearchChange} />
-  <SearchButton onClick={handleSearchClick}>
+  <SearchBar
+  type="text"
+  placeholder="Search..."
+  value={searchTerm}
+  onChange={handleSearchChange}
+  onKeyDown={handleSearchKeyDown}
+/>
+  <SearchButton onClick={handleSearchClick}  >
   <FaSearch />
   </SearchButton>
   </SearchBarContainer>
