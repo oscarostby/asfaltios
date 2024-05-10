@@ -1,14 +1,15 @@
-// Main.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HeaderComponent from '../components/header';
+import MobileHeader from '../components/mobileheader'; // Import MobileHeader
 import styled from 'styled-components';
 import ProductPage from '../components/Product';
 import AboutUsPage from '../components/AboutUs';
 import Footer from '../components/footer';
-import logo from '../bilder/logo.png'; // Import your logo image
+import logo from '../bilder/logo2.png'; // Import your logo image
+import Bg from '../bilder/bg2.jpg'; // Import your logo image
 
 const PageWrapper = styled.div`
-  background-color: #0b1240;
+  background-color: white;
   min-height: 100vh;
   padding-top: 140px;
   position: relative; // Add position relative to create a positioning context
@@ -18,13 +19,16 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: calc(100vh - 140px);
-  padding: 40px;
-  background-color: #e0ebf6;
+  height: calc(100vh - 10px);
+  padding: 20px; /* Reduced padding for mobile */
+  background-color: #333333;
+  background-image: url(${Bg});
+  background-size: cover; /* Adjusts the background image size */
+  background-position: center; /* Centers the background image */
 
-  @media (max-width: 768px) {
-    height: auto;
-    padding: 20px;
+  @media (min-width: 769px) {
+    /* Desktop styles */
+    padding: 40px; /* Original padding for desktop */
   }
 `;
 
@@ -34,10 +38,11 @@ const HeaderTitle = styled.h1`
   margin-bottom: 20px;
   text-align: center;
   position: relative; // Add position relative to create a positioning context for the logo
-  margin-top: 150px; // Increase the margin-top to move the text further from the header
+  margin-top: 250px; // Increase the margin-top to move the text further from the header
 
   @media (max-width: 768px) {
     font-size: 36px;
+    margin-top: 150px; /* Adjusted margin-top for mobile */
   }
 `;
 
@@ -48,17 +53,23 @@ const Logo = styled.img`
   transform: translateX(-50%); // Adjust the horizontal position
   max-width: 150px; // Increase the maximum width for the logo
   max-height: 150px; // Increase the maximum height for the logo
+
+  @media (max-width: 768px) {
+    top: -100px; /* Adjusted top position for mobile */
+    max-width: 100px; /* Reduced max-width for mobile */
+    max-height: 100px; /* Reduced max-height for mobile */
+  }
 `;
 
 const Subtitle = styled.h2`
   color: white;
   font-size: 32px;
-  margin-bottom: 60px;
+  margin-bottom: 40px; /* Reduced margin-bottom for mobile */
   text-align: center;
 
   @media (max-width: 768px) {
     font-size: 24px;
-    margin-bottom: 40px;
+    margin-bottom: 20px; /* Further reduced margin-bottom for mobile */
   }
 `;
 
@@ -85,17 +96,31 @@ const ContactButton = styled.button`
 `;
 
 const Main = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <PageWrapper>
-      <HeaderComponent />
+      {isMobile ? <MobileHeader /> : <HeaderComponent />}
       <Container>
         <HeaderTitle>
-          Our most Downloaded Plugins
+          Your Minecraft security solutions
           <Logo src={logo} alt="Logo" />
         </HeaderTitle>
-        <Subtitle>Check out our top products</Subtitle>
+        <Subtitle>Our key features:</Subtitle>
         <ProductPage />
-        <ContactButton onClick={() => window.location.href = '/contact'}>Contact us here!</ContactButton>
       </Container>
       <AboutUsPage />
       <Footer />

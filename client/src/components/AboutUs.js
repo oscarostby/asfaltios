@@ -1,80 +1,88 @@
-// AboutUs.js
 import React from 'react';
 import styled from 'styled-components';
 import logo from '../bilder/logo2.png';
+import Bg from '../bilder/bglayer.jpg';
 
-const AboutUsContainer = styled.div`
+const Container = styled.div`
+  background-image: url(${Bg});
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 100px 40px;
-  background-color: #0b1240;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    padding: 60px 20px;
-  }
-`;
-
-const AboutUsText = styled.div`
-  flex: 1;
-  padding: 0 80px;
   color: white;
-  font-size: 18px;
-  line-height: 1.5;
   text-align: center;
+  padding: 2rem;
 
-  @media (max-width: 768px) {
-    padding: 0;
-    margin-top: 40px;
+  @media (min-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    text-align: left;
+    padding: 4rem;
   }
 `;
 
-const AboutUsImage = styled.div`
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+const LogoWrapper = styled.div`
+  margin-bottom: 2rem;
+
+  @media (min-width: 768px) {
+    margin-right: 4rem;
+    margin-bottom: 0;
+  }
 `;
 
-const AboutUsLogo = styled.img`
-  max-width: 100%;
+const LogoImage = styled.img`
+  width: 150px;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
 `;
 
-const AboutUsTitle = styled.h2`
-  font-size: 36px;
-  margin-bottom: 20px;
+const TextWrapper = styled.div`
+  max-width: 600px;
+`;
 
-  @media (max-width: 768px) {
-    font-size: 28px;
+const Title = styled.h1`
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+
+  @media (min-width: 768px) {
+    font-size: 3rem;
   }
 `;
 
-const AboutUsDescription = styled.p`
-  font-size: 18px;
-  margin-bottom: 30px;
+const Description = styled.p`
+  font-size: 1.1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+
+  @media (min-width: 768px) {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
 `;
 
-const AboutUsPage = () => {
+const AboutUs = () => {
   return (
-    <AboutUsContainer>
-      <AboutUsImage>
-        <AboutUsLogo src={logo} alt="AFP Logo" />
-      </AboutUsImage>
-      <AboutUsText>
-        <AboutUsTitle>About Us</AboutUsTitle>
-        <AboutUsDescription>
-          We are a team of passionate developers who are dedicated to creating innovative and reliable firewall plugins. Our mission is to provide our customers with the best possible solutions to protect their networks and data.
-        </AboutUsDescription>
-        <p>
-          With years of experience in the cybersecurity industry, we have developed a deep understanding of the challenges faced by businesses and individuals in today's digital landscape. Our team of experts is committed to staying ahead of the curve, constantly researching and implementing the latest security technologies to ensure our customers' peace of mind.
-        </p>
-      </AboutUsText>
-    </AboutUsContainer>
+    <Container>
+      <LogoWrapper>
+        <LogoImage src={logo} alt="Company Logo" />
+      </LogoWrapper>
+      <TextWrapper>
+        <Title>About Minecraft Secure Plugins</Title>
+        <Description>
+          At Minecraft Secure Plugins, we are dedicated to providing top-notch security solutions for Minecraft servers. Our team of expert developers has years of experience in crafting high-quality plugins that prioritize server protection and player safety.
+        </Description>
+        <Description>
+          Our flagship product, the SecureCore plugin, is designed to safeguard your server from malicious attacks, exploitation attempts, and unauthorized access. With advanced features like IP whitelisting, command blocking, and real-time monitoring, you can rest assured that your server and its players are in safe hands.
+        </Description>
+        <Description>
+          We believe in continuous innovation and strive to stay ahead of the curve when it comes to server security. Our plugins are regularly updated to address the latest threats and vulnerabilities, ensuring that your server remains secure and protected at all times.
+        </Description>
+      </TextWrapper>
+    </Container>
   );
 };
 
-export default AboutUsPage;
+export default AboutUs;
