@@ -1,8 +1,9 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+const multer = require('multer');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -12,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: 'http://localhost:3000', // Replace with your client-side URL
-  credentials: true // Allow sending cookies
+  credentials: true, // Allow sending cookies
 }));
 
 const connectionString = process.env.MONGODB_URI;
@@ -35,6 +36,17 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model('User', userSchema);
+
+const itemSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  mainText: { type: String, required: true },
+  fileUrl: { type: String }, // Adjusted fileUrl to match the previous schema
+  iconImageUrl: { type: String, required: true },
+});
+
+const Item = mongoose.model('Item', itemSchema);
+
+const upload = multer({ dest: 'uploads/' }); // Configure multer for file uploads
 
 app.post('/register', async (req, res) => {
   const { username, password, confirmPassword } = req.body;
@@ -91,6 +103,28 @@ app.get('/api/users/:userId', async (req, res) => {
     res.status(200).json({ username: user.username });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the user' });
+  }
+});
+
+app.post('/upload', async (req, res) => {
+  try {
+    const { title, mainText, fileUrl, iconImageUrl } = req.body; // Adjusted variable names to match the previous schema
+    const newItem = new Item({ title, mainText, fileUrl, iconImageUrl }); // Adjusted property names to match the previous schema
+    await newItem.save();
+    res.status(200).json({ message: 'Item uploaded successfully' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'An error occurred while processing your request' });
+  }
+});
+
+app.get('/list/:searchTerm', async (req, res) => {
+  const { searchTerm } = req.params;
+  try {
+    const items = await Item.find({ title: { $regex: searchTerm, $options: 'i' } });
+    res.status(200).json({ items });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the items' });
   }
 });
 
