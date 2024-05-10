@@ -1,164 +1,65 @@
 import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import HeaderComponent from '../components/header';
+import Plugin1 from '../components/plugin1';
+import Plugin2 from '../components/Plugin2';
+import Plugin3 from '../components/Plugin3';
+import Plugin4 from '../components/Plugin4';
+import Plugin5 from '../components/Plugin5';
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Open Sans', sans-serif;
-    background-color: #1e1e1e;
-    color: #ccc;
-  }
-`;
+import Text from '../components/text';  // Assuming Text.js is in the same directory
 
+// Styling for the main container that holds the entire page
 const MainContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: column; // Stack elements vertically
+  align-items: center; // Center align children in the cross axis
+  min-height: 100vh;
+  width: 100%; // Ensure full width
+`;
+
+// Styling for the header and plugin sections
+const ContentSection = styled.div`
+  display: flex;
+  width: 100%; // Take full width
+  justify-content: space-between; // Distribute children to start and end
+`;
+
+// Styling for the plugin section that contains the Plugin1
+const PluginSection = styled.div`
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  padding-top: 200px; // Increased padding
-`;
-
-const Section = styled.section`
-  width: 90%;
-  max-width: 1200px; // Maximum width for larger screens
-  padding: 30px;
-  background: #2c2c2c;
-  margin-bottom: 30px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 28px;
-  color: #fff;
-  margin-bottom: 30px;
-  text-align: center;
-`;
-
-const IconGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
-`;
-
-const WideGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-  gap: 20px;
-`;
-
-const Card = styled.div`
-  background-color: #333;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-  position: relative;
-  color: #eee;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
+  margin-left: 150px;
+  & > *:not(:last-child) {  // Adds margin-right to all children except the last one
+    margin-right: 190px; // Adjust this value as needed for spacing
   }
 `;
 
-const IconCard = styled(Card)`
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+
+// Styled component for adding margin around Plugin1
+const PluginWrapper = styled.div`
+  margin-right: 20px; // Adjust this value as needed for spacing
 `;
 
-const WideCard = styled(Card)`
-  display: flex;
-  flex-direction: column;
-`;
-
-const CardImage = styled.img`
-  width: 100%;
-  height: auto;
-  border-bottom: 1px solid #444;
-`;
-
-const CardInfo = styled.div`
-  padding: 15px;
-  text-align: center;
-`;
-
-const CardTitle = styled.h3`
-  font-size: 20px;
-`;
-
-const CardDescription = styled.p`
-  font-size: 16px;
-  color: #aaa;
-`;
-
-const PriceTag = styled.span`
-  background-color: #4caf50;
-  color: white;
-  padding: 8px 12px;
-  border-radius: 5px;
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 18px;
-  font-weight: bold;
-`;
-
-// Mock data for the cards
-const icons = [
-  { id: 1, name: 'DirectionalBlocks', price: 'FREE', imageUrl: 'https://path/to/image.png', description: 'The best way to make logs and lumber' },
-  { id: 2, name: 'Ultra Motd', price: '£9.98', imageUrl: 'https://path/to/image.png', description: 'The Ultimate Motd Plugin which adds Server and Welcome Motds' },
-  { id: 3, name: 'CustomFishing', price: '£11.98', imageUrl: 'https://path/to/image.png', description: 'Fishing mini-game, Fishing Bag, Sell shop, Lava fishing' },
-  { id: 4, name: 'ShieldSpigot 1.8X', price: '£20.00', imageUrl: 'https://path/to/image.png', description: 'Advanced Paper fork on Polymart market' },
-];
-
-const wides = [
-  { id: 5, name: 'HarvestEXP', price: '12.00 USD', imageUrl: 'https://path/to/image.png', description: 'Fully customizable experience drops when harvesting crops!' },
-  { id: 6, name: 'Better Survival | New Big Update', price: '27.99 EUR', imageUrl: 'https://path/to/image.png', description: 'Survival 1.20.4 | Detailed Spawn - Texture | Skills' },
-  { id: 7, name: 'Lobby SkyWars | BedWars etc..', price: '2.50 USD', imageUrl: 'https://path/to/image.png', description: 'Lobby MiniGames | SkyWars | BedWars | PartyGames' },
-  { id: 8, name: 'NullCordX', price: '13.99 USD', imageUrl: 'https://path/to/image.png', description: 'Sophisticated Waterfall fork natively built on antibot, improves performance' },
-];
-
-export default function App() {
+function App() {
   return (
-    <>
-      <GlobalStyle />
-      <HeaderComponent />
-      <MainContainer>
-        <Section>
-          <SectionTitle>Exclusively on Polymart</SectionTitle>
-          <IconGrid>
-            {icons.map((item) => (
-              <IconCard key={item.id}>
-                <CardImage src={item.imageUrl} alt={item.name} style={{ height: '150px' }} />
-                <CardInfo>
-                  <CardTitle>{item.name}</CardTitle>
-                  <CardDescription>{item.description}</CardDescription>
-                  <PriceTag>{item.price}</PriceTag>
-                </CardInfo>
-              </IconCard>
-            ))}
-          </IconGrid>
-        </Section>
-        <Section>
-          <SectionTitle>Recently Updated</SectionTitle>
-          <WideGrid>
-            {wides.map((item) => (
-              <WideCard key={item.id}>
-                <CardImage src={item.imageUrl} alt={item.name} style={{ height: '250px' }} />
-                <CardInfo>
-                  <CardTitle>{item.name}</CardTitle>
-                  <CardDescription>{item.description}</CardDescription>
-                  <PriceTag>{item.price}</PriceTag>
-                </CardInfo>
-              </WideCard>
-            ))}
-          </WideGrid>
-        </Section>
-      </MainContainer>
-    </>
+    <MainContainer>
+      <Text />  
+      <ContentSection>
+        <PluginSection>
+          <PluginWrapper><Plugin1 /></PluginWrapper>
+          <PluginWrapper><Plugin2 /></PluginWrapper>
+          <PluginWrapper><Plugin3 /></PluginWrapper>
+          <PluginWrapper><Plugin4 /></PluginWrapper>
+          <PluginWrapper><Plugin5 /></PluginWrapper>
+
+        </PluginSection>
+        <HeaderComponent />
+      </ContentSection>
+    </MainContainer>
   );
 }
+
+
+export default App;
