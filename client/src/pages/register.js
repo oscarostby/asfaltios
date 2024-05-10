@@ -115,7 +115,7 @@ const Register = () => {
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/register', registerData);
+      const response = await axios.post('http://198.244.148.54:5000/register', registerData);
       if (response && response.data && response.data.userId) {
         // Store the user ID in a cookie upon successful registration
         document.cookie = `userId=${response.data.userId}`;

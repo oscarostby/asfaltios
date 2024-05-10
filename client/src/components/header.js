@@ -5,6 +5,7 @@ import { FaSearch, FaCaretDown } from 'react-icons/fa';
 import TeslaFont from '../bilder/TESLA.ttf';
 import axios from 'axios';
 
+
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Tesla';
@@ -223,7 +224,7 @@ const Header = () => {
     const userId = getCookie('userId');
     if (userId) {
       try {
-        const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
+        const response = await axios.get(`http://198.244.148.54:5000/api/users/${userId}`);
         setLoggedInUsername(response.data.username);
       } catch (error) {
         console.error('Error fetching user data:', error);

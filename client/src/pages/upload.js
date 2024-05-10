@@ -119,7 +119,7 @@ function Upload() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/upload', {
+      await axios.post('http://198.244.148.54:5000/upload', {
         title,
         mainText,
         imageUrl,
