@@ -2,6 +2,11 @@ import React from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import HeaderComponent from '../components/header';
 import Plugin1 from '../components/plugin1';
+import Plugin2 from '../components/Plugin2';
+import Plugin3 from '../components/Plugin3';
+import Plugin4 from '../components/Plugin4';
+import Plugin5 from '../components/Plugin5';
+
 import Text from '../components/text';  // Assuming Text.js is in the same directory
 
 // Styling for the main container that holds the entire page
@@ -23,24 +28,38 @@ const ContentSection = styled.div`
 // Styling for the plugin section that contains the Plugin1
 const PluginSection = styled.div`
   display: flex;
-  flex-direction: column; // Keeps the Plugin1 stacked
-  align-items: flex-start; // Align Plugin1 to the start (left)
+  flex-direction: row;
+  align-items: center;
   margin-left: 150px;
+  & > *:not(:last-child) {  // Adds margin-right to all children except the last one
+    margin-right: 190px; // Adjust this value as needed for spacing
+  }
 `;
 
-// App component that includes the Header, Plugin1, and the new Text component as a heading
+
+// Styled component for adding margin around Plugin1
+const PluginWrapper = styled.div`
+  margin-right: 20px; // Adjust this value as needed for spacing
+`;
+
 function App() {
   return (
     <MainContainer>
       <Text />  
       <ContentSection>
         <PluginSection>
-          <Plugin1 />
+          <PluginWrapper><Plugin1 /></PluginWrapper>
+          <PluginWrapper><Plugin2 /></PluginWrapper>
+          <PluginWrapper><Plugin3 /></PluginWrapper>
+          <PluginWrapper><Plugin4 /></PluginWrapper>
+          <PluginWrapper><Plugin5 /></PluginWrapper>
+
         </PluginSection>
         <HeaderComponent />
       </ContentSection>
     </MainContainer>
   );
 }
+
 
 export default App;

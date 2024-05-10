@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import logoBilde from '../bilder/Firewall.png';
+import logoBilde from '../bilder/simplegold-logo.png';
 import Button from '../components/button';
 
 // Animations for quotation marks
@@ -70,17 +70,17 @@ const StyledForm = styled.form`
   }
 `;
 
-class Plugin1 extends React.Component {
+class Plugin3 extends React.Component {
   render() {
     return (
       <StyledForm>
         <img src={logoBilde} alt="Logo Image" />
-        <h1>FireWall</h1>
-        <p>Your protection</p>
+        <h1>SimpleGold</h1>
+        <p>Your Economy</p>
         <Button />  {/* Here the Button component is added */}
       </StyledForm>
     );
   }
 }
 
-export default Plugin1;
+export default Plugin3;
