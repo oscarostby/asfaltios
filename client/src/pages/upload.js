@@ -119,7 +119,7 @@ function Upload() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('https://198.244.148.54:5000/upload', {
+      await axios.post('https://api.asfaltios.com/upload', {
         title,
         mainText,
         imageUrl,
