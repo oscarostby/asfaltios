@@ -79,12 +79,19 @@ const MenuIcon = styled.div`
 
 const MenuContainer = styled.div`
   position: fixed;
-  top: ${props => (props.open ? '40px' : '-200px')};
+  top: 0;
   left: 0;
   width: 100%;
+  height: ${props => (props.open ? '100vh' : '0')};
   background-color: white;
   z-index: 999;
-  transition: top 0.3s;
+  overflow: hidden;
+  transition: height 0.3s;
+  top: 7%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const MenuItem = styled.div`
@@ -98,24 +105,25 @@ const MenuItem = styled.div`
 
 const ButtonContainer = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 `;
 
 const Button = styled.button`
   font-size: 16px;
   cursor: pointer;
-  background-color: transparent;
+  background-color: #f1f1f1;
   border: none;
-  margin-right: 20px;
-  transition: color 0.3s;
+  margin: 0 10px;
+  transition: background-color 0.3s;
   padding: 10px 20px;
-  border-radius: 2px;
-  border: 2px solid white;
-  transition: border 0.3s;
+  border-radius: 4px;
+  color: #333;
+  width: 120px;
+  font-weight: bold;
   
   &:hover {
-    color: #333;
-    border: 2px solid black;
+    background-color: #e1e1e1;
   }
 `;
 
@@ -184,8 +192,10 @@ const Header = () => {
       </HeaderContainer>
       <MenuContainer open={menuOpen}>
         <MenuItem onClick={handleSearchClick}>Search</MenuItem>
-        <MenuItem onClick={handleLoginClick}>Login</MenuItem>
-        <MenuItem onClick={handleRegisterClick}>Register</MenuItem>
+        <ButtonContainer>
+          <Button onClick={handleLoginClick}>Login</Button>
+          <Button onClick={handleRegisterClick}>Register</Button>
+        </ButtonContainer>
         <MenuItem onClick={handlePluginClick}>Plugins</MenuItem>
         <MenuItem onClick={handleServerClick}>server.js</MenuItem>
         <MenuItem onClick={handleDiscordClick}>Discord</MenuItem>

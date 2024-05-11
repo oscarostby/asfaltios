@@ -22,7 +22,7 @@ const HeaderContainer = styled.div`
   height: ${props => (props.small ? '40px' : '140px')};
   position: fixed;
   width: 100%;
-  z-index: 1000;
+  z-index: 999;
   transition: height 0.3s, top 0.3s;
   top: 0; /* Always at the top */
 `;
