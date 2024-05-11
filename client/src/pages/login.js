@@ -116,7 +116,7 @@ const Login = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://198.244.148.54:5000/login', loginData);
+      const response = await axios.post('https://198.244.148.54:5000/login', loginData);
       if (response && response.data && response.data.userId) {
         // Store the user ID in a cookie upon successful login
         document.cookie = `userId=${response.data.userId}`;

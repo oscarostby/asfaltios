@@ -61,9 +61,9 @@ function Search() {
       try {
         let response;
         if (searchTerm) {
-          response = await axios.get(`http://198.244.148.54:5000/list/${searchTerm}`);
+          response = await axios.get(`https://198.244.148.54:5000/list/${searchTerm}`);
         } else {
-          response = await axios.get(`http://198.244.148.54:5000/list`);
+          response = await axios.get(`https://198.244.148.54:5000/list`);
         }
         setItems(response.data.items);
         console.log(response.data.items); // Log the items to check image URLs
