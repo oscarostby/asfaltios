@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 
+<<<<<<< Updated upstream
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -16,3 +16,11 @@ const userSchema = new Schema({
 });
 
 module.exports = mongoose.model('users', userSchema);
+=======
+const userSchema = new mongoose.Schema({
+  username: { type: String, unique: true, required: true },
+  password: { type: String, required: true },
+});
+
+module.exports = mongoose.model('User', userSchema);
+>>>>>>> Stashed changes
