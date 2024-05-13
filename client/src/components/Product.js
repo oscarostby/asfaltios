@@ -18,17 +18,7 @@ const securityTopics = [
   { title: 'Compliance', icon: faBalanceScaleRight }
 ];
 
-const BlurredBackground = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: url('https://source.unsplash.com/random/1920x1080') no-repeat center center fixed;
-  background-size: cover;
-  filter: blur(10px);
-  z-index: -1;
-`;
+
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +27,8 @@ const Container = styled.div`
   justify-content: center;
   height: 100vh;
   padding: 20px;
+  overflow: hidden;
+
 `;
 
 const Row = styled.div`
@@ -92,7 +84,6 @@ const Box = styled.div`
 const App = () => {
   return (
     <>
-      <BlurredBackground />
       <Container>
         <Row>
           {securityTopics.slice(0, 6).map(({ title, icon }, index) => (

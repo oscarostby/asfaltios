@@ -13,6 +13,7 @@ const PageWrapper = styled.div`
   min-height: 100vh;
   padding-top: 140px;
   position: relative; // Add position relative to create a positioning context
+  overflow: hidden;
 `;
 
 const Container = styled.div`
