@@ -11,6 +11,7 @@ import Bg from '../bilder/bg2.jpg'; // Import your logo image
 const PageWrapper = styled.div`
   background-color: white;
   min-height: 100vh;
+  width: 100vw; /* Ensure the width fills the entire viewport */
   padding-top: 140px;
   position: relative;
   overflow: hidden;
@@ -19,13 +20,12 @@ const PageWrapper = styled.div`
   @media (max-width: 768px) {
     padding-top: 0; /* Remove top padding on mobile */
     padding-bottom: 0; /* Remove bottom padding on mobile */
-    padding-left: env(safe-area-inset-left); /* Adjust padding to fill safe areas */
-    padding-right: env(safe-area-inset-right); /* Adjust padding to fill safe areas */
-    margin-left: calc(-1 * env(safe-area-inset-left)); /* Adjust margin to fill safe areas */
-    margin-right: calc(-1 * env(safe-area-inset-right)); /* Adjust margin to fill safe areas */
+    padding-left: 0; /* Remove left padding on mobile */
+    padding-right: 0; /* Remove right padding on mobile */
     min-height: 100vh; /* Ensure minimum height fills entire viewport */
   }
 `;
+
 
 
 const Container = styled.div`
