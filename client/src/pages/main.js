@@ -12,9 +12,21 @@ const PageWrapper = styled.div`
   background-color: white;
   min-height: 100vh;
   padding-top: 140px;
-  position: relative; // Add position relative to create a positioning context
+  position: relative;
   overflow: hidden;
+
+  /* Make background fill entire viewport on mobile */
+  @media (max-width: 768px) {
+    padding-top: 0; /* Remove top padding on mobile */
+    padding-bottom: 0; /* Remove bottom padding on mobile */
+    padding-left: env(safe-area-inset-left); /* Adjust padding to fill safe areas */
+    padding-right: env(safe-area-inset-right); /* Adjust padding to fill safe areas */
+    margin-left: calc(-1 * env(safe-area-inset-left)); /* Adjust margin to fill safe areas */
+    margin-right: calc(-1 * env(safe-area-inset-right)); /* Adjust margin to fill safe areas */
+    min-height: 100vh; /* Ensure minimum height fills entire viewport */
+  }
 `;
+
 
 const Container = styled.div`
   display: flex;
