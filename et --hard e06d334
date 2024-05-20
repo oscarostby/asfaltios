@@ -1,0 +1,12 @@
+[33me06d334[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: reset: moving to HEAD@{1}
+[33m5992604[m HEAD@{1}: commit: pull
+[33me06d334[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{2}: commit: whitepagee
+[33m332cf9d[m HEAD@{3}: commit: whitepage
+[33mc2af924[m HEAD@{4}: commit: no overflow
+[33mb5cc431[m HEAD@{5}: pull: Fast-forward
+[33m6827eec[m HEAD@{6}: commit: d
+[33m09bb88d[m HEAD@{7}: pull: Fast-forward
+[33m7fa7108[m HEAD@{8}: commit: siu
+[33m773ebd6[m HEAD@{9}: pull: Fast-forward
+[33mb722a30[m HEAD@{10}: commit: d
+[33me6cab85[m HEAD@{11}: clone: from https://github.com/oscarostby/asfaltios.git
