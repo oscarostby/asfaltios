@@ -1,47 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import HeaderComponent from '../components/header';
-import MobileHeader from '../components/mobileheader'; // Import MobileHeader
 import styled from 'styled-components';
+import axios from 'axios';
+import HeaderComponent from '../components/header';
+import MobileHeader from '../components/mobileheader';
+import MessageBanner from '../components/MessageBanner'; // Import MessageBanner
 import ProductPage from '../components/Product';
 import AboutUsPage from '../components/AboutUs';
 import Footer from '../components/footer';
-import logo from '../bilder/logo2.png'; // Import your logo image
-import Bg from '../bilder/bg2.jpg'; // Import your logo image
+import logo from '../bilder/logo2.png';
+import Bg from '../bilder/bg2.jpg';
 
 const PageWrapper = styled.div`
   background-color: white;
   min-height: 100vh;
   width: 100vw; /* Ensure the width fills the entire viewport */
   padding-top: 140px;
-  position: relative;
-  overflow: hidden;
-
-  /* Make background fill entire viewport on mobile */
-  @media (max-width: 768px) {
-    padding-top: 0; /* Remove top padding on mobile */
-    padding-bottom: 0; /* Remove bottom padding on mobile */
-    padding-left: 0; /* Remove left padding on mobile */
-    padding-right: 0; /* Remove right padding on mobile */
-    min-height: 100vh; /* Ensure minimum height fills entire viewport */
-  }
+  position: relative; // Add position relative to create a positioning context
 `;
-
-
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   height: calc(100vh - 10px);
-  padding: 20px; /* Reduced padding for mobile */
+  padding: 20px;
   background-color: #333333;
   background-image: url(${Bg});
-  background-size: cover; /* Adjusts the background image size */
-  background-position: center; /* Centers the background image */
+  background-size: cover;
+  background-position: center;
 
   @media (min-width: 769px) {
-    /* Desktop styles */
-    padding: 40px; /* Original padding for desktop */
+    padding: 40px;
   }
 `;
 
@@ -50,39 +39,39 @@ const HeaderTitle = styled.h1`
   font-size: 48px;
   margin-bottom: 20px;
   text-align: center;
-  position: relative; // Add position relative to create a positioning context for the logo
-  margin-top: 250px; // Increase the margin-top to move the text further from the header
+  position: relative;
+  margin-top: 250px;
 
   @media (max-width: 768px) {
     font-size: 36px;
-    margin-top: 150px; /* Adjusted margin-top for mobile */
+    margin-top: 150px;
   }
 `;
 
 const Logo = styled.img`
-  position: absolute; // Position the logo absolutely within the HeaderTitle
-  top: -150px; // Adjust the top position to move the logo further from the header
-  left: 50%; // Center the logo horizontally
-  transform: translateX(-50%); // Adjust the horizontal position
-  max-width: 150px; // Increase the maximum width for the logo
-  max-height: 150px; // Increase the maximum height for the logo
+  position: absolute;
+  top: -150px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 150px;
+  max-height: 150px;
 
   @media (max-width: 768px) {
-    top: -100px; /* Adjusted top position for mobile */
-    max-width: 100px; /* Reduced max-width for mobile */
-    max-height: 100px; /* Reduced max-height for mobile */
+    top: -100px;
+    max-width: 100px;
+    max-height: 100px;
   }
 `;
 
 const Subtitle = styled.h2`
   color: white;
   font-size: 32px;
-  margin-bottom: 40px; /* Reduced margin-bottom for mobile */
+  margin-bottom: 40px;
   text-align: center;
 
   @media (max-width: 768px) {
     font-size: 24px;
-    margin-bottom: 20px; /* Further reduced margin-bottom for mobile */
+    margin-bottom: 20px;
   }
 `;
 
@@ -116,7 +105,7 @@ const Main = () => {
       setIsMobile(window.innerWidth <= 768);
     };
 
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener('resize', handleResize);
 
     return () => {
@@ -126,6 +115,7 @@ const Main = () => {
 
   return (
     <PageWrapper>
+      <MessageBanner />
       {isMobile ? <MobileHeader /> : <HeaderComponent />}
       <Container>
         <HeaderTitle>

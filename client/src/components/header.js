@@ -5,7 +5,6 @@ import { FaSearch, FaCaretDown } from 'react-icons/fa';
 import TeslaFont from '../bilder/TESLA.ttf';
 import axios from 'axios';
 
-
 const GlobalStyle = createGlobalStyle`
   @font-face {
     font-family: 'Tesla';
@@ -64,7 +63,6 @@ const SearchBar = styled.input`
   border-radius: 2px;
   transition: width 0.3s, padding 0.3s, font-size 0.3s, border 0.3s;
   position: relative; /* Change the position to relative */
-  
 `;
 
 const SearchButton = styled.button`
@@ -94,7 +92,7 @@ const Button = styled.button`
   border-radius: 2px;
   border: 2px solid white;
   transition: border 0.3s;
-  
+
   &:hover {
     color: #333; /* Change color on hover */
     border: 2px solid black;
@@ -122,8 +120,8 @@ const UserButton = styled.button`
 
 const UserDropdown = styled.div`
   position: absolute;
-  top: calc(10);
-  left: 80%;
+  top: calc(100% + 10px);
+  left: 50%;
   transform: translateX(-50%);
   background-color: white;
   border: 1px solid #ccc;
@@ -134,11 +132,6 @@ const UserDropdown = styled.div`
   z-index: 1; /* Ensure the dropdown is above other elements */
 `;
 
-
-
-
-
-
 const UserDropdownItem = styled.div`
   cursor: pointer;
   padding: 5px;
@@ -147,10 +140,15 @@ const UserDropdownItem = styled.div`
   }
 `;
 
-
-
 const CaretIcon = styled(FaCaretDown)`
   margin-left: 5px;
+`;
+
+const ProfilePicture = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
 `;
 
 const deleteTextAnimation = keyframes`
@@ -192,6 +190,7 @@ const Header = () => {
   const [textVisible, setTextVisible] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [loggedInUsername, setLoggedInUsername] = useState(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
@@ -226,6 +225,7 @@ const Header = () => {
       try {
         const response = await axios.get(`https://api.asfaltios.com/api/users/${userId}`);
         setLoggedInUsername(response.data.username);
+        setProfilePictureUrl(response.data.profilePictureUrl);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -248,7 +248,6 @@ const Header = () => {
       handleSearchClick();
     }
   };
-  
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -257,91 +256,101 @@ const Header = () => {
   const handleLogoClick = () => {
     navigate('/');
   };
+
   const handleSearchClick = () => {
     navigate(`/plugins/${searchTerm}`);
   };
+
   const handleLoginClick = () => {
-  navigate('/Login');
+    navigate('/Login');
   };
+
   const handleRegisterClick = () => {
-  navigate('/Register');
+    navigate('/Register');
   };
+
   const handlePluginClick = () => {
-  navigate('/Plugins');
+    navigate('/Plugins');
   };
+
   const handleServerClick = () => {
-  // Handle server button click
+    // Handle server button click
   };
+
   const handleDiscordClick = () => {
-  // Handle discord button click
+    // Handle discord button click
   };
+
   const handleUserButtonClick = () => {
-  setShowDropdown(!showDropdown);
+    setShowDropdown(!showDropdown);
   };
+
   const handleSettingsClick = () => {
-  // Handle settings button click
-  console.log('Settings clicked');
+    navigate('/Profile');
+    console.log('Settings clicked');
   };
+
   const handleLogoutClick = () => {
-  // Handle logout button click
-  console.log('Logout clicked');
-  // Clear the userId cookie
-  document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-  setLoggedInUsername(null);
-
-
-  
+    // Handle logout button click
+    console.log('Logout clicked');
+    // Clear the userId cookie
+    document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    setLoggedInUsername(null);
+    setProfilePictureUrl(null);
   };
+
   return (
-  <>
-  <GlobalStyle />
-  <HeaderContainer small={smallHeader}>
-  <SquareBrackets small={smallHeader}>
-  「<HeaderText visible={textVisible } onClick={handleLogoClick}> Asfaltios </HeaderText>」
-  <ButtonContainer>
-  <Button onClick={handlePluginClick}>Plugins</Button>
-  <Button onClick={handleServerClick}>server.js</Button>
-  <Button onClick={handleDiscordClick}>Discord</Button>
-  </ButtonContainer>
-  </SquareBrackets>
-  <ButtonContainer>
-  {loggedInUsername ? (
-  <div ref={dropdownRef}>
-  <UserButton onClick={handleUserButtonClick}>
-  {loggedInUsername} <CaretIcon />
-  </UserButton>
-  {showDropdown && (
-  <UserDropdown>
-  <UserDropdownItem onClick={handleSettingsClick}>
-  Settings Profile
-  </UserDropdownItem>
-  <UserDropdownItem onClick={handleLogoutClick}>
-  Logout
-  </UserDropdownItem>
-  </UserDropdown>
-  )}
-  </div>
-  ) : (
-  <>
-  <Button onClick={handleLoginClick}>Login</Button>
-  <Button onClick={handleRegisterClick}>Register</Button>
-  </>
-  )}
-  <SearchBarContainer>
-  <SearchBar
-  type="text"
-  placeholder="Search..."
-  value={searchTerm}
-  onChange={handleSearchChange}
-  onKeyDown={handleSearchKeyDown}
-/>
-  <SearchButton onClick={handleSearchClick}  >
-  <FaSearch />
-  </SearchButton>
-  </SearchBarContainer>
-  </ButtonContainer>
-  </HeaderContainer>
-  </>
+    <>
+      <GlobalStyle />
+      <HeaderContainer small={smallHeader}>
+        <SquareBrackets small={smallHeader}>
+          「<HeaderText visible={textVisible} onClick={handleLogoClick}>Asfaltios</HeaderText>」
+          <ButtonContainer>
+            <Button onClick={handlePluginClick}>Plugins</Button>
+            <Button onClick={handleServerClick}>server.js</Button>
+            <Button onClick={handleDiscordClick}>Discord</Button>
+          </ButtonContainer>
+        </SquareBrackets>
+        <ButtonContainer>
+          {loggedInUsername ? (
+            <div ref={dropdownRef}>
+              <UserButton onClick={handleUserButtonClick}>
+                {profilePictureUrl && <ProfilePicture src={profilePictureUrl} alt="Profile" />}
+                {loggedInUsername} <CaretIcon />
+              </UserButton>
+              {showDropdown && (
+                <UserDropdown>
+                  <UserDropdownItem onClick={handleSettingsClick}>
+                    Settings Profile
+                  </UserDropdownItem>
+                  <UserDropdownItem onClick={handleLogoutClick}>
+                    Logout
+                  </UserDropdownItem>
+                </UserDropdown>
+              )}
+            </div>
+          ) : (
+            <>
+              <Button onClick={handleLoginClick}>Login</Button>
+              <Button onClick={handleRegisterClick}>Register</Button>
+            </>
+          )}
+          <SearchBarContainer>
+            <SearchBar
+              type="text"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              onKeyDown={handleSearchKeyDown}
+            />
+            <SearchButton onClick={handleSearchClick}>
+              <FaSearch />
+            </SearchButton>
+          </SearchBarContainer>
+        </ButtonContainer>
+      </HeaderContainer>
+    </>
   );
-  };
-  export default Header;
+};
+
+export default Header;
