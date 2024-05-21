@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { FaSearch, FaCaretDown, FaBars, FaTimes } from 'react-icons/fa';
 import TeslaFont from '../bilder/TESLA.ttf';
-import axios from 'axios';
 
 const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -24,6 +23,20 @@ const HeaderContainer = styled.div`
   z-index: 1000;
   transition: height 0.3s, top 0.3s;
   top: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a shadow to highlight the header */
+  @media (max-width: 768px) {
+    padding: ${props => (props.small ? '10px' : '20px')}; /* Less padding on mobile */
+  }
+`;
+
+const AboveHeader = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: ${props => (props.small ? '20px' : '0')}; /* Height adjusted to header size */
+  background-color: white; /* Background color for the area above the header */
+  z-index: 999;
 `;
 
 const SquareBrackets = styled.div`
@@ -182,6 +195,7 @@ const Header = () => {
   return (
     <>
       <GlobalStyle />
+      <AboveHeader small={smallHeader} />
       <HeaderContainer small={smallHeader}>
         <SquareBrackets small={smallHeader}>
           「<HeaderText visible={textVisible}>Asfaltios</HeaderText>」
