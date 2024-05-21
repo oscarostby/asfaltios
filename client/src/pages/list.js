@@ -79,12 +79,12 @@ function Search() {
       <h1>Search Results for "{searchTerm || 'All Plugins'}"</h1>
       {items.map(item => (
         <SearchResultItem key={item._id}>
-          <ItemImage src={item.imageUrl} alt="Item" />
+          <ItemImage src={item.iconImageUrl} alt="Item" /> {/* Use iconImageUrl for the item image */}
           <ItemInfo>
             <ItemTitle>{item.title}</ItemTitle>
             <p>{item.mainText}</p>
           </ItemInfo>
-          <DownloadButton href={item.downloadLink} download>Download</DownloadButton>
+          <DownloadButton href={item.fileUrl} download>Download</DownloadButton> {/* Use fileUrl for the download link */}
         </SearchResultItem>
       ))}
     </SearchResultContainer>

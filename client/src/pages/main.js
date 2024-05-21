@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import axios from 'axios';
 import HeaderComponent from '../components/header';
 import MobileHeader from '../components/mobileheader';
-import MessageBanner from '../components/MessageBanner'; // Import MessageBanner
 import ProductPage from '../components/Product';
 import AboutUsPage from '../components/AboutUs';
 import Footer from '../components/footer';
@@ -115,7 +114,6 @@ const Main = () => {
 
   return (
     <PageWrapper>
-      <MessageBanner />
       {isMobile ? <MobileHeader /> : <HeaderComponent />}
       <Container>
         <HeaderTitle>
