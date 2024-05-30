@@ -1,5 +1,4 @@
 // pages/search.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -53,6 +52,7 @@ const DownloadButton = styled.a`
 
 function Search() {
   const [items, setItems] = useState([]);
+  const [sortBy, setSortBy] = useState('');
   const location = useLocation();
   const searchTerm = location.pathname.split('/').pop();
 
@@ -61,30 +61,43 @@ function Search() {
       try {
         let response;
         if (searchTerm) {
-          response = await axios.get(`https://api.asfaltios.com/list/${searchTerm}`);
+          response = await axios.get(`https://api.asfaltios.com/list/${searchTerm}?sortBy=${sortBy}`);
         } else {
-          response = await axios.get(`https://api.asfaltios.com/list`);
+          response = await axios.get(`https://api.asfaltios.com/list?sortBy=${sortBy}`);
         }
         setItems(response.data.items);
-        console.log(response.data.items); // Log the items to check image URLs
       } catch (error) {
         console.error(error);
       }
     };
     fetchData();
-  }, [searchTerm]);
+  }, [searchTerm, sortBy]);
 
   return (
     <SearchResultContainer>
       <h1>Search Results for "{searchTerm || 'All Plugins'}"</h1>
-      {items.map(item => (
+      <div>
+        <label htmlFor="sortBy">Sort by:</label>
+        <select
+          id="sortBy"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+        >
+          <option value="">Default</option>
+          <option value="mostDownloaded">Most Downloaded</option>
+          <option value="type">Type</option>
+        </select>
+      </div>
+      {items.map((item) => (
         <SearchResultItem key={item._id}>
-          <ItemImage src={item.iconImageUrl} alt="Item" /> {/* Use iconImageUrl for the item image */}
+          <ItemImage src={item.iconImageUrl} alt="Item" />
           <ItemInfo>
             <ItemTitle>{item.title}</ItemTitle>
             <p>{item.mainText}</p>
           </ItemInfo>
-          <DownloadButton href={item.fileUrl} download>Download</DownloadButton> {/* Use fileUrl for the download link */}
+          <DownloadButton href={item.fileUrl} download>
+            Download
+          </DownloadButton>
         </SearchResultItem>
       ))}
     </SearchResultContainer>

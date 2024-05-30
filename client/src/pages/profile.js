@@ -10,6 +10,44 @@ const ProfileContainer = styled.div`
   background-color: #f5f5f5;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+`;
+
+const TopBannerContainer = styled.div`
+  width: 100%;
+  height: 200px;
+  position: relative;
+`;
+
+const TopBanner = styled.div`
+  width: 100%;
+  height: 200px;
+  background-image: url(${props => props.src});
+  background-size: cover;
+  background-position: center;
+  transition: filter 0.3s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const EditBannerContainer = styled.div`
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+
+  ${TopBannerContainer}:hover & {
+    display: flex;
+  }
 `;
 
 const ProfilePicture = styled.img`
@@ -17,7 +55,28 @@ const ProfilePicture = styled.img`
   height: 150px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 1rem;
+  margin-top: -75px; /* Adjust to position the profile picture over the banner */
+  border: 4px solid white;
+  transition: filter 0.3s ease;
+`;
+
+const HoverableContainer = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  &:hover ${TopBanner}, &:hover ${ProfilePicture} {
+    filter: blur(2px);
+  }
+`;
+
+const ProfileContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
 `;
 
 const InputContainer = styled.div`
@@ -55,6 +114,8 @@ const Message = styled.p`
 const Profile = () => {
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
   const [newProfilePictureUrl, setNewProfilePictureUrl] = useState('');
+  const [bannerUrl, setBannerUrl] = useState('https://static.vecteezy.com/system/resources/thumbnails/001/426/892/small/abstract-banner-web-template-free-vector.jpg');
+  const [newBannerUrl, setNewBannerUrl] = useState('');
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
   const [username, setUsername] = useState('');
@@ -105,25 +166,53 @@ const Profile = () => {
     }
   };
 
+  const handleBannerChange = async () => {
+    // Update the banner URL as needed
+    // For now, we just set the new banner URL locally
+    setBannerUrl(newBannerUrl);
+    setMessage('Banner updated successfully');
+    setIsSuccess(true);
+  };
+
   const handleInputChange = (e) => {
     setNewProfilePictureUrl(e.target.value);
   };
 
+  const handleBannerInputChange = (e) => {
+    setNewBannerUrl(e.target.value);
+  };
+
   return (
     <ProfileContainer>
-      <h2>Profile</h2>
-      <ProfilePicture src={profilePictureUrl} alt="Profile" />
-      <h3>Username: {username}</h3>
-      <InputContainer>
-        <Input
-          type="text"
-          placeholder="Enter new profile picture URL"
-          value={newProfilePictureUrl}
-          onChange={handleInputChange}
-        />
-        <Button onClick={handleProfilePictureChange}>Change Profile Picture</Button>
-      </InputContainer>
-      {message && <Message success={isSuccess}>{message}</Message>}
+      <HoverableContainer>
+        <TopBannerContainer>
+          <TopBanner src={bannerUrl} />
+          <EditBannerContainer>
+            <Input
+              type="text"
+              placeholder="Enter new banner URL"
+              value={newBannerUrl}
+              onChange={handleBannerInputChange}
+            />
+            <Button onClick={handleBannerChange}>Change Banner</Button>
+          </EditBannerContainer>
+        </TopBannerContainer>
+        <ProfilePicture src={profilePictureUrl} alt="Profile" />
+      </HoverableContainer>
+      <ProfileContent>
+        <h2>Profile</h2>
+        <h3>Username: {username}</h3>
+        <InputContainer>
+          <Input
+            type="text"
+            placeholder="Enter new profile picture URL"
+            value={newProfilePictureUrl}
+            onChange={handleInputChange}
+          />
+          <Button onClick={handleProfilePictureChange}>Change Profile Picture</Button>
+        </InputContainer>
+        {message && <Message success={isSuccess}>{message}</Message>}
+      </ProfileContent>
     </ProfileContainer>
   );
 };
