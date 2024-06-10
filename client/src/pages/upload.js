@@ -24,7 +24,6 @@ const UploadPageContainer = styled.div`
       rgba(255, 255, 255, 0.2) 0%,
       rgba(255, 255, 255, 0) 70%
     );
-    animation: ${rotate} 20s infinite linear;
   }
 `;
 
