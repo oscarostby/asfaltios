@@ -87,15 +87,27 @@ const Button = styled.button`
   background-color: transparent;
   border: none;
   margin-right: 20px; /* Increase the margin */
-  transition: color 0.3s; /* Add transition effect */
   padding: 10px 20px;
-  border-radius: 2px;
-  border: 2px solid white;
-  transition: border 0.3s;
+  position: relative; /* Position relative for the pseudo-element */
 
   &:hover {
     color: #333; /* Change color on hover */
-    border: 2px solid black;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: black;
+    transition: width 0.3s ease-in-out;
   }
 `;
 
@@ -108,35 +120,51 @@ const UserButton = styled.button`
   border: none;
   font-size: 16px;
   padding: 10px 20px;
-  border-radius: 2px;
-  border: 2px solid white;
-  transition: border 0.3s;
+  margin-left: -160px; /* Add margin-left to shift it to the left */
 
   &:hover {
     color: #333;
-    border: 2px solid black;
   }
+
+  &:hover::after {
+    width: 100%;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: black;
+    transition: width 0.3s ease;
+
 `;
 
 const UserDropdown = styled.div`
   position: absolute;
-  top: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
+  top: 100%;
+  right: 0;
   background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 150px; /* Adjust width if needed */
-  z-index: 1; /* Ensure the dropdown is above other elements */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  z-index: 1000;
 `;
 
 const UserDropdownItem = styled.div`
   cursor: pointer;
-  padding: 5px;
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.2s ease;
+
   &:hover {
-    background-color: #f1f1f1;
+    background-color: #f5f5f5;
   }
 `;
 
@@ -183,6 +211,13 @@ const HeaderText = styled.div`
   animation: ${props => (props.visible ? appearTextAnimation : deleteTextAnimation)} 0.5s forwards;
   line-height: 1; /* Ensure text is vertically centered */
   cursor: pointer;
+`;
+
+const Divider = styled.div`
+  width: 1px;
+  height: 20px; /* Adjust the height as needed */
+  background-color: #ccc;
+  margin: 0 10px; /* Adjust the margin */
 `;
 
 const Header = () => {
@@ -264,7 +299,6 @@ const Header = () => {
   const handleLoginClick = () => {
     navigate('/Login');
   };
-
   const handleRegisterClick = () => {
     navigate('/Register');
   };
@@ -313,13 +347,13 @@ const Header = () => {
         </SquareBrackets>
         <ButtonContainer>
           {loggedInUsername ? (
-            <div ref={dropdownRef}>
+            <div ref={dropdownRef} style={{ position: 'relative' }}>
               <UserButton onClick={handleUserButtonClick}>
                 {profilePictureUrl && <ProfilePicture src={profilePictureUrl} alt="Profile" />}
                 {loggedInUsername} <CaretIcon />
               </UserButton>
               {showDropdown && (
-                <UserDropdown>
+                <UserDropdown style={{ left: '1' }}>
                   <UserDropdownItem onClick={handleSettingsClick}>
                     Settings Profile
                   </UserDropdownItem>
@@ -332,6 +366,7 @@ const Header = () => {
           ) : (
             <>
               <Button onClick={handleLoginClick}>Login</Button>
+              <Divider /> {/* Divider added here */}
               <Button onClick={handleRegisterClick}>Register</Button>
             </>
           )}
@@ -354,3 +389,5 @@ const Header = () => {
 };
 
 export default Header;
+
+
