@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-// Styled components for improved styling
 const SearchResultContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,6 +36,10 @@ const ItemTitle = styled.h2`
   margin-top: 0;
 `;
 
+const ItemType = styled.p`
+  font-style: italic;
+`;
+
 const DownloadButton = styled.a`
   padding: 8px 20px;
   background-color: #007bff;
@@ -52,7 +55,7 @@ const DownloadButton = styled.a`
 
 function Search() {
   const [items, setItems] = useState([]);
-  const [sortBy, setSortBy] = useState('');
+  const [pluginTypeFilter, setPluginTypeFilter] = useState('');
   const location = useLocation();
   const searchTerm = location.pathname.split('/').pop();
 
@@ -60,10 +63,12 @@ function Search() {
     const fetchData = async () => {
       try {
         let response;
-        if (searchTerm) {
-          response = await axios.get(`https://api.asfaltios.com/list/${searchTerm}?sortBy=${sortBy}`);
+        if (searchTerm && pluginTypeFilter) {
+          response = await axios.get(`https://api.asfaltios.com/list/${searchTerm}?pluginType=${pluginTypeFilter}`);
+        } else if (searchTerm) {
+          response = await axios.get(`https://api.asfaltios.com/list/${searchTerm}`);
         } else {
-          response = await axios.get(`https://api.asfaltios.com/list?sortBy=${sortBy}`);
+          response = await axios.get(`https://api.asfaltios.com/list`);
         }
         setItems(response.data.items);
       } catch (error) {
@@ -71,21 +76,26 @@ function Search() {
       }
     };
     fetchData();
-  }, [searchTerm, sortBy]);
+  }, [searchTerm, pluginTypeFilter]);
+
+  const handlePluginTypeFilterChange = (e) => {
+    setPluginTypeFilter(e.target.value);
+  };
 
   return (
     <SearchResultContainer>
       <h1>Search Results for "{searchTerm || 'All Plugins'}"</h1>
       <div>
-        <label htmlFor="sortBy">Sort by:</label>
+        <label htmlFor="pluginTypeFilter">Filter by Type:</label>
         <select
-          id="sortBy"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
+          id="pluginTypeFilter"
+          value={pluginTypeFilter}
+          onChange={handlePluginTypeFilterChange}
         >
-          <option value="">Default</option>
-          <option value="mostDownloaded">Most Downloaded</option>
-          <option value="type">Type</option>
+          <option value="">All</option>
+          <option value="survival">Survival</option>
+          <option value="creative">Creative</option>
+          {/* Add more options as needed */}
         </select>
       </div>
       {items.map((item) => (
@@ -93,6 +103,7 @@ function Search() {
           <ItemImage src={item.iconImageUrl} alt="Item" />
           <ItemInfo>
             <ItemTitle>{item.title}</ItemTitle>
+            <ItemType>Type: {item.pluginType}</ItemType> {/* Display pluginType */}
             <p>{item.mainText}</p>
           </ItemInfo>
           <DownloadButton href={item.fileUrl} download>

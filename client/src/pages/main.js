@@ -22,26 +22,13 @@ const PageWrapper = styled.div`
   min-height: 100vh;
   width: 100vw;
   padding-top: 140px;
-  background-color: #888484;
+  background-color: white;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      to bottom,
-      #717477 0%,
-      #838585 25%,
-      #979792 50%,
-      #858786 75%,
-      #6e7074 100%
-    );
-    filter: blur(10px);
-    z-index: -1;  /* Place the pseudo-element behind the content */
+  @media (max-width: 769px) {
+    padding-top: 80px;
+
   }
+
 `;
 
 const Container = styled.div`

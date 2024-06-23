@@ -182,13 +182,19 @@ const UploadPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://api.asfaltios.com/upload', {
-        title,
-        mainText,
-        iconImageUrl,
-        fileUrl,
-        type: pluginType,
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('mainText', mainText);
+      formData.append('iconImageUrl', iconImageUrl);
+      formData.append('pluginType', pluginType);
+      formData.append('file', fileUrl); // Append file
+
+      const response = await axios.post('https://api.asfaltios.com/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
+      
       if (response.status === 200) {
         setMessage('Item uploaded successfully');
         setIsSuccess(true);
@@ -234,11 +240,11 @@ const UploadPage = () => {
           />
         </FormGroup>
         <FormGroup>
-          <Label>File URL:</Label>
+          <Label>File Upload:</Label>
           <Input
-            type="text"
-            value={fileUrl}
-            onChange={(e) => setFileUrl(e.target.value)}
+            type="file"
+            onChange={(e) => setFileUrl(e.target.files[0])}
+            accept=".zip, .rar" // Specify accepted file types if needed
           />
         </FormGroup>
         <FormGroup>
@@ -247,6 +253,7 @@ const UploadPage = () => {
             id="pluginType"
             value={pluginType}
             onChange={(e) => setPluginType(e.target.value)}
+            required
           >
             <option value="">Select a type</option>
             <option value="survival">Survival</option>

@@ -137,6 +137,21 @@ app.post('/upload', async (req, res) => {
   }
 });
 
+app.get('/list/:searchTerm', async (req, res) => {
+  const { searchTerm } = req.params;
+  const { sort, category } = req.query;
+  try {
+    const query = { title: { $regex: searchTerm, $options: 'i' } };
+    if (category) {
+      query.category = category;
+    }
+    const items = await Item.find(query).sort(sort ? { downloads: sort === 'desc' ? -1 : 1 } : {});
+    res.status(200).json({ items });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the items' });
+  }
+});
+
 let message = '';
 
 app.post('/api/message', async (req, res) => {

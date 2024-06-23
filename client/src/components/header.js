@@ -373,7 +373,7 @@ const Header = () => {
           <SearchBarContainer>
             <SearchBar
               type="text"
-              placeholder="Search..."
+              placeholder="Search for plugins..."
               value={searchTerm}
               onChange={handleSearchChange}
               onKeyDown={handleSearchKeyDown}
