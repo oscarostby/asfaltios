@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
+import styled, { createGlobalStyle } from 'styled-components';
 import HeaderComponent from '../components/header';
 import MobileHeader from '../components/mobileheader';
 import ProductPage from '../components/Product';
@@ -9,15 +8,44 @@ import Footer from '../components/footer';
 import logo from '../bilder/logo2.png';
 import Bg from '../bilder/bg2.jpg';
 
+const GlobalStyle = createGlobalStyle`
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;  /* Prevent horizontal scrolling */
+  }
+`;
+
 const PageWrapper = styled.div`
-  background-color: white;
+  overflow-x: hidden;  /* Prevent horizontal scrolling */
+  position: relative;
   min-height: 100vh;
-  width: 100vw; /* Ensure the width fills the entire viewport */
+  width: 100vw;
   padding-top: 140px;
-  position: relative; // Add position relative to create a positioning context
+  background-color: #888484;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      to bottom,
+      #717477 0%,
+      #838585 25%,
+      #979792 50%,
+      #858786 75%,
+      #6e7074 100%
+    );
+    filter: blur(10px);
+    z-index: -1;  /* Place the pseudo-element behind the content */
+  }
 `;
 
 const Container = styled.div`
+  overflow-x: hidden;  /* Prevent horizontal scrolling */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -113,19 +141,22 @@ const Main = () => {
   }, []);
 
   return (
-    <PageWrapper>
-      {isMobile ? <MobileHeader /> : <HeaderComponent />}
-      <Container>
-        <HeaderTitle>
-          Your Minecraft security solutions
-          <Logo src={logo} alt="Logo" />
-        </HeaderTitle>
-        <Subtitle>Our key features:</Subtitle>
-        <ProductPage />
-      </Container>
-      <AboutUsPage />
-      <Footer />
-    </PageWrapper>
+    <>
+      <GlobalStyle />
+      <PageWrapper>
+        {isMobile ? <MobileHeader /> : <HeaderComponent />}
+        <Container>
+          <HeaderTitle>
+            Your Minecraft security solutions
+            <Logo src={logo} alt="Logo" />
+          </HeaderTitle>
+          <Subtitle>Our key features:</Subtitle>
+          <ProductPage />
+        </Container>
+        <AboutUsPage />
+        <Footer />
+      </PageWrapper>
+    </>
   );
 };
 
