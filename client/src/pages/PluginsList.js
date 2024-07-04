@@ -12,12 +12,12 @@ const fadeContent = keyframes`
 const Buttons = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 5rem;
+  margin-bottom: 3rem; /* Adjusted margin */
 `;
 
 const Header = styled.header`
   position: relative;
-  padding-top: 9.5rem;
+  padding-top: 48rem; /* Adjusted padding to make the top section long */
   background: linear-gradient(135deg, #f3f4f7, #e8eef2);
   overflow: hidden;
   margin-top: 100px;
@@ -26,6 +26,7 @@ const Header = styled.header`
   align-items: center;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
 `;
 
 const Logo = styled.div`
@@ -58,7 +59,7 @@ const Brackets = styled.div`
 
 const Slogan = styled.h2`
   max-width: 630px;
-  margin: 0 auto 3.5rem;
+  margin: 0 auto 1.5rem; /* Adjusted margin */
   color: #333;
   font: 100 26px / 1.5 'Segoe UI', sans-serif;
   text-shadow: 0 1px 1px rgba(0,0,0,.2);
@@ -66,6 +67,7 @@ const Slogan = styled.h2`
   opacity: 0;
   transform: perspective(800px) rotateX(-60deg) translateY(50px);
   animation: ${fadeContent} .85s 2.1s cubic-bezier(.2,1,.2,1) forwards;
+
 `;
 
 const PS = styled.span`
@@ -196,123 +198,6 @@ const Main = styled.main`
   position: relative;
 `;
 
-const Product = styled.article`
-  --base: ${props => props.base || 80};
-  --spread: ${props => props.spread || 500};
-  --outer: ${props => props.outer || 1};
-  aspect-ratio: 3 / 4;
-  border-radius: 14px;
-  width: 260px;
-  position: relative;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  box-shadow: 0 1rem 2rem -1rem black;
-  padding: 1rem;
-  border: 1px solid hsl(0 0% 100% / 0.15);
-  backdrop-filter: blur(5px);
-  background: ${props => `url(${props.bgImage}) no-repeat center center/cover`};
-  color: white;
-  touch-action: none;
-`;
-
-const ProductTitle = styled.h3`
-  color: #fff;
-  line-height: 1.35;
-`;
-
-const GlowWrapper = styled.div`
-  --border-size: 3px;
-  --spotlight-size: 200px;
-  --hue: calc(var(--base) + (var(--xp, 0) * var(--spread, 0)));
-  background-image: radial-gradient(
-    var(--spotlight-size) var(--spotlight-size) at
-    calc(var(--x, 0) * 1px)
-    calc(var(--y, 0) * 1px),
-    hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 70) * 1%) / 0.1), transparent
-  );
-  background-color: transparent;
-  background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
-  background-position: 50% 50%;
-  background-attachment: fixed;
-  border: var(--border-size) solid var(--backup-border);
-  position: relative;
-  touch-action: none;
-  border-radius: 14px;
-`;
-
-const GlowBefore = styled.div`
-  content: "";
-  position: absolute;
-  inset: calc(var(--border-size) * -1);
-  border: var(--border-size) solid transparent;
-  border-radius: 14px;
-  background-attachment: fixed;
-  background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
-  mask-clip: padding-box, border-box;
-  mask-composite: intersect;
-  background-image: radial-gradient(
-    calc(var(--spotlight-size) * 0.75) calc(var(--spotlight-size) * 0.75) at
-    calc(var(--x, 0) * 1px)
-    calc(var(--y, 0) * 1px),
-    hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 50) * 1%) / 1), transparent 100%
-  );
-  filter: brightness(2);
-`;
-
-const GlowAfter = styled.div`
-  content: "";
-  position: absolute;
-  inset: calc(var(--border-size) * -1);
-  border: var(--border-size) solid transparent;
-  border-radius: 14px;
-  background-attachment: fixed;
-  background-size: calc(100% + (2 * var(--border-size))) calc(100% + (2 * var(--border-size)));
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  mask: linear-gradient(transparent, transparent), linear-gradient(white, white);
-  mask-clip: padding-box, border-box;
-  mask-composite: intersect;
-  background-image: radial-gradient(
-    calc(var(--spotlight-size) * 0.5) calc(var(--spotlight-size) * 0.5) at
-    calc(var(--x, 0) * 1px)
-    calc(var(--y, 0) * 1px),
-    hsl(0 100% 100% / 1), transparent 100%
-  );
-`;
-
-const GlowButton = styled.button`
-  padding: 0.75rem 2rem;
-  align-self: end;
-  color: hsl(0 0% 100%);
-  background: rgba(0, 0, 0, 0.5); /* Halvtransparent sort bakgrunn for kontrast */
-  border: 2px solid hsl(0 0% 100%); /* Hvit kantlinje for å fremheve knappen */
-  border-radius: 0.5rem; /* Gjør hjørnene litt avrundet */
-  cursor: pointer;
-  transition: background 0.3s ease, border-color 0.3s ease;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.7); /* Mørkere bakgrunn ved hover for bedre visuell tilbakemelding */
-    border-color: hsl(0 0% 80%); /* Litt mørkere kantlinje ved hover */
-  }
-
-  & span {
-    font-weight: bold;
-    background-image: radial-gradient(
-      var(--spotlight-size) var(--spotlight-size) at
-      calc(var(--x, 0) * 1px)
-      calc(var(--y, 0) * 1px),
-      hsl(var(--hue, 210) calc(var(--saturation, 100) * 1%) calc(var(--lightness, 70) * 1%) / 1), transparent
-    );
-    background-color: var(--backdrop, transparent);
-    background-position: 50% 50%;
-    background-clip: text;
-    filter: brightness(1.5);
-  }
-`;
-
 const ClrPrimaryVariables = `
   --clr-primary-900: hsl(0, 0%, 10%);
   --clr-primary-800: hsl(0, 0%, 20%);
@@ -436,47 +321,210 @@ const PluginsList = () => {
         </div>
         <Layout>
           <Main>
-            <GlowWrapper data-glow>
-              <Product bgImage="https://static.vecteezy.com/system/resources/previews/002/184/738/non_2x/polygon-black-gold-background-free-vector.jpg">
-                <GlowBefore />
-                <GlowAfter />
-                <ProductTitle>SimpleGold</ProductTitle>
-                <p>A simple and efficient gold management plugin.</p>
-                <GlowButton data-glow>
-                  <span>Download</span>
-                </GlowButton>
-              </Product>
-            </GlowWrapper>
-            <GlowWrapper data-glow>
-              <Product base={220} spread={200} bgImage="https://static.vecteezy.com/system/resources/thumbnails/003/127/954/small_2x/abstract-template-blue-background-white-squares-free-vector.jpg">
-                <GlowBefore />
-                <GlowAfter />
-                <ProductTitle>Asfaltios staff</ProductTitle>
-                <p>Manage your staff effectively with this plugin.</p>
-                <GlowButton data-glow>
-                  <span>Buy for $15</span>
-                </GlowButton>
-              </Product>
-            </GlowWrapper>
-            <GlowWrapper data-glow>
-              <Product bgImage="https://static.vecteezy.com/system/resources/previews/004/447/761/non_2x/abstract-red-fluid-wave-background-free-vector.jpg">
-                <GlowBefore />
-                <GlowAfter />
-                <ProductTitle>Asfltios Firewall</ProductTitle>
-                <p>Enhance your Minecraft experience with unique features.</p>
-                <GlowButton data-glow>
-                  <span>Buy for $12</span>
-                </GlowButton>
-              </Product>
-            </GlowWrapper>
+            {/* Removed GlowWrapper components */}
           </Main>
         </Layout>
+
+        <BannerSection>
+          <Container>
+            <BannerText>
+              <h1>Optimize</h1>
+              <p>
+                <strong>We make it easy to maximize your gaming experience.</strong> Our plugins provide robust features to enhance your server's performance and ensure seamless gameplay for all users.
+              </p>
+              <button>Get Started</button>
+            </BannerText>
+          </Container>
+          <BannerImage src="https://preview.ibb.co/bMi5Y6/banner_img.png" alt="monitoring" />
+        </BannerSection>
+
+        <Container>
+          <Row>
+            <Card>
+              <CardIcon src="https://image.ibb.co/cFV8mR/monitoring.png" alt="monitoring" />
+              <CardTitle>SimpleGold</CardTitle>
+              <CardText>Efficient gold management to keep your economy balanced and fair for all players on your server.</CardText>
+              <CardLink href="https://www.spigotmc.org/resources/simple-gold-1-20-1-21-vault-towny.115987/">Learn more</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/jfmg6R/cloud_firewalls.png" alt="cloud firewalls" />
+              <CardTitle>Bakteria Staff Plugin</CardTitle>
+              <CardText>Monitor staff activities and ensure a healthy and productive server environment. We give you all the tools your staff member need!</CardText>
+              <CardLink href="https://www.spigotmc.org/resources/bakteria-staff-moderation-plugin-1-8-1-21.117394/">Learn more</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/fcnzt6/team_management.png" alt="team management" />
+              <CardTitle>Asfaltios Basic</CardTitle>
+              <CardText>Basic tools to get your server up and running with essential features and easy management.</CardText>
+              <CardLink href="#">Learn more</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/evyiLm/backups.png" alt="backups" />
+              <CardTitle>AutoBackup</CardTitle>
+              <CardText>Automatic backups to ensure your server data is always secure and can be restored easily.</CardText>
+              <CardLink href="#">Learn more</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/g9bERR/snapshots.png" alt="snapshots" />
+              <CardTitle>WorldEdit</CardTitle>
+              <CardText>Powerful tools to create and manage your world, making large-scale changes simple and fast.</CardText>
+              <CardLink href="#">Learn more</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/cFV8mR/monitoring.png" alt="monitoring" />
+              <CardTitle>Asfaltios Firewall</CardTitle>
+              <CardText>Comprehensive security features to protect your server from threats and unauthorized access.</CardText>
+              <CardLink href="#">Learn more</CardLink>
+            </Card>
+          </Row>
+        </Container>
       </Wrapper>
-      <br></br>
-      <br></br>
+      <br />
+      <br />
 
     </>
   );
 };
+
+const BannerSection = styled.section`
+  height: auto;
+  margin: 32px 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+
+  @media (min-width: 768px) {
+    height: 450px;
+    margin-bottom: 32px;
+  }
+`;
+
+const Container = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+`;
+
+const BannerText = styled.div`
+  max-width: 550px;
+  float: left;
+
+  h1 {
+    color: #00106a;
+    font-size: 3rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #00106a;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  button {
+    border: 0;
+    border-radius: 50px;
+    padding: .75rem 2.75rem;
+    background: #4b71ff;
+    color: #ffffff;
+    box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.25);
+    cursor: pointer;
+    position: relative;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 1px;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 1rem 1.5rem rgba(0,0,0,.25);
+    }
+  }
+`;
+
+const BannerImage = styled.img`
+  position: absolute;
+  opacity: .25;
+  right: -610px;
+  top: 0;
+  height: 300px;
+  z-index: -1;
+  filter: drop-shadow(0 3rem 0.05rem rgba(191, 216, 255, 1));
+
+  @media (min-width: 768px) {
+    display: inherit;
+    height: 400px;
+    top: 0;
+    opacity: 0.5;
+  }
+
+  @media (min-width: 992px) {
+    height: 500px;
+    top: -50px;
+    opacity: 1;
+  }
+`;
+
+const Row = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -16px;
+`;
+
+const Card = styled.div`
+  padding: 16px 24px;
+  background: #ffffff;
+  height: 100%;
+  position: relative;
+  border: none;
+  box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.15);
+  border: 2px solid transparent;
+  transition: all 0.3s ease-in-out;
+  z-index: 10;
+  flex: 0 0 calc(33.333% - 32px);
+  margin: 16px;
+
+  &:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 1rem 1.5rem rgba(0,0,0,.15);
+    cursor: pointer;
+  }
+`;
+
+const CardIcon = styled.img`
+  width: 60px;
+  margin-bottom: 8px;
+  position: relative;
+  top: 0;
+  left: -12px;
+`;
+
+const CardTitle = styled.h3`
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #00106a;
+`;
+
+const CardText = styled.p`
+  color: #989dc5;
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 72px;
+`;
+
+const CardLink = styled.a`
+  position: absolute;
+  bottom: 18px;
+  color: #4b71ff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 export default PluginsList;
