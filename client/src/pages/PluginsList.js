@@ -17,7 +17,8 @@ const Buttons = styled.div`
 
 const Header = styled.header`
   position: relative;
-  padding-top: 48rem; /* Adjusted padding to make the top section long */
+  padding-top: 10rem; /* Adjust padding-top to move content closer to the top */
+  padding-bottom: 35rem; /* Add padding-bottom to maintain the overall height */
   background: linear-gradient(135deg, #f3f4f7, #e8eef2);
   overflow: hidden;
   margin-top: 100px;
@@ -26,8 +27,8 @@ const Header = styled.header`
   align-items: center;
   text-align: center;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
 `;
+
 
 const Logo = styled.div`
   position: relative;
@@ -143,11 +144,12 @@ const Circle = styled.div`
   width: ${props => props.size};
   height: ${props => props.size};
   border-radius: 50%;
-  background-color: rgba(0,0,0,.1);
+  background: linear-gradient(135deg, rgba(135, 206, 235, 0.75), rgba(0, 191, 255, 0.75));
   transform: translate(100%, 500px);
   animation: ${fadeContent} 1.2s ${props => props.delay} cubic-bezier(.2,1,.2,1) forwards;
   mix-blend-mode: darken;
 `;
+
 
 const Hill = styled.div`
   position: relative;
@@ -356,25 +358,25 @@ const PluginsList = () => {
               <CardIcon src="https://image.ibb.co/fcnzt6/team_management.png" alt="team management" />
               <CardTitle>Asfaltios Basic</CardTitle>
               <CardText>Basic tools to get your server up and running with essential features and easy management.</CardText>
-              <CardLink href="#">Learn more</CardLink>
+              <CardLink href="#">Coming soon!</CardLink>
             </Card>
             <Card>
               <CardIcon src="https://image.ibb.co/evyiLm/backups.png" alt="backups" />
               <CardTitle>AutoBackup</CardTitle>
               <CardText>Automatic backups to ensure your server data is always secure and can be restored easily.</CardText>
-              <CardLink href="#">Learn more</CardLink>
+              <CardLink href="#">Coming soon!</CardLink>
             </Card>
             <Card>
               <CardIcon src="https://image.ibb.co/g9bERR/snapshots.png" alt="snapshots" />
-              <CardTitle>WorldEdit</CardTitle>
-              <CardText>Powerful tools to create and manage your world, making large-scale changes simple and fast.</CardText>
-              <CardLink href="#">Learn more</CardLink>
+              <CardTitle>Asfaltios AFK</CardTitle>
+              <CardText>Stops automated systems when players go AFK, preventing unfair AFK farming in Minecraft.</CardText>
+              <CardLink href="#">Coming soon!</CardLink>
             </Card>
             <Card>
               <CardIcon src="https://image.ibb.co/cFV8mR/monitoring.png" alt="monitoring" />
               <CardTitle>Asfaltios Firewall</CardTitle>
               <CardText>Comprehensive security features to protect your server from threats and unauthorized access.</CardText>
-              <CardLink href="#">Learn more</CardLink>
+              <CardLink href="#">Coming soon!</CardLink>
             </Card>
           </Row>
         </Container>
@@ -449,7 +451,7 @@ const BannerText = styled.div`
 const BannerImage = styled.img`
   position: absolute;
   opacity: .25;
-  right: -610px;
+  left: 76%;
   top: 0;
   height: 300px;
   z-index: -1;
