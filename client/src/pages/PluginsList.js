@@ -121,16 +121,6 @@ const Button = styled.button`
     background: #555;
   }
 
-  &.primary {
-    font-weight: 900;
-    text-shadow: 0 1px 0 rgba(0,0,0,.1);
-    box-shadow: 0 4px 16px -1px rgba(0,0,0,.4);
-    background: #000;
-    &::before {
-      color: rgba(0,0,0,.3);
-    }
-  }
-
   & ~ & {
     margin-left: 1.5em;
     animation-delay: 2.4s;
@@ -198,6 +188,7 @@ const Main = styled.main`
   width: 120ch;
   max-width: calc(100vw - 2rem);
   position: relative;
+  
 `;
 
 const ClrPrimaryVariables = `
@@ -310,7 +301,7 @@ const PluginsList = () => {
         </Slogan>
         
         <Buttons className="btns">
-          <Button className="btn primary">Contact</Button>
+          <Button className="btn">Contact</Button>
           <Button className="btn">Discord</Button>
         </Buttons>
         
@@ -346,10 +337,10 @@ const PluginsList = () => {
               <CardIcon src="https://image.ibb.co/cFV8mR/monitoring.png" alt="monitoring" />
               <CardTitle>SimpleGold</CardTitle>
               <CardText>Efficient gold management to keep your economy balanced and fair for all players on your server.</CardText>
-              <CardLink href="https://www.spigotmc.org/resources/simple-gold-1-20-1-21-vault-towny.115987/">Learn more</CardLink>
+              <CardLink href="http://localhost:3000/bakteriainfo">Learn more</CardLink>
             </Card>
             <Card>
-              <CardIcon src="https://image.ibb.co/jfmg6R/cloud_firewalls.png" alt="cloud firewalls" />
+              <CardIcon src="https://i.ibb.co/V9wby5w/3dgifmaker37576.gif" alt="cloud firewalls" />
               <CardTitle>Bakteria Staff Plugin</CardTitle>
               <CardText>Monitor staff activities and ensure a healthy and productive server environment. We give you all the tools your staff member need!</CardText>
               <CardLink href="https://www.spigotmc.org/resources/bakteria-staff-moderation-plugin-1-8-1-21.117394/">Learn more</CardLink>
@@ -396,10 +387,12 @@ const BannerSection = styled.section`
   width: 100%;
   position: relative;
   z-index: 1;
+  padding: 2rem 0;
 
   @media (min-width: 768px) {
     height: 450px;
     margin-bottom: 32px;
+    padding: 0;
   }
 `;
 
@@ -498,7 +491,7 @@ const Card = styled.div`
 `;
 
 const CardIcon = styled.img`
-  width: 60px;
+  width: 100px;
   margin-bottom: 8px;
   position: relative;
   top: 0;
