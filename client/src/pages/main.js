@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     font-family: 'Exo 2', sans-serif;
-    background: #0a0b1e;
+    background: #0f172a;
     color: #ffffff;
     overflow-x: hidden;
   }
@@ -40,7 +40,7 @@ const SpaceBackground = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  background: radial-gradient(ellipse at bottom, #1e3a8a 0%, #0f172a 100%);
   z-index: -1;
 `;
 
@@ -71,7 +71,7 @@ const HeroSection = styled(motion.section)`
   align-items: center;
   text-align: center;
   padding: 2rem;
-  background: rgba(10, 11, 30, 0.7);
+  background: rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(10px);
 `;
 
@@ -79,8 +79,8 @@ const HeroTitle = styled(motion.h1)`
   font-size: 4rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #7b68ee;
-  text-shadow: 0 0 20px rgba(123, 104, 238, 0.5);
+  color: #3b82f6;
+  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
 
   @media (max-width: 768px) {
     font-size: 3rem;
@@ -91,7 +91,7 @@ const HeroSubtitle = styled(motion.p)`
   font-size: 1.2rem;
   margin-bottom: 2rem;
   max-width: 600px;
-  color: #b8c7e0;
+  color: #93c5fd;
 `;
 
 const SearchBar = styled(motion.form)`
@@ -122,7 +122,7 @@ const SearchInput = styled.input`
 `;
 
 const SearchButton = styled.button`
-  background-color: #7b68ee;
+  background-color: #3b82f6;
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -132,14 +132,14 @@ const SearchButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #6a5acd;
+    background-color: #2563eb;
   }
 `;
 
 const PluginButton = styled(motion.button)`
   background-color: transparent;
-  color: #7b68ee;
-  border: 2px solid #7b68ee;
+  color: #3b82f6;
+  border: 2px solid #3b82f6;
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
   cursor: pointer;
@@ -147,14 +147,14 @@ const PluginButton = styled(motion.button)`
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #7b68ee;
+    background-color: #3b82f6;
     color: white;
   }
 `;
 
 const FeaturedSection = styled(motion.section)`
   padding: 5rem 2rem;
-  background-color: rgba(10, 11, 30, 0.8);
+  background-color: rgba(15, 23, 42, 0.8);
   min-height: 40vh;
 `;
 
@@ -162,7 +162,7 @@ const SectionTitle = styled(motion.h2)`
   text-align: center;
   margin-bottom: 3rem;
   font-size: 2.5rem;
-  color: #7b68ee;
+  color: #3b82f6;
 `;
 
 const CategoryGrid = styled(motion.div)`
@@ -174,7 +174,7 @@ const CategoryGrid = styled(motion.div)`
 `;
 
 const CategoryCard = styled(motion.div)`
-  background-color: rgba(123, 104, 238, 0.1);
+  background-color: rgba(59, 130, 246, 0.1);
   border-radius: 20px;
   padding: 2rem;
   text-align: center;
@@ -183,21 +183,21 @@ const CategoryCard = styled(motion.div)`
 
   &:hover {
     transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(123, 104, 238, 0.3);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
   }
 `;
 
 const IconWrapper = styled.div`
   font-size: 3rem;
   margin-bottom: 1rem;
-  color: #7b68ee;
+  color: #3b82f6;
 `;
 
 const ScrollButton = styled(motion.div)`
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  background-color: rgba(123, 104, 238, 0.8);
+  background-color: rgba(59, 130, 246, 0.8);
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -209,7 +209,7 @@ const ScrollButton = styled(motion.div)`
   z-index: 1000;
 
   &:hover {
-    background-color: #7b68ee;
+    background-color: #3b82f6;
   }
 `;
 
@@ -230,23 +230,23 @@ const SocialIcons = styled.div`
   font-size: 1.5rem;
 
   a {
-    color: #7b68ee;
+    color: #3b82f6;
     transition: color 0.3s ease;
 
     &:hover {
-      color: white; /* Hover effect with blue accent color */
-      transform: scale(1.1); /* Slight scale effect on hover */
-      
+      color: #60a5fa;
+      transform: scale(1.1);
     }
   }
 `;
+
 const MotionSocialIcon = styled(motion.div)`
-  color: #7b68ee;
+  color: #3b82f6;
   transition: color 0.3s ease;
   
   &:hover {
-    color: white; /* Hover effect with blue accent color */
-    transform: scale(1.1); /* Slight scale effect on hover */
+    color: #60a5fa;
+    transform: scale(1.1);
   }
 `;
 
@@ -304,9 +304,9 @@ const MinecraftSecurityPluginHomepage = () => {
 
   const createNebulas = () => {
     const nebulas = [
-      { color: '#ff6b6b', top: '10%', left: '5%', size: '300px' },
-      { color: '#4ecdc4', top: '60%', right: '10%', size: '250px' },
-      { color: '#45b7d1', bottom: '15%', left: '15%', size: '200px' },
+      { color: '#60a5fa', top: '10%', left: '5%', size: '300px' },
+      { color: '#38bdf8', top: '60%', right: '10%', size: '250px' },
+      { color: '#2dd4bf', bottom: '15%', left: '15%', size: '200px' },
     ];
 
     return nebulas.map((nebula, index) => (
@@ -329,7 +329,6 @@ const MinecraftSecurityPluginHomepage = () => {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
-  
 
   return (
     <>

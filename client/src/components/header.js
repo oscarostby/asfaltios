@@ -10,26 +10,26 @@ const NavBar = styled(motion.nav)`
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
-  height: 10rem; /* Increased height for desktop */
-  background-color: rgba(10, 11, 30, 0.8);
+  height: 10rem;
+  background-color: rgba(15, 23, 42, 0.8);
   backdrop-filter: blur(10px);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.1);
 
   @media (max-width: 768px) {
     padding: 0 20px;
-    height: 80px; /* Height for mobile */
+    height: 80px;
   }
 `;
 
 const NavLogo = styled.div`
   font-size: 2.5rem;
   font-weight: bold;
-  color: #7b68ee;
+  color: #3b82f6;
 `;
 
 const NavLinks = styled.div`
@@ -43,13 +43,13 @@ const NavLinks = styled.div`
 `;
 
 const NavLink = styled.a`
-  color: #b8c7e0;
+  color: #93c5fd;
   text-decoration: none;
   margin-right: 20px;
   font-size: 1rem;
   transition: color 0.3s ease;
   &:hover {
-    color: #7b68ee;
+    color: #3b82f6;
   }
 `;
 
@@ -65,7 +65,7 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   margin-right: 20px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(59, 130, 246, 0.1);
   border-radius: 20px;
   padding: 5px 10px;
 `;
@@ -84,7 +84,7 @@ const SearchInput = styled.input`
 const SearchButton = styled.button`
   background: none;
   border: none;
-  color: #7b68ee;
+  color: #3b82f6;
   font-size: 1.2rem;
   cursor: pointer;
 `;
@@ -102,18 +102,18 @@ const AuthButton = styled(motion.button)`
 
 const LoginButton = styled(AuthButton)`
   background-color: transparent;
-  color: #7b68ee;
-  border: 2px solid #7b68ee;
+  color: #3b82f6;
+  border: 2px solid #3b82f6;
   &:hover {
-    background-color: rgba(123, 104, 238, 0.1);
+    background-color: rgba(59, 130, 246, 0.1);
   }
 `;
 
 const RegisterButton = styled(AuthButton)`
-  background-color: #7b68ee;
+  background-color: #3b82f6;
   color: white;
   &:hover {
-    background-color: #6a5acd;
+    background-color: #2563eb;
   }
 `;
 
@@ -122,7 +122,7 @@ const UserButton = styled(motion.button)`
   align-items: center;
   background: none;
   border: none;
-  color: #b8c7e0;
+  color: #93c5fd;
   cursor: pointer;
   font-size: 1.1rem;
 `;
@@ -132,25 +132,26 @@ const ProfilePicture = styled.img`
   height: 35px;
   border-radius: 50%;
   margin-right: 10px;
+  border: 2px solid #3b82f6;
 `;
 
 const UserDropdown = styled(motion.div)`
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: rgba(10, 11, 30, 0.9);
+  background-color: rgba(15, 23, 42, 0.9);
   backdrop-filter: blur(10px);
   border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
   overflow: hidden;
 `;
 
 const UserDropdownItem = styled(motion.div)`
   padding: 10px 15px;
   cursor: pointer;
-  color: #b8c7e0;
+  color: #93c5fd;
   &:hover {
-    background-color: rgba(123, 104, 238, 0.1);
+    background-color: rgba(59, 130, 246, 0.1);
   }
 `;
 
@@ -169,7 +170,7 @@ const HamburgerIcon = styled.div`
     display: block;
     height: 3px;
     width: 100%;
-    background-color: #7b68ee;
+    background-color: #3b82f6;
     transition: all 0.3s ease;
   }
 
@@ -194,7 +195,7 @@ const MobileMenu = styled(motion.div)`
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(10, 11, 30, 0.95);
+  background-color: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
@@ -209,19 +210,19 @@ const CloseButton = styled.button`
   right: 20px;
   background: none;
   border: none;
-  color: #7b68ee;
+  color: #3b82f6;
   font-size: 1.5rem;
   cursor: pointer;
 `;
 
 const MobileNavLink = styled(motion.a)`
-  color: #b8c7e0;
+  color: #93c5fd;
   text-decoration: none;
   margin: 15px 0;
   font-size: 1.2rem;
   transition: color 0.3s ease;
   &:hover {
-    color: #7b68ee;
+    color: #3b82f6;
   }
 `;
 
