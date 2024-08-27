@@ -1,15 +1,15 @@
 import React from 'react';
 import { FaGithub, FaDiscord } from 'react-icons/fa';
 import styled from 'styled-components';
-import logo from '../bilder/logo3.png';
+import logo from '../bilder/logo2.png';
 
 const FooterContainer = styled.footer`
-  background-color: #ffffff;
-  color: #070b2e;
-  padding: 40px 20px; // Reduced padding for smaller screens
+  background-color: #2c3e50; /* Match the page background color */
+  color: #ecf0f1; /* Light text color for contrast */
+  padding: 40px 20px;
 
   @media (min-width: 768px) {
-    padding: 80px 0; // Original padding for larger screens
+    padding: 80px 0;
   }
 `;
 
@@ -29,22 +29,23 @@ const FooterContent = styled.div`
 
 const FooterLogo = styled.div`
   display: flex;
-  flex-direction: column; // Stack logo and text vertically on smaller screens
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 20px; // Reduced margin for smaller screens
+  margin-bottom: 20px;
 
   img {
-    height: 40px; // Reduced logo size for smaller screens
+    height: 40px;
     margin-right: 0;
-    margin-bottom: 10px; // Add some spacing between logo and text
+    margin-bottom: 10px;
   }
 
   span {
-    font-size: 24px; // Reduced font size for smaller screens
+    font-size: 24px;
+    color: #6495ED; /* Use the same blue accent color */
   }
 
   @media (min-width: 768px) {
-    flex-direction: row; // Revert to original layout for larger screens
+    flex-direction: row;
     margin-bottom: 40px;
 
     img {
@@ -63,16 +64,16 @@ const FooterLinks = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px; // Reduced margin for smaller screens
+  margin-bottom: 20px;
 
   a {
-    color: #070b2e;
+    color: #ecf0f1; /* Match the text color */
     text-decoration: none;
-    margin: 0 10px; // Reduced margin for smaller screens
-    font-size: 16px; // Reduced font size for smaller screens
+    margin: 0 10px;
+    font-size: 16px;
 
     &:hover {
-      color: #4b4b4b;
+      color: #6495ED; /* Hover effect with blue accent color */
     }
   }
 
@@ -89,16 +90,16 @@ const FooterLinks = styled.div`
 const FooterSocial = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 20px; // Reduced margin for smaller screens
+  margin-bottom: 20px;
 
   a {
-    color: #070b2e;
+    color: #ecf0f1; /* Match the text color */
     text-decoration: none;
-    margin: 0 10px; // Reduced margin for smaller screens
-    font-size: 20px; // Reduced font size for smaller screens
+    margin: 0 10px;
+    font-size: 20px;
 
     &:hover {
-      color: #4b4b4b;
+      color: #6495ED; /* Hover effect with blue accent color */
     }
   }
 
@@ -113,9 +114,9 @@ const FooterSocial = styled.div`
 `;
 
 const FooterCopyright = styled.div`
-  font-size: 14px; // Reduced font size for smaller screens
+  font-size: 14px;
   text-align: center;
-  color: #4b4b4b;
+  color: #bdc3c7; /* Slightly lighter color for the copyright text */
 
   @media (min-width: 768px) {
     font-size: 16px;
@@ -132,7 +133,7 @@ const Footer = () => {
         </FooterLogo>
 
         <FooterSocial>
-          <a href="https://discord.gg/XSwEQCxPMus" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/your-github-link" target="_blank" rel="noopener noreferrer">
             <FaGithub />
           </a>
           <a href="https://discord.gg/XSwEQCxPMu" target="_blank" rel="noopener noreferrer">
