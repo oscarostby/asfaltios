@@ -334,16 +334,16 @@ const PluginsList = () => {
         <Container>
           <Row>
             <Card>
-              <CardIcon src="https://image.ibb.co/cFV8mR/monitoring.png" alt="monitoring" />
+              <CardIcon src="https://i.ibb.co/rdLyxmf/3dgif-Simplegold.gif" alt="monitoring" />
               <CardTitle>SimpleGold</CardTitle>
               <CardText>Efficient gold management to keep your economy balanced and fair for all players on your server.</CardText>
-              <CardLink href="http://localhost:3000/bakteriainfo">Learn more</CardLink>
+              <CardLink href="https://www.spigotmc.org/resources/simple-gold-1-20-1-21-vault-towny.115987/">Learn more</CardLink>
             </Card>
             <Card>
               <CardIcon src="https://i.ibb.co/V9wby5w/3dgifmaker37576.gif" alt="cloud firewalls" />
               <CardTitle>Bakteria Staff Plugin</CardTitle>
               <CardText>Monitor staff activities and ensure a healthy and productive server environment. We give you all the tools your staff member need!</CardText>
-              <CardLink href="https://www.spigotmc.org/resources/bakteria-staff-moderation-plugin-1-8-1-21.117394/">Learn more</CardLink>
+              <CardLink href="http://localhost:3000/bakteriainfo">Learn more</CardLink>
             </Card>
             <Card>
               <CardIcon src="https://image.ibb.co/fcnzt6/team_management.png" alt="team management" />
