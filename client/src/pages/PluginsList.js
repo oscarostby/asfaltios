@@ -343,7 +343,7 @@ const PluginsList = () => {
               <CardIcon src="https://i.ibb.co/V9wby5w/3dgifmaker37576.gif" alt="cloud firewalls" />
               <CardTitle>Bakteria Staff Plugin</CardTitle>
               <CardText>Monitor staff activities and ensure a healthy and productive server environment. We give you all the tools your staff member need!</CardText>
-              <CardLink href="http://localhost:3000/bakteriainfo">Learn more</CardLink>
+              <CardLink href="https://asfaltios.vercel.app/bakteriainfo">Learn more</CardLink>
             </Card>
             <Card>
               <CardIcon src="https://image.ibb.co/fcnzt6/team_management.png" alt="team management" />
