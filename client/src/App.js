@@ -7,7 +7,7 @@ import Register from './pages/register';
 import Upload from './pages/upload';
 import List from './pages/list';
 import Profile from './pages/profile';
-
+import BakteriaInfo from './pages/bakteriainfo'; // Import the BakteriaInfo component
 
 function App() {
   useEffect(() => {
@@ -36,7 +36,7 @@ function App() {
         <Route path="/upload" element={<Upload />} />
         <Route path="/Plugins/:searchTerm" element={<List />} />
         <Route path="/Profile" element={<Profile />} />
-
+        <Route path="/BakteriaInfo" element={<BakteriaInfo />} /> {/* Add the new route */}
       </Routes>
     </BrowserRouter>
   );
