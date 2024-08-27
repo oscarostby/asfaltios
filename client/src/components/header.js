@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { FaCaretDown, FaSearch, FaBars, FaTimes, FaDiscord } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const NavBar = styled.nav`
+const NavBar = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
-  height: 80px;
-  background-color: #2c3e50;
+  height: 10rem; /* Increased height for desktop */
+  background-color: rgba(10, 11, 30, 0.8);
+  backdrop-filter: blur(10px);
   position: fixed;
   top: 0;
   left: 0;
@@ -20,13 +22,14 @@ const NavBar = styled.nav`
 
   @media (max-width: 768px) {
     padding: 0 20px;
+    height: 80px; /* Height for mobile */
   }
 `;
 
 const NavLogo = styled.div`
   font-size: 2.5rem;
   font-weight: bold;
-  color: #ffffff;
+  color: #7b68ee;
 `;
 
 const NavLinks = styled.div`
@@ -40,13 +43,13 @@ const NavLinks = styled.div`
 `;
 
 const NavLink = styled.a`
-  color: #ffffff;
+  color: #b8c7e0;
   text-decoration: none;
   margin-right: 20px;
   font-size: 1rem;
   transition: color 0.3s ease;
   &:hover {
-    color: #6495ED;
+    color: #7b68ee;
   }
 `;
 
@@ -81,12 +84,12 @@ const SearchInput = styled.input`
 const SearchButton = styled.button`
   background: none;
   border: none;
-  color: #6495ED;
+  color: #7b68ee;
   font-size: 1.2rem;
   cursor: pointer;
 `;
 
-const AuthButton = styled.button`
+const AuthButton = styled(motion.button)`
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -99,27 +102,27 @@ const AuthButton = styled.button`
 
 const LoginButton = styled(AuthButton)`
   background-color: transparent;
-  color: #6495ED;
-  border: 2px solid #6495ED;
+  color: #7b68ee;
+  border: 2px solid #7b68ee;
   &:hover {
-    background-color: rgba(100, 149, 237, 0.1);
+    background-color: rgba(123, 104, 238, 0.1);
   }
 `;
 
 const RegisterButton = styled(AuthButton)`
-  background-color: #6495ED;
+  background-color: #7b68ee;
   color: white;
   &:hover {
-    background-color: #4169E1;
+    background-color: #6a5acd;
   }
 `;
 
-const UserButton = styled.button`
+const UserButton = styled(motion.button)`
   display: flex;
   align-items: center;
   background: none;
   border: none;
-  color: #ffffff;
+  color: #b8c7e0;
   cursor: pointer;
   font-size: 1.1rem;
 `;
@@ -131,22 +134,23 @@ const ProfilePicture = styled.img`
   margin-right: 10px;
 `;
 
-const UserDropdown = styled.div`
+const UserDropdown = styled(motion.div)`
   position: absolute;
   top: 100%;
   right: 0;
-  background-color: #ffffff;
+  background-color: rgba(10, 11, 30, 0.9);
+  backdrop-filter: blur(10px);
   border-radius: 4px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 `;
 
-const UserDropdownItem = styled.div`
+const UserDropdownItem = styled(motion.div)`
   padding: 10px 15px;
   cursor: pointer;
-  color: #333;
+  color: #b8c7e0;
   &:hover {
-    background-color: #f0f0f0;
+    background-color: rgba(123, 104, 238, 0.1);
   }
 `;
 
@@ -165,7 +169,7 @@ const HamburgerIcon = styled.div`
     display: block;
     height: 3px;
     width: 100%;
-    background-color: white;
+    background-color: #7b68ee;
     transition: all 0.3s ease;
   }
 
@@ -182,42 +186,21 @@ const HamburgerIcon = styled.div`
   }
 `;
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const MobileMenu = styled.div`
-  display: none;
+const MobileMenu = styled(motion.div)`
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #2c3e50;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(10, 11, 30, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  z-index: 1500;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-
-  @media (max-width: 768px) {
-    display: flex;
-
-    &.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    > * {
-      animation: ${fadeIn} 0.3s ease forwards;
-      opacity: 0;
-      transform: translateY(-20px);
-      margin: 10px 0;
-    }
-  }
+  z-index: 2000;
 `;
 
 const CloseButton = styled.button`
@@ -226,9 +209,20 @@ const CloseButton = styled.button`
   right: 20px;
   background: none;
   border: none;
-  color: white;
+  color: #7b68ee;
   font-size: 1.5rem;
   cursor: pointer;
+`;
+
+const MobileNavLink = styled(motion.a)`
+  color: #b8c7e0;
+  text-decoration: none;
+  margin: 15px 0;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #7b68ee;
+  }
 `;
 
 const LogoAndLinks = styled.div`
@@ -306,8 +300,34 @@ const Header = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const menuVariants = {
+    closed: {
+      opacity: 0,
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1
+      }
+    },
+    open: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    closed: { opacity: 0, y: 20 },
+    open: { opacity: 1, y: 0 }
+  };
+
   return (
-    <NavBar>
+    <NavBar
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <LogoAndLinks>
         <NavLogo>Asfaltios</NavLogo>
         <NavLinks>
@@ -338,16 +358,24 @@ const Header = () => {
           </>
         )}
 
-        {showDropdown && (
-          <UserDropdown ref={dropdownRef}>
-            <UserDropdownItem onClick={() => navigate('/Profile')}>
-              Settings Profile
-            </UserDropdownItem>
-            <UserDropdownItem onClick={handleLogoutClick}>
-              Logout
-            </UserDropdownItem>
-          </UserDropdown>
-        )}
+        <AnimatePresence>
+          {showDropdown && (
+            <UserDropdown
+              ref={dropdownRef}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <UserDropdownItem onClick={() => navigate('/Profile')}>
+                Settings Profile
+              </UserDropdownItem>
+              <UserDropdownItem onClick={handleLogoutClick}>
+                Logout
+              </UserDropdownItem>
+            </UserDropdown>
+          )}
+        </AnimatePresence>
       </NavItems>
 
       <HamburgerIcon onClick={toggleMobileMenu} className={isMobileMenuOpen ? 'open' : ''}>
@@ -356,33 +384,54 @@ const Header = () => {
         <span></span>
       </HamburgerIcon>
 
-      <MobileMenu className={isMobileMenuOpen ? 'open' : ''}>
-        <CloseButton onClick={toggleMobileMenu}>
-          <FaTimes />
-        </CloseButton>
-        <NavLink href="#" onClick={() => setIsMobileMenuOpen(false)}>Server.Jar</NavLink>
-        <NavLink href="#" onClick={() => setIsMobileMenuOpen(false)}>Paper</NavLink>
-        <NavLink href="#" onClick={() => setIsMobileMenuOpen(false)}>Discord</NavLink>
-        {loggedInUsername ? (
-          <>
-            <UserButton onClick={handleUserButtonClick}>
-              {profilePictureUrl && <ProfilePicture src={profilePictureUrl} alt="Profile" />}
-              {loggedInUsername}
-            </UserButton>
-            <UserDropdownItem onClick={() => { navigate('/Profile'); setIsMobileMenuOpen(false); }}>
-              Settings Profile
-            </UserDropdownItem>
-            <UserDropdownItem onClick={() => { handleLogoutClick(); setIsMobileMenuOpen(false); }}>
-              Logout
-            </UserDropdownItem>
-          </>
-        ) : (
-          <>
-            <LoginButton onClick={handleLoginClick}>Login</LoginButton>
-            <RegisterButton onClick={handleRegisterClick}>Register</RegisterButton>
-          </>
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <MobileMenu
+            initial="closed"
+            animate="open"
+            exit="closed"
+            variants={menuVariants}
+          >
+            <CloseButton onClick={toggleMobileMenu}>
+              <FaTimes />
+            </CloseButton>
+            <MobileNavLink href="#" onClick={() => setIsMobileMenuOpen(false)} variants={itemVariants}>
+              Server.Jar
+            </MobileNavLink>
+            <MobileNavLink href="#" onClick={() => setIsMobileMenuOpen(false)} variants={itemVariants}>
+              Paper
+            </MobileNavLink>
+            <MobileNavLink href="#" onClick={() => setIsMobileMenuOpen(false)} variants={itemVariants}>
+              Discord
+            </MobileNavLink>
+            {loggedInUsername ? (
+              <>
+                <UserButton onClick={handleUserButtonClick} variants={itemVariants}>
+                  {profilePictureUrl && <ProfilePicture src={profilePictureUrl} alt="Profile" />}
+                  {loggedInUsername}
+                </UserButton>
+                <UserDropdownItem 
+                  onClick={() => { navigate('/Profile'); setIsMobileMenuOpen(false); }}
+                  variants={itemVariants}
+                >
+                  Settings Profile
+                </UserDropdownItem>
+                <UserDropdownItem 
+                  onClick={() => { handleLogoutClick(); setIsMobileMenuOpen(false); }}
+                  variants={itemVariants}
+                >
+                  Logout
+                </UserDropdownItem>
+              </>
+            ) : (
+              <>
+                <LoginButton onClick={handleLoginClick} variants={itemVariants}>Login</LoginButton>
+                <RegisterButton onClick={handleRegisterClick} variants={itemVariants}>Register</RegisterButton>
+              </>
+            )}
+          </MobileMenu>
         )}
-      </MobileMenu>
+      </AnimatePresence>
     </NavBar>
   );
 };

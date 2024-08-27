@@ -1,197 +1,252 @@
 import React, { useState, useEffect } from 'react';
-import styled, { keyframes } from 'styled-components';
-import { FaSearch, FaShieldAlt, FaLock, FaUserShield, FaServer, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaSearch, FaShieldAlt, FaLock, FaUserShield, FaServer, FaChevronDown, FaChevronUp, FaDiscord, FaGithub } from 'react-icons/fa';
 import Header from '../components/header';
 import Footer from "../components/footer";
 
-const float = keyframes`
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0px); }
-`;
+const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&display=swap');
 
-const PageContainer = styled.div`
-  font-family: 'Minecraft', sans-serif;
-  color: #ffffff;
-  min-height: 100vh;
-  background-color: #1e2327;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-      linear-gradient(to right, #2c3e50 1px, transparent 1px),
-      linear-gradient(to bottom, #2c3e50 1px, transparent 1px);
-    background-size: 20px 20px;
-    opacity: 0.2;
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Exo 2', sans-serif;
+    background: #0a0b1e;
+    color: #ffffff;
+    overflow-x: hidden;
   }
 `;
 
-const FloatingCube = styled.div`
+const starTwinkle = keyframes`
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+`;
+
+const nebulaPulse = keyframes`
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+`;
+
+const PageContainer = styled.div`
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+`;
+
+const SpaceBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  z-index: -1;
+`;
+
+const Star = styled.div`
   position: absolute;
-  width: 50px;
-  height: 50px;
-  background-color: rgba(100, 149, 237, 0.3);
-  animation: ${float} 6s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(100, 149, 237, 0.5);
+  background: #ffffff;
+  border-radius: 50%;
+  animation: ${starTwinkle} ${props => props.duration}s ease-in-out infinite;
+`;
+
+const Nebula = styled.div`
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  animation: ${nebulaPulse} 10s ease-in-out infinite;
 `;
 
 const ContentWrapper = styled.div`
   position: relative;
   z-index: 1;
-
 `;
 
-const HeroSection = styled.section`
-  min-height: 100vh;
+const HeroSection = styled(motion.section)`
+  min-height: 95vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 80px 20px 0;
-  background: rgba(44, 62, 80, 0.6);
+  padding: 2rem;
+  background: rgba(10, 11, 30, 0.7);
+  backdrop-filter: blur(10px);
+`;
+
+const HeroTitle = styled(motion.h1)`
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #7b68ee;
+  text-shadow: 0 0 20px rgba(123, 104, 238, 0.5);
 
   @media (max-width: 768px) {
-    padding: 30px 20px 0; /* Move the section content up by reducing top padding */
+    font-size: 3rem;
   }
 `;
 
-const HeroTitle = styled.h1`
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  color: #6495ED;
-  text-shadow: 0 0 10px rgba(100, 149, 237, 0.5);
-`;
-
-const HeroSubtitle = styled.p`
+const HeroSubtitle = styled(motion.p)`
   font-size: 1.2rem;
   margin-bottom: 2rem;
   max-width: 600px;
-  color: #ecf0f1;
+  color: #b8c7e0;
 `;
 
-const SearchBar = styled.form`
+const SearchBar = styled(motion.form)`
   display: flex;
   width: 100%;
   max-width: 600px;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
 `;
 
 const SearchInput = styled.input`
   flex-grow: 1;
-  padding: 15px;
+  padding: 1rem;
   font-size: 1rem;
-  border: 2px solid #6495ED;
-  border-radius: 5px 0 0 5px;
-  background-color: rgba(44, 62, 80, 0.8);
-  color: #ecf0f1;
+  border: none;
+  border-radius: 50px 0 0 50px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  outline: none;
+  transition: background-color 0.3s ease;
 
   &::placeholder {
-    color: #bdc3c7;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &:focus {
+    background-color: rgba(255, 255, 255, 0.2);
   }
 `;
 
 const SearchButton = styled.button`
-  background-color: #6495ED;
+  background-color: #7b68ee;
   color: white;
   border: none;
-  padding: 15px 25px;
+  padding: 1rem 1.5rem;
   font-size: 1rem;
   cursor: pointer;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 50px 50px 0;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #4169E1;
+    background-color: #6a5acd;
   }
 `;
 
-const PluginButton = styled.button`
+const PluginButton = styled(motion.button)`
   background-color: transparent;
-  color: #6495ED;
-  border: 2px solid #6495ED;
-  padding: 10px 20px;
+  color: #7b68ee;
+  border: 2px solid #7b68ee;
+  padding: 0.8rem 1.5rem;
   font-size: 1rem;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 50px;
   transition: all 0.3s ease;
-  margin-top: 1rem;
 
   &:hover {
-    background-color: #6495ED;
+    background-color: #7b68ee;
     color: white;
   }
 `;
 
-const FeaturedSection = styled.section`
-  padding: 100px 0;
-  background-color: rgba(44, 62, 80, 0.8);
+const FeaturedSection = styled(motion.section)`
+  padding: 5rem 2rem;
+  background-color: rgba(10, 11, 30, 0.8);
+  min-height: 40vh;
 `;
 
-const SectionTitle = styled.h2`
+const SectionTitle = styled(motion.h2)`
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 3rem;
   font-size: 2.5rem;
-  color: #6495ED;
+  color: #7b68ee;
 `;
 
-const CategoryGrid = styled.div`
+const CategoryGrid = styled(motion.div)`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 30px;
+  gap: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
 `;
 
-const CategoryCard = styled.div`
-  background-color: rgba(52, 73, 94, 0.8);
-  border-radius: 10px;
-  padding: 30px;
+const CategoryCard = styled(motion.div)`
+  background-color: rgba(123, 104, 238, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
 
   &:hover {
     transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(100, 149, 237, 0.3);
+    box-shadow: 0 10px 20px rgba(123, 104, 238, 0.3);
   }
 `;
 
 const IconWrapper = styled.div`
   font-size: 3rem;
-  margin-bottom: 20px;
-  color: #6495ED;
+  margin-bottom: 1rem;
+  color: #7b68ee;
 `;
 
-const ScrollIndicator = styled.div`
+const ScrollButton = styled(motion.div)`
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: rgba(100, 149, 237, 0.8);
-  width: 50px;
-  height: 50px;
+  bottom: 2rem;
+  right: 2rem;
+  background-color: rgba(123, 104, 238, 0.8);
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  z-index: 2000;
+  z-index: 1000;
 
   &:hover {
-    background-color: rgba(100, 149, 237, 1);
+    background-color: #7b68ee;
   }
+`;
 
-  svg {
-    transition: transform 0.3s ease;
+const RocketIcon = styled(motion.div)`
+  font-size: 1.5rem;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const SocialIcons = styled.div`
+  margin-top: 2rem;
+  display: flex;
+  gap: 2rem;
+  font-size: 1.5rem;
+
+  a {
+    color: #7b68ee;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: white; /* Hover effect with blue accent color */
+      transform: scale(1.1); /* Slight scale effect on hover */
+      
+    }
+  }
+`;
+const MotionSocialIcon = styled(motion.div)`
+  color: #7b68ee;
+  transition: color 0.3s ease;
+  
+  &:hover {
+    color: white; /* Hover effect with blue accent color */
+    transform: scale(1.1); /* Slight scale effect on hover */
   }
 `;
 
@@ -200,31 +255,12 @@ const MinecraftSecurityPluginHomepage = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    const createFloatingCube = () => {
-      const cube = document.createElement('div');
-      cube.className = FloatingCube.styledComponentId;
-      cube.style.left = `${Math.random() * 100}vw`;
-      cube.style.top = `${Math.random() * 100}vh`;
-      cube.style.animationDelay = `${Math.random() * 5}s`;
-      document.body.appendChild(cube);
-
-      setTimeout(() => {
-        document.body.removeChild(cube);
-      }, 10000);
-    };
-
-    const interval = setInterval(createFloatingCube, 2000);
-
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > window.innerHeight / 2);
+      setIsScrolled(window.scrollY > 100);
     };
 
     window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollToSection = () => {
@@ -242,63 +278,193 @@ const MinecraftSecurityPluginHomepage = () => {
     }
   };
 
-  const navigateToPlugins = () => {
+  const handleExploreClick = () => {
     window.location.href = '/plugins';
   };
 
-  return (
-    <PageContainer>
-      <Header />
-      <ContentWrapper>
-        <HeroSection>
-          <HeroTitle>Minecraft Security Hub</HeroTitle>
-          <HeroSubtitle>
-            Protect your Minecraft server with cutting-edge security plugins. 
-            Safeguard your world, players, and data.
-          </HeroSubtitle>
-          <SearchBar onSubmit={handleSearch}>
-            <SearchInput 
-              type="text" 
-              placeholder="Search for security plugins..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <SearchButton type="submit"><FaSearch /></SearchButton>
-          </SearchBar>
-          <PluginButton onClick={navigateToPlugins}>Or look at our plugins here</PluginButton>
-        </HeroSection>
+  const createStars = () => {
+    const stars = [];
+    for (let i = 0; i < 200; i++) {
+      const size = Math.random() * 2;
+      stars.push(
+        <Star
+          key={i}
+          style={{
+            width: `${size}px`,
+            height: `${size}px`,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          duration={Math.random() * 5 + 3}
+        />
+      );
+    }
+    return stars;
+  };
 
-        <FeaturedSection>
-          <SectionTitle>Security Solutions</SectionTitle>
-          <CategoryGrid>
-            <CategoryCard>
-              <IconWrapper><FaShieldAlt /></IconWrapper>
-              <h3>Anti-Cheat</h3>
-              <p>Detect and prevent cheating on your server</p>
-            </CategoryCard>
-            <CategoryCard>
-              <IconWrapper><FaLock /></IconWrapper>
-              <h3>Authentication</h3>
-              <p>Secure login and player verification systems</p>
-            </CategoryCard>
-            <CategoryCard>
-              <IconWrapper><FaUserShield /></IconWrapper>
-              <h3>Grief Prevention</h3>
-              <p>Protect builds and prevent unwanted modifications</p>
-            </CategoryCard>
-            <CategoryCard>
-              <IconWrapper><FaServer /></IconWrapper>
-              <h3>DDoS Protection</h3>
-              <p>Shield your server from malicious attacks</p>
-            </CategoryCard>
-          </CategoryGrid>
-        </FeaturedSection>
-      </ContentWrapper>
-      <ScrollIndicator onClick={scrollToSection}>
-        {isScrolled ? <FaChevronUp /> : <FaChevronDown />}
-      </ScrollIndicator>
-      <Footer />
-    </PageContainer>
+  const createNebulas = () => {
+    const nebulas = [
+      { color: '#ff6b6b', top: '10%', left: '5%', size: '300px' },
+      { color: '#4ecdc4', top: '60%', right: '10%', size: '250px' },
+      { color: '#45b7d1', bottom: '15%', left: '15%', size: '200px' },
+    ];
+
+    return nebulas.map((nebula, index) => (
+      <Nebula
+        key={index}
+        style={{
+          backgroundColor: nebula.color,
+          top: nebula.top,
+          left: nebula.left,
+          right: nebula.right,
+          bottom: nebula.bottom,
+          width: nebula.size,
+          height: nebula.size,
+        }}
+      />
+    ));
+  };
+
+  const socialIconVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+  
+
+  return (
+    <>
+      <GlobalStyle />
+      <PageContainer>
+        <SpaceBackground>
+          {createStars()}
+          {createNebulas()}
+        </SpaceBackground>
+        <Header />
+        <ContentWrapper>
+          <HeroSection
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            <HeroTitle
+              initial={{ y: -50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.8 }}
+            >
+              Minecraft Security Hub
+            </HeroTitle>
+            <HeroSubtitle
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              Protect your Minecraft server with cutting-edge security plugins. 
+              Safeguard your world, players, and data.
+            </HeroSubtitle>
+            <SearchBar
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              onSubmit={handleSearch}
+            >
+              <SearchInput 
+                type="text" 
+                placeholder="Search for security plugins..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <SearchButton type="submit"><FaSearch /></SearchButton>
+            </SearchBar>
+            <PluginButton
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleExploreClick}
+            >
+              Explore Our Plugins
+            </PluginButton>
+            <SocialIcons>
+              <MotionSocialIcon
+                variants={socialIconVariants}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.6, delay: 1.5 }}
+              >
+                <a href="https://discord.com" target="_blank" rel="noopener noreferrer">
+                  <FaDiscord />
+                </a>
+              </MotionSocialIcon>
+              <MotionSocialIcon
+                variants={socialIconVariants}
+                initial="hidden"
+                animate="visible"
+                transition={{ duration: 0.6, delay: 1.8 }}
+              >
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                  <FaGithub />
+                </a>
+              </MotionSocialIcon>
+            </SocialIcons>
+          </HeroSection>
+
+          <FeaturedSection
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
+            <SectionTitle
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+            >
+              Security Solutions
+            </SectionTitle>
+            <CategoryGrid>
+              {[
+                { icon: <FaShieldAlt />, title: "Anti-Cheat", description: "Detect and prevent cheating on your server" },
+                { icon: <FaLock />, title: "Authentication", description: "Secure login and player verification systems" },
+                { icon: <FaUserShield />, title: "Grief Prevention", description: "Protect builds and prevent unwanted modifications" },
+                { icon: <FaServer />, title: "DDoS Protection", description: "Shield your server from malicious attacks" },
+              ].map((category, index) => (
+                <CategoryCard
+                  key={index}
+                  initial={{ y: 50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <IconWrapper>{category.icon}</IconWrapper>
+                  <h3>{category.title}</h3>
+                  <p>{category.description}</p>
+                </CategoryCard>
+              ))}
+            </CategoryGrid>
+          </FeaturedSection>
+        </ContentWrapper>
+        <AnimatePresence>
+          <ScrollButton
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={scrollToSection}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <RocketIcon
+              animate={{ rotate: isScrolled ? 360 : 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {isScrolled ? <FaChevronUp /> : <FaChevronDown />}
+            </RocketIcon>
+          </ScrollButton>
+        </AnimatePresence>
+        <Footer />
+      </PageContainer>
+    </>
   );
 };
 

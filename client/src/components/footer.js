@@ -3,13 +3,14 @@ import { FaGithub, FaDiscord } from 'react-icons/fa';
 import styled from 'styled-components';
 import logo from '../bilder/logo2.png';
 
+// Update colors and effects to match the design
 const FooterContainer = styled.footer`
-  background-color: #2c3e50; /* Match the page background color */
-  color: #ecf0f1; /* Light text color for contrast */
-  padding: 40px 20px;
+  background-color: rgba(10, 11, 30, 0.8); /* Match the dark background with slight transparency */
+  color: #b8c7e0; /* Light text color for contrast */
+  padding: 2rem;
 
   @media (min-width: 768px) {
-    padding: 80px 0;
+    padding: 4rem 2rem;
   }
 `;
 
@@ -31,31 +32,30 @@ const FooterLogo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 
   img {
     height: 40px;
     margin-right: 0;
-    margin-bottom: 10px;
+    margin-bottom: 0.5rem;
   }
 
   span {
-    font-size: 24px;
-    color: #6495ED; /* Use the same blue accent color */
+    font-size: 1.5rem;
+    color: #7b68ee; /* Use the same blue accent color */
   }
 
   @media (min-width: 768px) {
     flex-direction: row;
-    margin-bottom: 40px;
+    margin-bottom: 2rem;
 
     img {
       height: 60px;
-      margin-right: 20px;
-      margin-bottom: 0;
+      margin-right: 1rem;
     }
 
     span {
-      font-size: 28px;
+      font-size: 1.8rem;
     }
   }
 `;
@@ -64,25 +64,26 @@ const FooterLinks = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 
   a {
-    color: #ecf0f1; /* Match the text color */
+    color: #b8c7e0; /* Match the text color */
     text-decoration: none;
-    margin: 0 10px;
-    font-size: 16px;
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    transition: color 0.3s ease; /* Transition effect for hover */
 
     &:hover {
-      color: #6495ED; /* Hover effect with blue accent color */
+      color: #7b68ee; /* Hover effect with blue accent color */
     }
   }
 
   @media (min-width: 768px) {
-    margin-bottom: 40px;
+    margin-bottom: 2rem;
 
     a {
-      margin: 0 20px;
-      font-size: 18px;
+      margin: 0 1rem;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -90,36 +91,38 @@ const FooterLinks = styled.div`
 const FooterSocial = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 1.5rem;
 
   a {
-    color: #ecf0f1; /* Match the text color */
+    color: #b8c7e0; /* Match the text color */
     text-decoration: none;
-    margin: 0 10px;
-    font-size: 20px;
+    margin: 0 0.5rem;
+    font-size: 1.5rem;
+    transition: color 0.3s ease, transform 0.3s ease; /* Transition effect for hover */
 
     &:hover {
-      color: #6495ED; /* Hover effect with blue accent color */
+      color: #7b68ee; /* Hover effect with blue accent color */
+      transform: scale(1.1); /* Slight scale effect on hover */
     }
   }
 
   @media (min-width: 768px) {
-    margin-bottom: 40px;
+    margin-bottom: 2rem;
 
     a {
-      margin: 0 20px;
-      font-size: 24px;
+      margin: 0 1rem;
+      font-size: 1.8rem;
     }
   }
 `;
 
 const FooterCopyright = styled.div`
-  font-size: 14px;
+  font-size: 0.875rem;
   text-align: center;
-  color: #bdc3c7; /* Slightly lighter color for the copyright text */
+  color: rgba(255, 255, 255, 0.7); /* Slightly lighter color for the copyright text */
 
   @media (min-width: 768px) {
-    font-size: 16px;
+    font-size: 1rem;
   }
 `;
 
@@ -131,6 +134,15 @@ const Footer = () => {
           <img src={logo} alt="Asfaltios Logo" />
           <span>Asfaltios</span>
         </FooterLogo>
+
+        <FooterLinks>
+          <a href="https://github.com/your-github-link" target="_blank" rel="noopener noreferrer">
+            
+          </a>
+          <a href="https://discord.gg/XSwEQCxPMu" target="_blank" rel="noopener noreferrer">
+            
+          </a>
+        </FooterLinks>
 
         <FooterSocial>
           <a href="https://github.com/your-github-link" target="_blank" rel="noopener noreferrer">
