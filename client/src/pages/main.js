@@ -5,7 +5,8 @@ import {
   FaSearch, FaShieldAlt, FaLock, FaUserShield, FaServer, 
   FaChevronDown, FaChevronUp, FaDiscord, FaGithub, 
   FaDownload, FaStar, FaCode, FaUsers, FaQuestionCircle,
-  FaBug, FaComments, FaNewspaper, FaAngleDown
+  FaBug, FaComments, FaNewspaper, FaAngleDown,
+  FaArrowDown
 } from 'react-icons/fa';
 import Header from '../components/header';
 import Footer from "../components/footer";
@@ -115,7 +116,7 @@ const HeroTitle = styled(motion.h1)`
 
 const HeroSubtitle = styled(motion.p)`
   font-size: 1.2rem;
-  margin-bottom: 2rem;
+  margin: 0 auto 2rem;
   max-width: 600px;
   color: #bfdbfe;
   line-height: 1.6;
@@ -173,14 +174,17 @@ const PluginButton = styled(motion.button)`
   font-size: 1rem;
   cursor: pointer;
   border-radius: 50px;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease, width 0.3s ease;
   margin-top: 1rem;
+  width: 18rem; // Set an initial width
 
   &:hover {
-    background-color: rgba(59, 130, 246, 0.1);
+    background-color: rgb(59, 130, 246);
+    color: white;
+    width: 20rem; // Increase width on hover
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.6); // Glow effect
   }
 `;
-
 const Section = styled(motion.section)`
   padding: 5rem 2rem;
 `;
@@ -604,13 +608,13 @@ const MinecraftSecurityPluginHomepage = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 1 }}
           >
-            <motion.div style={{ opacity }}>
+            <motion.div style={{ opacity, width: '100%' }}>
               <HeroTitle
                 initial={{ y: -50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
               >
-                Secure Your Minecraft World
+                Secure Your Minecraft Server
               </HeroTitle>
               <HeroSubtitle
                 initial={{ y: 50, opacity: 0 }}
@@ -643,7 +647,7 @@ const MinecraftSecurityPluginHomepage = () => {
               whileTap={{ scale: 0.95 }}
               onClick={handleExploreClick}
             >
-              Explore Our Plugins
+              Or Explore Our Plugins Here
             </PluginButton>
             <SocialIcons>
               <MotionSocialIcon
@@ -811,9 +815,9 @@ const MinecraftSecurityPluginHomepage = () => {
           >
             <RocketIcon
               animate={{ rotate: isScrolled ? 180 : 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.2 }}
             >
-              {isScrolled ? <FaChevronUp /> : <FaChevronDown />}
+              {isScrolled ? <FaChevronDown /> : <FaChevronDown />}
             </RocketIcon>
           </ScrollButton>
         </AnimatePresence>
