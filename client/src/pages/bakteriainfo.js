@@ -1,7 +1,5 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import HeaderComponent from '../components/header';
-
 
 // Keyframes for the animations
 const animStar = keyframes`
@@ -266,14 +264,11 @@ const App = () => {
   
     // Function to handle the button click
     const handleButtonClick = () => {
-      window.location.href = 'https://www.spigotmc.org/resources/bakteria-staff-moderation-plugin-1-8-1-21.117394/'; // Replace with the URL you want to redirect to
+      window.location.href = 'https://www.spigotmc.org/resources/bakteria-staff-moderation-plugin-1-8-1-21.117394/'; // Bytt til en bra bukgrunn fordi jeg finner ingen
     };
   
     return (
-        
       <Background>
-              <HeaderComponent />
-
         <Stars shadows={generateShadows(700)} />
         <Stars2 shadows={generateShadows(200)} />
         <Stars3 shadows={generateShadows(100)} />
