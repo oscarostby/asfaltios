@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
-import { FaCaretDown, FaSearch, FaBars, FaTimes, FaDiscord } from 'react-icons/fa';
+import { FaCaretDown, FaSearch, FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -235,6 +235,7 @@ const Header = () => {
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -300,6 +301,12 @@ const Header = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/plugins/${searchQuery.trim()}`);
+    }
+  };
+
   const menuVariants = {
     closed: {
       opacity: 0,
@@ -329,7 +336,11 @@ const Header = () => {
       transition={{ duration: 0.5 }}
     >
       <LogoAndLinks>
-        <NavLogo>Asfaltios</NavLogo>
+      <NavLogo>
+  <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+    Asfaltios
+  </a>
+</NavLogo>
         <NavLinks>
           <NavLink href="#">Server.Jar</NavLink>
           <NavLink href="#">Paper</NavLink>
@@ -339,8 +350,14 @@ const Header = () => {
 
       <NavItems>
         <SearchContainer>
-          <SearchInput type="text" placeholder="Search..." />
-          <SearchButton>
+          <SearchInput
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+          />
+          <SearchButton onClick={handleSearch}>
             <FaSearch />
           </SearchButton>
         </SearchContainer>
@@ -364,71 +381,42 @@ const Header = () => {
               ref={dropdownRef}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
             >
-              <UserDropdownItem onClick={() => navigate('/Profile')}>
-                Settings Profile
+              <UserDropdownItem onClick={() => navigate('/profile')}>
+                Profile
               </UserDropdownItem>
-              <UserDropdownItem onClick={handleLogoutClick}>
-                Logout
-              </UserDropdownItem>
+              <UserDropdownItem onClick={handleLogoutClick}>Logout</UserDropdownItem>
             </UserDropdown>
           )}
         </AnimatePresence>
       </NavItems>
 
-      <HamburgerIcon onClick={toggleMobileMenu} className={isMobileMenuOpen ? 'open' : ''}>
-        <span></span>
-        <span></span>
-        <span></span>
+      <HamburgerIcon
+        className={isMobileMenuOpen ? 'open' : ''}
+        onClick={toggleMobileMenu}
+      >
+        <span />
+        <span />
+        <span />
       </HamburgerIcon>
 
       <AnimatePresence>
         {isMobileMenuOpen && (
           <MobileMenu
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={menuVariants}
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
           >
             <CloseButton onClick={toggleMobileMenu}>
               <FaTimes />
             </CloseButton>
-            <MobileNavLink href="#" onClick={() => setIsMobileMenuOpen(false)} variants={itemVariants}>
-              Server.Jar
-            </MobileNavLink>
-            <MobileNavLink href="#" onClick={() => setIsMobileMenuOpen(false)} variants={itemVariants}>
-              Paper
-            </MobileNavLink>
-            <MobileNavLink href="#" onClick={() => setIsMobileMenuOpen(false)} variants={itemVariants}>
-              Discord
-            </MobileNavLink>
-            {loggedInUsername ? (
-              <>
-                <UserButton onClick={handleUserButtonClick} variants={itemVariants}>
-                  {profilePictureUrl && <ProfilePicture src={profilePictureUrl} alt="Profile" />}
-                  {loggedInUsername}
-                </UserButton>
-                <UserDropdownItem 
-                  onClick={() => { navigate('/Profile'); setIsMobileMenuOpen(false); }}
-                  variants={itemVariants}
-                >
-                  Settings Profile
-                </UserDropdownItem>
-                <UserDropdownItem 
-                  onClick={() => { handleLogoutClick(); setIsMobileMenuOpen(false); }}
-                  variants={itemVariants}
-                >
-                  Logout
-                </UserDropdownItem>
-              </>
-            ) : (
-              <>
-                <LoginButton onClick={handleLoginClick} variants={itemVariants}>Login</LoginButton>
-                <RegisterButton onClick={handleRegisterClick} variants={itemVariants}>Register</RegisterButton>
-              </>
-            )}
+            <MobileNavLink href="#">Server.Jar</MobileNavLink>
+            <MobileNavLink href="#">Paper</MobileNavLink>
+            <MobileNavLink href="#">Discord</MobileNavLink>
+            <MobileNavLink onClick={handleLoginClick}>Login</MobileNavLink>
+            <MobileNavLink onClick={handleRegisterClick}>Register</MobileNavLink>
           </MobileMenu>
         )}
       </AnimatePresence>
