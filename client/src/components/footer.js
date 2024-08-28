@@ -3,10 +3,9 @@ import { FaGithub, FaDiscord } from 'react-icons/fa';
 import styled from 'styled-components';
 import logo from '../bilder/logo2.png';
 
-// Update colors and effects to match the design
 const FooterContainer = styled.footer`
-  background-color: rgba(10, 11, 30, 0.8); /* Match the dark background with slight transparency */
-  color: #b8c7e0; /* Light text color for contrast */
+  background-color: rgba(15, 23, 42, 0.8);
+  color: #93c5fd;
   padding: 2rem;
 
   @media (min-width: 768px) {
@@ -42,7 +41,7 @@ const FooterLogo = styled.div`
 
   span {
     font-size: 1.5rem;
-    color: #7b68ee; /* Use the same blue accent color */
+    color: #3b82f6;
   }
 
   @media (min-width: 768px) {
@@ -67,14 +66,14 @@ const FooterLinks = styled.div`
   margin-bottom: 1.5rem;
 
   a {
-    color: #b8c7e0; /* Match the text color */
+    color: #93c5fd;
     text-decoration: none;
     margin: 0 0.5rem;
     font-size: 1rem;
-    transition: color 0.3s ease; /* Transition effect for hover */
+    transition: color 0.3s ease;
 
     &:hover {
-      color: #7b68ee; /* Hover effect with blue accent color */
+      color: #3b82f6;
     }
   }
 
@@ -94,15 +93,15 @@ const FooterSocial = styled.div`
   margin-bottom: 1.5rem;
 
   a {
-    color: #b8c7e0; /* Match the text color */
+    color: #93c5fd;
     text-decoration: none;
     margin: 0 0.5rem;
     font-size: 1.5rem;
-    transition: color 0.3s ease, transform 0.3s ease; /* Transition effect for hover */
+    transition: color 0.3s ease, transform 0.3s ease;
 
     &:hover {
-      color: #7b68ee; /* Hover effect with blue accent color */
-      transform: scale(1.1); /* Slight scale effect on hover */
+      color: #3b82f6;
+      transform: scale(1.1);
     }
   }
 
@@ -119,7 +118,7 @@ const FooterSocial = styled.div`
 const FooterCopyright = styled.div`
   font-size: 0.875rem;
   text-align: center;
-  color: rgba(255, 255, 255, 0.7); /* Slightly lighter color for the copyright text */
+  color: rgba(147, 197, 253, 0.7);
 
   @media (min-width: 768px) {
     font-size: 1rem;
