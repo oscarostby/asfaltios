@@ -553,10 +553,10 @@ const MinecraftSecurityPluginHomepage = () => {
   ];
 
   const stats = [
-    { icon: <FaDownload />, number: "1M+", label: "Downloads" },
-    { icon: <FaUsers />, number: "500K+", label: "Active Users" },
-    { icon: <FaStar />, number: "4.8", label: "Average Rating" },
-    { icon: <FaServer />, number: "50K+", label: "Protected Servers" },
+    { icon: <FaDownload />, number: "385+", label: "Downloads" },
+    { icon: <FaUsers />, number: "200+", label: "Active Users" },
+    { icon: <FaStar />, number: "5.0", label: "Average Rating" },
+    { icon: <FaServer />, number: "300+", label: "Protected Servers" },
   ];
 
   const testimonials = [

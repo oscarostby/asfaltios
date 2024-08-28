@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import HeaderComponent from '../components/header';
 
 // Keyframes for animasjon
 const animStar = keyframes`
@@ -271,7 +272,9 @@ const App = () => {
     };
   
     return (
-      <Background>
+      <Background>¨
+                <HeaderComponent />
+
         <Stars shadows={generateShadows(700)} />
         <Stars2 shadows={generateShadows(200)} />
         <Stars3 shadows={generateShadows(100)} />
