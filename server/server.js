@@ -41,7 +41,7 @@ const itemSchema = new mongoose.Schema({
   title: { type: String, required: true },
   mainText: { type: String, required: true },
   fileUrl: { type: String },
-  iconImageUrl: { type: String, required: true }, // Make iconImageUrl required
+  iconImageUrl: { type: String, required: true },
 });
 
 const Item = mongoose.model('Item', itemSchema);
@@ -62,7 +62,6 @@ app.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
-    // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
     res.cookie('userId', newUser._id, { httpOnly: true, sameSite: 'strict' });
     res.status(200).json({ message: 'User registered successfully', userId: newUser._id });
@@ -82,7 +81,6 @@ app.post('/login', async (req, res) => {
     if (!passwordMatch) {
       return res.status(400).json({ error: 'Incorrect password' });
     }
-    // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
     res.cookie('userId', user._id, { httpOnly: true, sameSite: 'strict' });
     res.status(200).json({ message: 'User logged in successfully', userId: user._id });
@@ -149,6 +147,21 @@ app.get('/list/:searchTerm', async (req, res) => {
     res.status(200).json({ items });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the items' });
+  }
+});
+
+// New delete endpoint
+app.delete('/items/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedItem = await Item.findByIdAndDelete(id);
+    if (!deletedItem) {
+      return res.status(404).json({ error: 'Item not found' });
+    }
+    res.status(200).json({ message: 'Item deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting item:', error);
+    res.status(500).json({ error: 'An error occurred while deleting the item' });
   }
 });
 
