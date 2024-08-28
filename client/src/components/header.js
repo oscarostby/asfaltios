@@ -18,7 +18,6 @@ const NavBar = styled(motion.nav)`
   left: 0;
   right: 0;
   z-index: 1000;
-  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.1);
 
   @media (max-width: 768px) {
     padding: 0 20px;
