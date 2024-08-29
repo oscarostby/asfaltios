@@ -149,37 +149,34 @@ const GalacticPortal = () => {
   const [pluginType, setPluginType] = useState('');
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchPosts();
   }, [searchTerm]);
 
   const fetchPosts = async () => {
+    setIsLoading(true);
+    setError(null);
     try {
       const response = await axios.get(`https://api.asfaltios.com/list/${searchTerm || ' '}`);
-      console.log('Fetched posts:', response.data);
       setPosts(response.data.items || []);
     } catch (error) {
       console.error('Error fetching posts:', error);
+      setError('Failed to fetch posts. Please try again later.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
     try {
-      const postData = {
-        title,
-        mainText,
-        iconImageUrl,
-        fileUrl,
-      };
-
-      console.log('Submitting post:', postData);
-
+      const postData = { title, mainText, iconImageUrl, fileUrl };
       const response = await axios.post('https://api.asfaltios.com/upload', postData);
-
-      console.log('Upload response:', response.data);
-
       if (response.status === 200) {
         alert('Item uploaded successfully');
         setTitle('');
@@ -191,11 +188,15 @@ const GalacticPortal = () => {
       }
     } catch (error) {
       console.error('Error uploading item:', error);
-      alert('Failed to upload item');
+      setError('Failed to upload item. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
+    setIsLoading(true);
+    setError(null);
     try {
       const response = await axios.delete(`https://api.asfaltios.com/items/${id}`);
       if (response.status === 200) {
@@ -204,7 +205,9 @@ const GalacticPortal = () => {
       }
     } catch (error) {
       console.error('Error deleting item:', error);
-      alert('Failed to delete item');
+      setError('Failed to delete item. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -253,7 +256,9 @@ const GalacticPortal = () => {
               <option value="packages">Packages</option>
               <option value="security">Security</option>
             </Select>
-            <Button type="submit">Launch Into Orbit</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Launching...' : 'Launch Into Orbit'}
+            </Button>
           </Form>
         </Card>
         <Card>
@@ -263,12 +268,16 @@ const GalacticPortal = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          {isLoading && <p>Loading...</p>}
+          {error && <p style={{ color: '#ff5050' }}>{error}</p>}
           <PostList>
             {posts.length > 0 ? (
               posts.map((post) => (
                 <PostItem key={post._id}>
                   <span>{post.title}</span>
-                  <DeleteButton onClick={() => handleDelete(post._id)}>Delete</DeleteButton>
+                  <DeleteButton onClick={() => handleDelete(post._id)} disabled={isLoading}>
+                    Delete
+                  </DeleteButton>
                 </PostItem>
               ))
             ) : (
