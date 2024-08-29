@@ -1,15 +1,15 @@
 import React from 'react';
 import { FaGithub, FaDiscord } from 'react-icons/fa';
 import styled from 'styled-components';
-import logo from '../bilder/logo3.png';
+import logo from '../bilder/logo2.png';
 
 const FooterContainer = styled.footer`
-  background-color: #ffffff;
-  color: #070b2e;
-  padding: 40px 20px; // Reduced padding for smaller screens
+  background-color: rgba(15, 23, 42, 0.8);
+  color: #93c5fd;
+  padding: 2rem;
 
   @media (min-width: 768px) {
-    padding: 80px 0; // Original padding for larger screens
+    padding: 4rem 2rem;
   }
 `;
 
@@ -29,32 +29,32 @@ const FooterContent = styled.div`
 
 const FooterLogo = styled.div`
   display: flex;
-  flex-direction: column; // Stack logo and text vertically on smaller screens
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 20px; // Reduced margin for smaller screens
+  margin-bottom: 1.5rem;
 
   img {
-    height: 40px; // Reduced logo size for smaller screens
+    height: 40px;
     margin-right: 0;
-    margin-bottom: 10px; // Add some spacing between logo and text
+    margin-bottom: 0.5rem;
   }
 
   span {
-    font-size: 24px; // Reduced font size for smaller screens
+    font-size: 1.5rem;
+    color: #3b82f6;
   }
 
   @media (min-width: 768px) {
-    flex-direction: row; // Revert to original layout for larger screens
-    margin-bottom: 40px;
+    flex-direction: row;
+    margin-bottom: 2rem;
 
     img {
       height: 60px;
-      margin-right: 20px;
-      margin-bottom: 0;
+      margin-right: 1rem;
     }
 
     span {
-      font-size: 28px;
+      font-size: 1.8rem;
     }
   }
 `;
@@ -63,25 +63,26 @@ const FooterLinks = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 20px; // Reduced margin for smaller screens
+  margin-bottom: 1.5rem;
 
   a {
-    color: #070b2e;
+    color: #93c5fd;
     text-decoration: none;
-    margin: 0 10px; // Reduced margin for smaller screens
-    font-size: 16px; // Reduced font size for smaller screens
+    margin: 0 0.5rem;
+    font-size: 1rem;
+    transition: color 0.3s ease;
 
     &:hover {
-      color: #4b4b4b;
+      color: #3b82f6;
     }
   }
 
   @media (min-width: 768px) {
-    margin-bottom: 40px;
+    margin-bottom: 2rem;
 
     a {
-      margin: 0 20px;
-      font-size: 18px;
+      margin: 0 1rem;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -89,36 +90,38 @@ const FooterLinks = styled.div`
 const FooterSocial = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 20px; // Reduced margin for smaller screens
+  margin-bottom: 1.5rem;
 
   a {
-    color: #070b2e;
+    color: #93c5fd;
     text-decoration: none;
-    margin: 0 10px; // Reduced margin for smaller screens
-    font-size: 20px; // Reduced font size for smaller screens
+    margin: 0 0.5rem;
+    font-size: 1.5rem;
+    transition: color 0.3s ease, transform 0.3s ease;
 
     &:hover {
-      color: #4b4b4b;
+      color: #3b82f6;
+      transform: scale(1.1);
     }
   }
 
   @media (min-width: 768px) {
-    margin-bottom: 40px;
+    margin-bottom: 2rem;
 
     a {
-      margin: 0 20px;
-      font-size: 24px;
+      margin: 0 1rem;
+      font-size: 1.8rem;
     }
   }
 `;
 
 const FooterCopyright = styled.div`
-  font-size: 14px; // Reduced font size for smaller screens
+  font-size: 0.875rem;
   text-align: center;
-  color: #4b4b4b;
+  color: rgba(147, 197, 253, 0.7);
 
   @media (min-width: 768px) {
-    font-size: 16px;
+    font-size: 1rem;
   }
 `;
 
@@ -131,8 +134,17 @@ const Footer = () => {
           <span>Asfaltios</span>
         </FooterLogo>
 
+        <FooterLinks>
+          <a href="https://github.com/your-github-link" target="_blank" rel="noopener noreferrer">
+            
+          </a>
+          <a href="https://discord.gg/XSwEQCxPMu" target="_blank" rel="noopener noreferrer">
+            
+          </a>
+        </FooterLinks>
+
         <FooterSocial>
-          <a href="https://discord.gg/XSwEQCxPMus" target="_blank" rel="noopener noreferrer">
+          <a href="https://github.com/your-github-link" target="_blank" rel="noopener noreferrer">
             <FaGithub />
           </a>
           <a href="https://discord.gg/XSwEQCxPMu" target="_blank" rel="noopener noreferrer">

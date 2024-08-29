@@ -1,255 +1,253 @@
 import React, { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
+import { FaCaretDown, FaSearch, FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import styled, { createGlobalStyle, keyframes } from 'styled-components';
-import { FaSearch, FaCaretDown } from 'react-icons/fa';
-import TeslaFont from '../bilder/TESLA.ttf';
 import axios from 'axios';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const GlobalStyle = createGlobalStyle`
-  @font-face {
-    font-family: 'Tesla';
-    src: url(${TeslaFont}) format('truetype');
-  }
-`;
-
-const HeaderContainer = styled.div`
+const NavBar = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
-  padding: 20px;
-  height: ${props => (props.small ? '40px' : '140px')};
+  padding: 0 40px;
+  height: 10rem;
+  background-color: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
   position: fixed;
-  width: 100%;
-  z-index: 999;
-  transition: height 0.3s, top 0.3s;
-  top: 0; /* Always at the top */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+    height: 80px;
+  }
 `;
 
-const Logo = styled.div`
-  font-family: 'Tesla', sans-serif;
-  font-size: ${props => (props.small ? '24px' : '32px')};
-  color: black;
-  opacity: ${props => (props.small ? '0' : '1')};
-  transition: opacity 0.5s, font-size 0.5s;
-`;
-
-const SquareBrackets = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center; /* Center the content horizontally */
-  font-family: 'Tesla', sans-serif;
-  font-size: ${props => (props.small ? '44px' : '44px')};
-  margin-left: 50px;
-  color: black;
-  opacity: 1;
+const NavLogo = styled.div`
+  font-size: 2.5rem;
   font-weight: bold;
-  line-height: 1;
-  height: 100%; /* Set height to 100% to align vertically */
+  color: #3b82f6;
 `;
 
-const SearchBarContainer = styled.div`
-  position: relative;
+const NavLinks = styled.div`
   display: flex;
   align-items: center;
-  margin-right: 50px; /* Add margin to the right to make space for the icon */
+  margin-left: 20px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
-const SearchBar = styled.input`
-  width: 200px;
-  padding: 10px 30px 10px 10px;
-  font-size: 16px;
-  border: 2px solid black;
-  border-radius: 2px;
-  transition: width 0.3s, padding 0.3s, font-size 0.3s, border 0.3s;
-  position: relative; /* Change the position to relative */
+const NavLink = styled.a`
+  color: #93c5fd;
+  text-decoration: none;
+  margin-right: 20px;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #3b82f6;
+  }
+`;
+
+const NavItems = styled.div`
+  display: flex;
+  align-items: center;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  background-color: rgba(59, 130, 246, 0.1);
+  border-radius: 20px;
+  padding: 5px 10px;
+`;
+
+const SearchInput = styled.input`
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  font-size: 1rem;
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
 `;
 
 const SearchButton = styled.button`
-  font-size: 24px;
-  cursor: pointer;
-  position: absolute;
-  right: 10px; /* Adjust the position of the icon */
-  top: 60%;
-  transform: translateY(-50%);
-  background-color: transparent;
+  background: none;
   border: none;
+  color: #3b82f6;
+  font-size: 1.2rem;
+  cursor: pointer;
 `;
 
-const ButtonContainer = styled.div`
+const AuthButton = styled(motion.button)`
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 10px;
+`;
+
+const LoginButton = styled(AuthButton)`
+  background-color: transparent;
+  color: #3b82f6;
+  border: 2px solid #3b82f6;
+  &:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+`;
+
+const RegisterButton = styled(AuthButton)`
+  background-color: #3b82f6;
+  color: white;
+  &:hover {
+    background-color: #2563eb;
+  }
+`;
+
+const UserButton = styled(motion.button)`
   display: flex;
   align-items: center;
-`;
-
-const Button = styled.button`
-  font-size: 16px;
-  cursor: pointer;
-  background-color: transparent;
+  background: none;
   border: none;
-  margin-right: 20px; /* Increase the margin */
-  padding: 10px 20px;
-  position: relative; /* Position relative for the pseudo-element */
-
-  &:hover {
-    color: #333; /* Change color on hover */
-  }
-
-  &:hover::after {
-    width: 100%;
-  }
-
-  &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: black;
-    transition: width 0.3s ease-in-out;
-  }
-`;
-
-const UserButton = styled.button`
-  position: relative;
+  color: #93c5fd;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  background-color: transparent;
-  border: none;
-  font-size: 16px;
-  padding: 10px 20px;
-  margin-left: -160px; /* Add margin-left to shift it to the left */
-
-  &:hover {
-    color: #333;
-  }
-
-  &:hover::after {
-    width: 100%;
-  }
-
-  &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: black;
-    transition: width 0.3s ease;
-
-`;
-
-const UserDropdown = styled.div`
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  padding: 10px 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 200px;
-  z-index: 1000;
-`;
-
-const UserDropdownItem = styled.div`
-  cursor: pointer;
-  padding: 10px 20px;
-  font-size: 14px;
-  color: #333;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background-color: #f5f5f5;
-  }
-`;
-
-const CaretIcon = styled(FaCaretDown)`
-  margin-left: 5px;
+  font-size: 1.1rem;
 `;
 
 const ProfilePicture = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   margin-right: 10px;
+  border: 2px solid #3b82f6;
 `;
 
-const deleteTextAnimation = keyframes`
-  0% {
-    content: "Asfaltios";
-    width: 135px;
-  }
-  100% {
-    content: "";
-    width: 0;
-  }
-`;
-
-const appearTextAnimation = keyframes`
-  0% {
-    content: "";
-    width: 0;
-  }
-  100% {
-    content: "Asfaltios";
-    width: 135px;
-  }
-`;
-
-const HeaderText = styled.div`
-  font-family: 'Tesla', sans-serif;
-  font-size: 24px;
-  color: black;
+const UserDropdown = styled(motion.div)`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(10px);
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
   overflow: hidden;
-  white-space: nowrap;
-  margin: 0 5px; /* Adjusted margin */
-  animation: ${props => (props.visible ? appearTextAnimation : deleteTextAnimation)} 0.5s forwards;
-  line-height: 1; /* Ensure text is vertically centered */
+`;
+
+const UserDropdownItem = styled(motion.div)`
+  padding: 10px 15px;
+  cursor: pointer;
+  color: #93c5fd;
+  &:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+`;
+
+const HamburgerIcon = styled.div`
+  display: none;
+  cursor: pointer;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  @media (max-width: 768px) {
+    display: flex;
+  }
+
+  span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: #3b82f6;
+    transition: all 0.3s ease;
+  }
+
+  &.open {
+    span:first-child {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    span:nth-child(2) {
+      opacity: 0;
+    }
+    span:last-child {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+  }
+`;
+
+const MobileMenu = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 1.5rem;
   cursor: pointer;
 `;
 
-const Divider = styled.div`
-  width: 1px;
-  height: 20px; /* Adjust the height as needed */
-  background-color: #ccc;
-  margin: 0 10px; /* Adjust the margin */
+const MobileNavLink = styled(motion.a)`
+  color: #93c5fd;
+  text-decoration: none;
+  margin: 15px 0;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+  &:hover {
+    color: #3b82f6;
+  }
+`;
+
+const LogoAndLinks = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const Header = () => {
-  const [smallHeader, setSmallHeader] = useState(false);
-  const [textVisible, setTextVisible] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
   const [loggedInUsername, setLoggedInUsername] = useState(null);
   const [profilePictureUrl, setProfilePictureUrl] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.pageYOffset;
-      setSmallHeader(currentScrollPos > 0);
-      setTextVisible(currentScrollPos <= 0); // Adjusted condition here
-    };
-
-    window.addEventListener('scroll', handleScroll);
     fetchUserData();
-
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowDropdown(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
-      window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
@@ -278,116 +276,152 @@ const Header = () => {
     return null;
   };
 
-  const handleSearchKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearchClick();
-    }
-  };
-
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const handleLogoClick = () => {
-    navigate('/');
-  };
-
-  const handleSearchClick = () => {
-    navigate(`/plugins/${searchTerm}`);
-  };
-
   const handleLoginClick = () => {
     navigate('/Login');
+    setIsMobileMenuOpen(false);
   };
+
   const handleRegisterClick = () => {
     navigate('/Register');
-  };
-
-  const handlePluginClick = () => {
-    navigate('/Plugins');
-  };
-
-  const handleServerClick = () => {
-    // Handle server button click
-  };
-
-  const handleDiscordClick = () => {
-    // Handle discord button click
+    setIsMobileMenuOpen(false);
   };
 
   const handleUserButtonClick = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const handleSettingsClick = () => {
-    navigate('/Profile');
-    console.log('Settings clicked');
-  };
-
   const handleLogoutClick = () => {
-    // Handle logout button click
-    console.log('Logout clicked');
-    // Clear the userId cookie
     document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     setLoggedInUsername(null);
     setProfilePictureUrl(null);
+    setIsMobileMenuOpen(false);
+  };
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/plugins/${searchQuery.trim()}`);
+    }
+  };
+
+  const menuVariants = {
+    closed: {
+      opacity: 0,
+      transition: {
+        staggerChildren: 0.05,
+        staggerDirection: -1
+      }
+    },
+    open: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    closed: { opacity: 0, y: 20 },
+    open: { opacity: 1, y: 0 }
   };
 
   return (
-    <>
-      <GlobalStyle />
-      <HeaderContainer small={smallHeader}>
-        <SquareBrackets small={smallHeader}>
-          「<HeaderText visible={textVisible} onClick={handleLogoClick}>Asfaltios</HeaderText>」
-          <ButtonContainer>
-            <Button onClick={handlePluginClick}>Plugins</Button>
-            <Button onClick={handleServerClick}>server.js</Button>
-            <Button onClick={handleDiscordClick}>Discord</Button>
-          </ButtonContainer>
-        </SquareBrackets>
-        <ButtonContainer>
-          {loggedInUsername ? (
-            <div ref={dropdownRef} style={{ position: 'relative' }}>
-              <UserButton onClick={handleUserButtonClick}>
-                {profilePictureUrl && <ProfilePicture src={profilePictureUrl} alt="Profile" />}
-                {loggedInUsername} <CaretIcon />
-              </UserButton>
-              {showDropdown && (
-                <UserDropdown style={{ left: '1' }}>
-                  <UserDropdownItem onClick={handleSettingsClick}>
-                    Settings Profile
-                  </UserDropdownItem>
-                  <UserDropdownItem onClick={handleLogoutClick}>
-                    Logout
-                  </UserDropdownItem>
-                </UserDropdown>
-              )}
-            </div>
-          ) : (
-            <>
-              <Button onClick={handleLoginClick}>Login</Button>
-              <Divider /> {/* Divider added here */}
-              <Button onClick={handleRegisterClick}>Register</Button>
-            </>
+    <NavBar
+      initial={{ opacity: 0, y: -50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <LogoAndLinks>
+      <NavLogo>
+  <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+    Asfaltios
+  </a>
+</NavLogo>
+        <NavLinks>
+          <NavLink href="#">Server.Jar</NavLink>
+          <NavLink href="#">Paper</NavLink>
+          <NavLink href="#"> Discord</NavLink>
+        </NavLinks>
+      </LogoAndLinks>
+
+      <NavItems>
+        <SearchContainer>
+          <SearchInput
+            type="text"
+            placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+          />
+          <SearchButton onClick={handleSearch}>
+            <FaSearch />
+          </SearchButton>
+        </SearchContainer>
+
+        {loggedInUsername ? (
+          <UserButton onClick={handleUserButtonClick}>
+            {profilePictureUrl && <ProfilePicture src={profilePictureUrl} alt="Profile" />}
+            {loggedInUsername}
+            <FaCaretDown />
+          </UserButton>
+        ) : (
+          <>
+            <LoginButton onClick={handleLoginClick}>Login</LoginButton>
+            <RegisterButton onClick={handleRegisterClick}>Register</RegisterButton>
+          </>
+        )}
+
+        <AnimatePresence>
+          {showDropdown && (
+            <UserDropdown
+              ref={dropdownRef}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, y: -10 }}
+            >
+              <UserDropdownItem onClick={() => navigate('/profile')}>
+                Profile
+              </UserDropdownItem>
+              <UserDropdownItem onClick={handleLogoutClick}>Logout</UserDropdownItem>
+            </UserDropdown>
           )}
-          <SearchBarContainer>
-            <SearchBar
-              type="text"
-              placeholder="Search for plugins..."
-              value={searchTerm}
-              onChange={handleSearchChange}
-              onKeyDown={handleSearchKeyDown}
-            />
-            <SearchButton onClick={handleSearchClick}>
-              <FaSearch />
-            </SearchButton>
-          </SearchBarContainer>
-        </ButtonContainer>
-      </HeaderContainer>
-    </>
+        </AnimatePresence>
+      </NavItems>
+
+      <HamburgerIcon
+        className={isMobileMenuOpen ? 'open' : ''}
+        onClick={toggleMobileMenu}
+      >
+        <span />
+        <span />
+        <span />
+      </HamburgerIcon>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <MobileMenu
+            initial={{ opacity: 0, x: '100%' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100%' }}
+          >
+            <CloseButton onClick={toggleMobileMenu}>
+              <FaTimes />
+            </CloseButton>
+            <MobileNavLink href="#">Server.Jar</MobileNavLink>
+            <MobileNavLink href="#">Paper</MobileNavLink>
+            <MobileNavLink href="#">Discord</MobileNavLink>
+            <MobileNavLink onClick={handleLoginClick}>Login</MobileNavLink>
+            <MobileNavLink onClick={handleRegisterClick}>Register</MobileNavLink>
+          </MobileMenu>
+        )}
+      </AnimatePresence>
+    </NavBar>
   );
 };
 
 export default Header;
-
-
