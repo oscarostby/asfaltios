@@ -242,6 +242,11 @@ const ScrollButton = styled(motion.div)`
   &:hover {
     background-color: #3b82f6;
   }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+
 `;
 
 const RocketIcon = styled(motion.div)`
