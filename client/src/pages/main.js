@@ -227,7 +227,7 @@ const IconWrapper = styled.div`
 const ScrollButton = styled(motion.div)`
   position: fixed;
   bottom: 2rem;
-  right: 2rem;
+  left: 2rem;
   background-color: rgba(59, 130, 246, 0.8);
   width: 60px;
   height: 60px;

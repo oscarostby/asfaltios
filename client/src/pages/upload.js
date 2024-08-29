@@ -1,274 +1,293 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import styled, { keyframes } from 'styled-components';
+import styled, { createGlobalStyle, keyframes } from 'styled-components';
 
-const UploadPageContainer = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
+const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: #0f0f1f;
+    color: #e0e0ff;
+  }
+`;
+
+const gradientAnimation = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+const AppContainer = styled.div`
+  min-height: 100vh;
   padding: 2rem;
-  background: radial-gradient(ellipse at center, #1a1a1a 0%, #000000 100%);
-  border-radius: 8px;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-  position: relative;
-  overflow: hidden;
+  background: linear-gradient(45deg, #0f0f1f, #1f1f3f);
+  background-size: 400% 400%;
+  animation: ${gradientAnimation} 15s ease infinite;
+`;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-      ellipse at center,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 70%
-    );
+const Header = styled.h1`
+  font-size: 3rem;
+  text-align: center;
+  color: #50c8ff;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 10px rgba(80, 200, 255, 0.5);
+`;
+
+const Card = styled.div`
+  background: rgba(30, 30, 60, 0.7);
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.5);
   }
 `;
 
-const rotate = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-`;
-
-const UploadForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 1;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 1rem;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    background: linear-gradient(45deg, #ff00ff, #00ffff);
-    border-radius: 8px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: -1;
-  }
-
-  &:focus-within::before {
-    opacity: 0.2;
-  }
-`;
-
-const Label = styled.label`
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #fff;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+const Form = styled.form`
+  display: grid;
+  gap: 1.5rem;
 `;
 
 const Input = styled.input`
-  padding: 0.5rem;
+  width: 100%;
+  padding: 1rem;
   border: none;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.3s ease;
+  border-radius: 8px;
+  background: rgba(60, 60, 100, 0.5);
+  color: #e0e0ff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 2px #50c8ff;
+    background: rgba(80, 80, 120, 0.5);
   }
 `;
 
-const Textarea = styled(Input).attrs({ as: 'textarea' })`
+const TextArea = styled(Input).attrs({ as: 'textarea' })`
   resize: vertical;
-  min-height: 100px;
+  min-height: 120px;
 `;
 
 const Select = styled.select`
-  padding: 0.5rem;
+  width: 100%;
+  padding: 1rem;
   border: none;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: box-shadow 0.3s ease;
+  border-radius: 8px;
+  background: rgba(60, 60, 100, 0.5);
+  color: #e0e0ff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 0 2px #50c8ff;
+    background: rgba(80, 80, 120, 0.5);
   }
 `;
 
-const SubmitButton = styled.button`
-  padding: 0.5rem 1rem;
-  background-color: #007bff;
-  color: #fff;
+const Button = styled.button`
+  padding: 1rem 2rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
+  background: linear-gradient(45deg, #50c8ff, #8080ff);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(
-      ellipse at center,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0) 70%
-    );
-    animation: ${rotate} 10s infinite linear;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+  transition: all 0.3s ease;
 
   &:hover {
-    background-color: #0056b3;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-
-    &::before {
-      opacity: 1;
-    }
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(80, 200, 255, 0.5);
   }
 `;
 
-const MessageContainer = styled.div`
-  margin-top: 1rem;
+const PostList = styled.ul`
+  list-style-type: none;
+  padding: 0;
+`;
+
+const PostItem = styled.li`
+  background: rgba(60, 60, 100, 0.5);
+  border-radius: 8px;
   padding: 1rem;
-  background-color: ${(props) => (props.success ? '#d4edda' : '#f8d7da')};
-  color: ${(props) => (props.success ? '#155724' : '#721c24')};
-  border-radius: 4px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    right: -10px;
-    bottom: -10px;
-    background: linear-gradient(45deg, #ff00ff, #00ffff);
-    border-radius: 8px;
-    opacity: 0.2;
-    z-index: -1;
+  &:hover {
+    background: rgba(80, 80, 120, 0.5);
   }
 `;
 
-const UploadPage = () => {
+const DeleteButton = styled(Button)`
+  background: linear-gradient(45deg, #ff5050, #ff8080);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+
+  &:hover {
+    background: linear-gradient(45deg, #ff6060, #ff9090);
+  }
+`;
+
+const GalacticPortal = () => {
   const [title, setTitle] = useState('');
   const [mainText, setMainText] = useState('');
   const [iconImageUrl, setIconImageUrl] = useState('');
   const [fileUrl, setFileUrl] = useState('');
   const [pluginType, setPluginType] = useState('');
-  const [message, setMessage] = useState('');
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [searchTerm]);
+
+  const fetchPosts = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get(`https://api.asfaltios.com/list/${searchTerm || ' '}`);
+      setPosts(response.data.items || []);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      setError('Failed to fetch posts. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
     try {
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('mainText', mainText);
-      formData.append('iconImageUrl', iconImageUrl);
-      formData.append('pluginType', pluginType);
-      formData.append('file', fileUrl); // Append file
-
-      const response = await axios.post('https://api.asfaltios.com/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      
+      const postData = { title, mainText, iconImageUrl, fileUrl };
+      const response = await axios.post('https://api.asfaltios.com/upload', postData);
       if (response.status === 200) {
-        setMessage('Item uploaded successfully');
-        setIsSuccess(true);
-      } else {
-        setMessage('Failed to upload item');
-        setIsSuccess(false);
+        alert('Item uploaded successfully');
+        setTitle('');
+        setMainText('');
+        setIconImageUrl('');
+        setFileUrl('');
+        setPluginType('');
+        fetchPosts();
       }
     } catch (error) {
-      setMessage('An error occurred while uploading the item');
-      setIsSuccess(false);
-      console.error(error);
+      console.error('Error uploading item:', error);
+      setError('Failed to upload item. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await axios.delete(`https://api.asfaltios.com/items/${id}`);
+      if (response.status === 200) {
+        alert('Item deleted successfully');
+        fetchPosts();
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      setError('Failed to delete item. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <UploadPageContainer>
-      <h2>Galactic Upload Portal</h2>
-      <UploadForm onSubmit={handleSubmit}>
-        <FormGroup>
-          <Label>Title:</Label>
+    <>
+      <GlobalStyle />
+      <AppContainer>
+        <Header>Galactic Upload Portal</Header>
+        <Card>
+          <Form onSubmit={handleSubmit}>
+            <Input
+              type="text"
+              placeholder="Title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
+            <TextArea
+              placeholder="Main Text"
+              value={mainText}
+              onChange={(e) => setMainText(e.target.value)}
+              required
+            />
+            <Input
+              type="url"
+              placeholder="Icon Image URL"
+              value={iconImageUrl}
+              onChange={(e) => setIconImageUrl(e.target.value)}
+              required
+            />
+            <Input
+              type="text"
+              placeholder="File URL"
+              value={fileUrl}
+              onChange={(e) => setFileUrl(e.target.value)}
+              required
+            />
+            <Select
+              value={pluginType}
+              onChange={(e) => setPluginType(e.target.value)}
+              required
+            >
+              <option value="">Select Plugin Type</option>
+              <option value="survival">Survival</option>
+              <option value="economy">Economy</option>
+              <option value="packages">Packages</option>
+              <option value="security">Security</option>
+            </Select>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Launching...' : 'Launch Into Orbit'}
+            </Button>
+          </Form>
+        </Card>
+        <Card>
           <Input
             type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
+            placeholder="Search posts..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
-        </FormGroup>
-        <FormGroup>
-          <Label>Main Text:</Label>
-          <Textarea
-            value={mainText}
-            onChange={(e) => setMainText(e.target.value)}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>Icon Image URL:</Label>
-          <Input
-            type="text"
-            value={iconImageUrl}
-            onChange={(e) => setIconImageUrl(e.target.value)}
-            required
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label>File Upload:</Label>
-          <Input
-            type="file"
-            onChange={(e) => setFileUrl(e.target.files[0])}
-            accept=".zip, .rar" // Specify accepted file types if needed
-          />
-        </FormGroup>
-        <FormGroup>
-          <Label htmlFor="pluginType">Plugin Type:</Label>
-          <Select
-            id="pluginType"
-            value={pluginType}
-            onChange={(e) => setPluginType(e.target.value)}
-            required
-          >
-            <option value="">Select a type</option>
-            <option value="survival">Survival</option>
-            <option value="economy">Economy</option>
-            <option value="packages">Packages</option>
-            <option value="security">Security</option>
-          </Select>
-        </FormGroup>
-        <SubmitButton type="submit">Launch Into Orbit</SubmitButton>
-      </UploadForm>
-      {message && (
-        <MessageContainer success={isSuccess}>{message}</MessageContainer>
-      )}
-    </UploadPageContainer>
+          {isLoading && <p>Loading...</p>}
+          {error && <p style={{ color: '#ff5050' }}>{error}</p>}
+          <PostList>
+            {posts.length > 0 ? (
+              posts.map((post) => (
+                <PostItem key={post._id}>
+                  <span>{post.title}</span>
+                  <DeleteButton onClick={() => handleDelete(post._id)} disabled={isLoading}>
+                    Delete
+                  </DeleteButton>
+                </PostItem>
+              ))
+            ) : (
+              <p>No posts found in this galaxy</p>
+            )}
+          </PostList>
+        </Card>
+      </AppContainer>
+    </>
   );
 };
 
-export default UploadPage;
+export default GalacticPortal;
