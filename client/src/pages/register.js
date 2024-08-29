@@ -1,280 +1,176 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
-import styled, { createGlobalStyle, keyframes } from 'styled-components';
+import logo from '../bilder/logo2.png';
+import logoMobile from '../bilder/logo3.png';
+import bg from '../bilder/bg3.png';
 
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-    background: #0f0f1f;
-    color: #e0e0ff;
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: relative;
+
+  @media (max-width: 768px) {
+    background-color: #fff;
   }
 `;
 
-const gradientAnimation = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-`;
+const BackgroundImage = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${bg});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: -1;
 
-const AppContainer = styled.div`
-  min-height: 100vh;
-  padding: 2rem;
-  background: linear-gradient(45deg, #0f0f1f, #1f1f3f);
-  background-size: 400% 400%;
-  animation: ${gradientAnimation} 15s ease infinite;
-`;
-
-const Header = styled.h1`
-  font-size: 3rem;
-  text-align: center;
-  color: #50c8ff;
-  margin-bottom: 2rem;
-  text-shadow: 0 0 10px rgba(80, 200, 255, 0.5);
-`;
-
-const Card = styled.div`
-  background: rgba(30, 30, 60, 0.7);
-  border-radius: 15px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  margin-bottom: 2rem;
-  transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 48px 0 rgba(31, 38, 135, 0.5);
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
 const Form = styled.form`
-  display: grid;
-  gap: 1.5rem;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 1rem;
-  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 40px;
   border-radius: 8px;
-  background: rgba(60, 60, 100, 0.5);
-  color: #e0e0ff;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #50c8ff;
-    background: rgba(80, 80, 120, 0.5);
+  @media (max-width: 768px) {
+    background-color: transparent;
+    box-shadow: none;
+    padding: 20px;
   }
 `;
 
-const TextArea = styled(Input).attrs({ as: 'textarea' })`
-  resize: vertical;
-  min-height: 120px;
-`;
-
-const Select = styled.select`
-  width: 100%;
-  padding: 1rem;
-  border: none;
-  border-radius: 8px;
-  background: rgba(60, 60, 100, 0.5);
-  color: #e0e0ff;
+const Input = styled.input`
+  margin: 10px;
+  padding: 8px;
+  width: 300px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  outline: none;
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px #50c8ff;
-    background: rgba(80, 80, 120, 0.5);
+  @media (max-width: 768px) {
+    width: 100%;
   }
 `;
 
 const Button = styled.button`
-  padding: 1rem 2rem;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(45deg, #50c8ff, #8080ff);
-  color: #fff;
+  margin-top: 20px;
+  padding: 10px 20px;
   font-size: 1rem;
-  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.2);
+  border: 2px solid black;
+  color: white;
+  border: none;
+  border-radius: 2px;
   cursor: pointer;
-  transition: all 0.3s ease;
 
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(80, 200, 255, 0.5);
+  @media (max-width: 768px) {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
   }
 `;
 
-const PostList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
-
-const PostItem = styled.li`
-  background: rgba(60, 60, 100, 0.5);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(80, 80, 120, 0.5);
-  }
-`;
-
-const DeleteButton = styled(Button)`
-  background: linear-gradient(45deg, #ff5050, #ff8080);
-  padding: 0.5rem 1rem;
+const Feedback = styled.div`
+  margin-top: 10px;
+  color: red;
   font-size: 0.9rem;
+`;
 
-  &:hover {
-    background: linear-gradient(45deg, #ff6060, #ff9090);
+const Logo = styled.img`
+  width: 200px;
+  height: auto;
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    content: url(${logoMobile});
+    width: 150px;
   }
 `;
 
-const GalacticPortal = () => {
-  const [title, setTitle] = useState('');
-  const [mainText, setMainText] = useState('');
-  const [iconImageUrl, setIconImageUrl] = useState('');
-  const [fileUrl, setFileUrl] = useState('');
-  const [pluginType, setPluginType] = useState('');
-  const [posts, setPosts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+const Title = styled.h2`
+  color: white;
+  margin-bottom: 20px;
 
-  useEffect(() => {
-    fetchPosts();
-  }, [searchTerm]);
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+    color: black;
+  }
+`;
 
-  const fetchPosts = async () => {
-    try {
-      const response = await axios.get(`https://api.asfaltios.com/list/${searchTerm || ' '}`);
-      console.log('Fetched posts:', response.data);
-      setPosts(response.data.items || []);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-    }
-  };
+const Register = () => {
+  const [registerData, setRegisterData] = useState({ username: '', password: '', confirmPassword: '' });
+  const [feedback, setFeedback] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleRegisterSubmit = async (e) => {
     e.preventDefault();
     try {
-      const postData = {
-        title,
-        mainText,
-        iconImageUrl,
-        fileUrl,
-      };
-
-      console.log('Submitting post:', postData);
-
-      const response = await axios.post('https://api.asfaltios.com/upload', postData);
-
-      console.log('Upload response:', response.data);
-
-      if (response.status === 200) {
-        alert('Item uploaded successfully');
-        setTitle('');
-        setMainText('');
-        setIconImageUrl('');
-        setFileUrl('');
-        setPluginType('');
-        fetchPosts();
+      const response = await axios.post('https://api.asfaltios.com/register', registerData);
+      if (response && response.data && response.data.userId) {
+        // Store the user ID in a cookie upon successful registration
+        document.cookie = `userId=${response.data.userId}`;
+        setFeedback('Registration successful');
+        // Redirect to '/'
+        window.location.href = '/';
+      } else {
+        setFeedback('Unexpected response from server');
       }
     } catch (error) {
-      console.error('Error uploading item:', error);
-      alert('Failed to upload item');
+      if (error.response && error.response.data && error.response.data.error) {
+        setFeedback(error.response.data.error);
+      } else {
+        setFeedback('An error occurred while processing your request');
+      }
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`https://api.asfaltios.com/items/${id}`);
-      fetchPosts();
-    } catch (error) {
-      console.error('Error deleting item:', error);
-    }
+  const handleRegisterInputChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterData({ ...registerData, [name]: value });
   };
 
   return (
-    <>
-      <GlobalStyle />
-      <AppContainer>
-        <Header>Galactic Upload Portal</Header>
-        <Card>
-          <Form onSubmit={handleSubmit}>
-            <Input
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-            <TextArea
-              placeholder="Main Text"
-              value={mainText}
-              onChange={(e) => setMainText(e.target.value)}
-              required
-            />
-            <Input
-              type="url"
-              placeholder="Icon Image URL"
-              value={iconImageUrl}
-              onChange={(e) => setIconImageUrl(e.target.value)}
-              required
-            />
-            <Input
-              type="text"
-              placeholder="File URL"
-              value={fileUrl}
-              onChange={(e) => setFileUrl(e.target.value)}
-              required
-            />
-            <Select
-              value={pluginType}
-              onChange={(e) => setPluginType(e.target.value)}
-              required
-            >
-              <option value="">Select Plugin Type</option>
-              <option value="survival">Survival</option>
-              <option value="economy">Economy</option>
-              <option value="packages">Packages</option>
-              <option value="security">Security</option>
-            </Select>
-            <Button type="submit">Launch Into Orbit</Button>
-          </Form>
-        </Card>
-        <Card>
-          <Input
-            type="text"
-            placeholder="Search posts..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <PostList>
-            {posts.length > 0 ? (
-              posts.map((post) => (
-                <PostItem key={post._id}>
-                  <span>{post.title}</span>
-                  <DeleteButton onClick={() => handleDelete(post._id)}>Delete</DeleteButton>
-                </PostItem>
-              ))
-            ) : (
-              <p>No posts found in this galaxy</p>
-            )}
-          </PostList>
-        </Card>
-      </AppContainer>
-    </>
+    <Container>
+      <BackgroundImage />
+      <Form onSubmit={handleRegisterSubmit}>
+        <Logo src={logo} alt="Logo" />
+        <Title>Register</Title>
+        <Input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={registerData.username}
+          onChange={handleRegisterInputChange}
+        />
+        <Input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={registerData.password}
+          onChange={handleRegisterInputChange}
+        />
+        <Input
+          type="password"
+          name="confirmPassword"
+          placeholder="Confirm Password"
+          value={registerData.confirmPassword}
+          onChange={handleRegisterInputChange}
+        />
+        <Button type="submit">Register</Button>
+        {feedback && <Feedback>{feedback}</Feedback>}
+      </Form>
+    </Container>
   );
 };
 
-export default GalacticPortal;
+export default Register;

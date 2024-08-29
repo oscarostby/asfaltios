@@ -136,8 +136,8 @@ const ProfilePicture = styled.img`
 
 const UserDropdown = styled(motion.div)`
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 75%;
+  right: 3%;
   background-color: rgba(15, 23, 42, 0.9);
   backdrop-filter: blur(10px);
   border-radius: 4px;
