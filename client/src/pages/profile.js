@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import HeaderComponent from '../components/header';
 import { FaDownload, FaTrash, FaRedo } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const MainContent = styled.main`
   padding-top: 60px;
@@ -236,6 +237,19 @@ const Message = styled.p`
   margin-top: 1rem;
 `;
 
+const StaffLink = styled(Link)`
+  color: #64ffda;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #4a90e2;
+  }
+`;
+
 const Profile = () => {
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
   const [newProfilePictureUrl, setNewProfilePictureUrl] = useState('');
@@ -396,6 +410,7 @@ const Profile = () => {
               </DownloadGrid>
               {latestDownloads.length === 0 && <p>No downloads found.</p>}
             </LatestDownloadsSection>
+            <StaffLink to="/staffpage">Go to Staff Page</StaffLink>
           </ProfileContent>
         </ProfileContainer>
         {showPopup && (
