@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import HeaderComponent from '../components/header';
@@ -72,27 +73,37 @@ const StyledLink = styled.a`
 `;
 
 const StaffPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [userId, setUserId] = useState('');
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchProfileData();
-  }, []);
-
-  const fetchProfileData = async () => {
-    const userIdFromCookie = getCookie('userId');
-    if (userIdFromCookie) {
-      try {
-        const response = await axios.get(`https://api.asfaltios.com/api/users/${userIdFromCookie}`);
-        setUsername(response.data.username);
-        setUserId(userIdFromCookie);
-        setProfilePictureUrl(response.data.profilePictureUrl);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+    const fetchProfileData = async () => {
+      const userIdFromCookie = getCookie('userId');
+      if (userIdFromCookie) {
+        try {
+          const response = await axios.get(`https://api.asfaltios.com/api/users/${userIdFromCookie}`);
+          if (!response.data.verified) {
+            navigate('/not-verified'); // Redirect to a "Not Verified" page or login page
+            return;
+          }
+          setUsername(response.data.username);
+          setUserId(userIdFromCookie);
+          setProfilePictureUrl(response.data.profilePictureUrl);
+          setIsLoading(false); // Data fetched successfully
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+          navigate('/login'); // Redirect to login on error
+        }
+      } else {
+        navigate('/login'); // Redirect to login if no userId cookie found
       }
-    }
-  };
+    };
+
+    fetchProfileData();
+  }, [navigate]);
 
   const getCookie = (name) => {
     const cookies = document.cookie.split(';');
@@ -104,6 +115,10 @@ const StaffPage = () => {
     }
     return null;
   };
+
+  if (isLoading) {
+    return null; // Don't render anything while loading or redirecting
+  }
 
   return (
     <>
