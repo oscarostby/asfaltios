@@ -4,51 +4,60 @@ import { FaCaretDown, FaSearch, FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import logoVideo from '../bilder/navlogowhite.mp4';
 
+// Styled components
 const NavBar = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 40px;
-  height: 10rem;
-  background-color: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(10px);
+  height: 12rem;
+  background-color: #ffffff;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-
   @media (max-width: 768px) {
     padding: 0 20px;
-    height: 80px;
+    height: 170px;
   }
 `;
 
 const NavLogo = styled.div`
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: #3b82f6;
+  width: 300px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+`;
+
+const LogoVideo = styled.video`
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
 `;
 
 const NavLinks = styled.div`
   display: flex;
   align-items: center;
   margin-left: 20px;
-
   @media (max-width: 768px) {
     display: none;
   }
 `;
 
 const NavLink = styled.a`
-  color: #93c5fd;
+  color: #000000;
   text-decoration: none;
   margin-right: 20px;
   font-size: 1rem;
   transition: color 0.3s ease;
   &:hover {
-    color: #3b82f6;
+    color: #555555;
   }
 `;
 
@@ -64,7 +73,7 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   margin-right: 20px;
-  background-color: rgba(59, 130, 246, 0.1);
+  background-color: #f0f0f0;
   border-radius: 20px;
   padding: 5px 10px;
 `;
@@ -73,17 +82,17 @@ const SearchInput = styled.input`
   padding: 8px 10px;
   border: none;
   background: transparent;
-  color: #ffffff;
+  color: #000000;
   font-size: 1rem;
   &::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: #888888;
   }
 `;
 
 const SearchButton = styled.button`
   background: none;
   border: none;
-  color: #3b82f6;
+  color: #000000;
   font-size: 1.2rem;
   cursor: pointer;
 `;
@@ -101,18 +110,19 @@ const AuthButton = styled(motion.button)`
 
 const LoginButton = styled(AuthButton)`
   background-color: transparent;
-  color: #3b82f6;
-  border: 2px solid #3b82f6;
+  color: #000000;
+  border: 2px solid #000000;
   &:hover {
-    background-color: rgba(59, 130, 246, 0.1);
+    background-color: #e0e0e0;
   }
 `;
 
 const RegisterButton = styled(AuthButton)`
-  background-color: #3b82f6;
+  background-color: #000000;
   color: white;
+  border: 2px solid #000000;
   &:hover {
-    background-color: #2563eb;
+    background-color: #333333;
   }
 `;
 
@@ -121,7 +131,7 @@ const UserButton = styled(motion.button)`
   align-items: center;
   background: none;
   border: none;
-  color: #93c5fd;
+  color: #000000;
   cursor: pointer;
   font-size: 1.1rem;
 `;
@@ -131,26 +141,25 @@ const ProfilePicture = styled.img`
   height: 35px;
   border-radius: 50%;
   margin-right: 10px;
-  border: 2px solid #3b82f6;
+  border: 2px solid #000000;
 `;
 
 const UserDropdown = styled(motion.div)`
   position: absolute;
   top: 75%;
   right: 3%;
-  background-color: rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(10px);
+  background-color: #ffffff;
   border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 `;
 
 const UserDropdownItem = styled(motion.div)`
   padding: 10px 15px;
   cursor: pointer;
-  color: #93c5fd;
+  color: #000000;
   &:hover {
-    background-color: rgba(59, 130, 246, 0.1);
+    background-color: #f0f0f0;
   }
 `;
 
@@ -164,15 +173,13 @@ const HamburgerIcon = styled.div`
   @media (max-width: 768px) {
     display: flex;
   }
-
   span {
     display: block;
     height: 3px;
     width: 100%;
-    background-color: #3b82f6;
+    background-color: #000000;
     transition: all 0.3s ease;
   }
-
   &.open {
     span:first-child {
       transform: rotate(45deg) translate(5px, 5px);
@@ -194,8 +201,7 @@ const MobileMenu = styled(motion.div)`
   bottom: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(10px);
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -209,19 +215,19 @@ const CloseButton = styled.button`
   right: 20px;
   background: none;
   border: none;
-  color: #3b82f6;
+  color: #000000;
   font-size: 1.5rem;
   cursor: pointer;
 `;
 
 const MobileNavLink = styled(motion.a)`
-  color: #93c5fd;
+  color: #000000;
   text-decoration: none;
   margin: 15px 0;
   font-size: 1.2rem;
   transition: color 0.3s ease;
   &:hover {
-    color: #3b82f6;
+    color: #555555;
   }
 `;
 
@@ -236,7 +242,9 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const videoRef = useRef(null);
   const dropdownRef = useRef(null);
+  const lastScrollTop = useRef(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -249,6 +257,43 @@ const Header = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleScroll = () => {
+      const st = window.pageYOffset || document.documentElement.scrollTop;
+      if (st > lastScrollTop.current) {
+        // Scrolling down
+        if (video.currentTime < video.duration) {
+          video.playbackRate = 1.2; // Play at 1.2x speed when scrolling down
+          video.play();
+        }
+      } else if (st < lastScrollTop.current) {
+        // Scrolling up
+        if (video.currentTime > 0) {
+          video.playbackRate = -1.2; // Play in reverse at 1.2x speed when scrolling up
+          video.play();
+        }
+      }
+      lastScrollTop.current = st <= 0 ? 0 : st;
+    };
+
+    const handleVideoUpdate = () => {
+      if (video.currentTime <= 0 || video.currentTime >= video.duration) {
+        video.pause();
+      }
+    };
+
+    video.addEventListener('timeupdate', handleVideoUpdate);
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      video.removeEventListener('timeupdate', handleVideoUpdate);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -307,28 +352,6 @@ const Header = () => {
     }
   };
 
-  const menuVariants = {
-    closed: {
-      opacity: 0,
-      transition: {
-        staggerChildren: 0.05,
-        staggerDirection: -1
-      }
-    },
-    open: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-        delayChildren: 0.2
-      }
-    }
-  };
-
-  const itemVariants = {
-    closed: { opacity: 0, y: 20 },
-    open: { opacity: 1, y: 0 }
-  };
-
   return (
     <NavBar
       initial={{ opacity: 0, y: -50 }}
@@ -336,15 +359,19 @@ const Header = () => {
       transition={{ duration: 0.5 }}
     >
       <LogoAndLinks>
-      <NavLogo>
-  <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-    Asfaltios
-  </a>
-</NavLogo>
+        <NavLogo>
+          <LogoVideo
+            ref={videoRef}
+            src={logoVideo}
+            muted
+            playsInline
+            preload="auto"
+          />
+        </NavLogo>
         <NavLinks>
           <NavLink href="#">Server.Jar</NavLink>
           <NavLink href="#">Paper</NavLink>
-          <NavLink href="#"> Discord</NavLink>
+          <NavLink href="#">Discord</NavLink>
         </NavLinks>
       </LogoAndLinks>
 

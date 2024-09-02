@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { createGlobalStyle, keyframes } from 'styled-components';
 import { motion, AnimatePresence, useViewportScroll, useTransform } from 'framer-motion';
+import creeperImage from '../bilder/creeper.png';
+import beeImage from '../bilder/bee.png';
+
 import { 
   FaSearch, FaShieldAlt, FaLock, FaUserShield, FaServer, 
   FaChevronDown, FaChevronUp, FaDiscord, FaGithub, 
@@ -18,30 +21,30 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     font-family: 'Exo 2', sans-serif;
-    background: #0f172a;
-    color: #ffffff;
+    background: #ffffff; // White background
+    color: #000000; // Black text
     overflow-x: hidden;
-  }
 
-  * {
-    box-sizing: border-box;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
 
-  ::-webkit-scrollbar-track {
-    background: #1e293b;
-  }
+    ::-webkit-scrollbar-track {
+      background: #f0f0f0; // Light gray track
+    }
 
-  ::-webkit-scrollbar-thumb {
-    background: #3b82f6;
-    border-radius: 5px;
-  }
+    ::-webkit-scrollbar-thumb {
+      background: #cccccc; // Gray thumb
+      border-radius: 5px;
+    }
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: #60a5fa;
+    ::-webkit-scrollbar-thumb:hover {
+      background: #aaaaaa; // Darker gray on hover
+    }
   }
 `;
 
@@ -61,30 +64,6 @@ const PageContainer = styled.div`
   overflow: hidden;
 `;
 
-const SpaceBackground = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(ellipse at bottom, #1e3a8a 0%, #0f172a 100%);
-  z-index: -1;
-`;
-
-const Star = styled.div`
-  position: absolute;
-  background: #ffffff;
-  border-radius: 50%;
-  animation: ${starTwinkle} ${props => props.duration}s ease-in-out infinite;
-`;
-
-const Nebula = styled.div`
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(30px);
-  animation: ${nebulaPulse} 10s ease-in-out infinite;
-`;
-
 const ContentWrapper = styled.div`
   position: relative;
   z-index: 1;
@@ -98,27 +77,43 @@ const HeroSection = styled(motion.section)`
   align-items: center;
   text-align: center;
   padding: 5rem 2rem;
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(10px);
+  background: white;
+  position: relative; // Add this to allow absolute positioning of the image
+`;
+
+const CreeperImage = styled.img`
+  position: absolute;
+  bottom: 10%;
+  right: 10%;
+  width: 13%; // Adjust the size as needed
+  height: auto;
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+const BeeImage = styled.img`
+  position: absolute;
+  left: 5%;
+  top: 22%;
+  width: 13%; // Adjust the size as needed
+  height: auto;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const HeroTitle = styled(motion.h1)`
   font-size: 4rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: #f0f9ff;
-  text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-
-  @media (max-width: 768px) {
-    font-size: 3rem;
-  }
+  color: #000000; // Black text
 `;
 
 const HeroSubtitle = styled(motion.p)`
   font-size: 1.2rem;
   margin: 0 auto 2rem;
   max-width: 600px;
-  color: #bfdbfe;
+  color: #333333; // Dark gray text
   line-height: 1.6;
   text-align: center;
 `;
@@ -134,26 +129,26 @@ const SearchInput = styled.input`
   flex-grow: 1;
   padding: 0.8rem 1rem;
   font-size: 1rem;
-  border: 2px solid rgba(59, 130, 246, 0.3);
+  border: 2px solid rgba(0, 0, 0, 0.3);
   border-radius: 50px 0 0 50px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: #ffffff; // White background
+  color: #000000; // Black text
   outline: none;
   transition: all 0.3s ease;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.5); // Gray placeholder
   }
 
   &:focus {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: #3b82f6;
+    background-color: #f0f0f0; // Light gray on focus
+    border-color: #000000; // Black border on focus
   }
 `;
 
 const SearchButton = styled.button`
-  background-color: #3b82f6;
-  color: white;
+  background-color: #000000; // Black button
+  color: white; // White text
   border: none;
   padding: 0.8rem 1.2rem;
   font-size: 1rem;
@@ -162,14 +157,14 @@ const SearchButton = styled.button`
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #2563eb;
+    background-color: #333333; // Dark gray on hover
   }
 `;
 
 const PluginButton = styled(motion.button)`
   background-color: transparent;
-  color: #3b82f6;
-  border: 2px solid #3b82f6;
+  color: #000000; // Black text
+  border: 2px solid #000000; // Black border
   padding: 0.8rem 1.5rem;
   font-size: 1rem;
   cursor: pointer;
@@ -179,21 +174,22 @@ const PluginButton = styled(motion.button)`
   width: 18rem; // Set an initial width
 
   &:hover {
-    background-color: rgb(59, 130, 246);
-    color: white;
-    width: 20rem; // Increase width on hover
-    box-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.6); // Glow effect
+    background-color: black; // Light gray background on hover
+    color: white; // Keep text black
+    width: 20%;
   }
 `;
+
 const Section = styled(motion.section)`
   padding: 5rem 2rem;
+  background-color: #ffffff; // White background
 `;
 
 const SectionTitle = styled(motion.h2)`
   text-align: center;
   margin-bottom: 3rem;
   font-size: 2.5rem;
-  color: #3b82f6;
+  color: #000000; // Black text
 `;
 
 const Grid = styled(motion.div)`
@@ -205,7 +201,7 @@ const Grid = styled(motion.div)`
 `;
 
 const Card = styled(motion.div)`
-  background-color: rgba(59, 130, 246, 0.1);
+  background-color: rgba(0, 0, 0, 0.05); // Very light gray background
   border-radius: 20px;
   padding: 2rem;
   text-align: center;
@@ -214,21 +210,21 @@ const Card = styled(motion.div)`
 
   &:hover {
     transform: translateY(-10px);
-    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); // Light shadow
   }
 `;
 
 const IconWrapper = styled.div`
   font-size: 3rem;
   margin-bottom: 1rem;
-  color: #3b82f6;
+  color: #000000; // Black icons
 `;
 
 const ScrollButton = styled(motion.div)`
   position: fixed;
   bottom: 2rem;
   left: 2rem;
-  background-color: rgba(59, 130, 246, 0.8);
+  background-color: rgba(0, 0, 0, 0.1); // Light gray background
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -240,18 +236,17 @@ const ScrollButton = styled(motion.div)`
   z-index: 1000;
 
   &:hover {
-    background-color: #3b82f6;
+    background-color: rgba(0, 0, 0, 0.2); // Darker gray on hover
   }
 
   @media (max-width: 768px) {
     display: none;
   }
-
 `;
 
 const RocketIcon = styled(motion.div)`
   font-size: 1.5rem;
-  color: white;
+  color: #000000; // Black icon
   display: flex;
   justify-content: center;
   align-items: center;
@@ -266,28 +261,28 @@ const SocialIcons = styled.div`
   font-size: 1.5rem;
 
   a {
-    color: #3b82f6;
+    color: #000000; // Black text
     transition: color 0.3s ease;
 
     &:hover {
-      color: #60a5fa;
+      color: #333333; // Dark gray on hover
       transform: scale(1.1);
     }
   }
 `;
 
 const MotionSocialIcon = styled(motion.div)`
-  color: #3b82f6;
+  color: #000000; // Black text
   transition: color 0.3s ease;
-  
+
   &:hover {
-    color: #60a5fa;
+    color: #333333; // Dark gray on hover
     transform: scale(1.1);
   }
 `;
 
 const FeaturesSection = styled(Section)`
-  background-color: rgba(30, 58, 138, 0.8);
+  background-color: #f9f9f9; // Light gray background
 `;
 
 const FeatureGrid = styled(Grid)`
@@ -309,17 +304,17 @@ const FeatureIcon = styled(IconWrapper)`
 
 const FeatureTitle = styled.h3`
   font-size: 1.5rem;
-  color: #60a5fa;
+  color: #000000; // Black text
   margin-bottom: 1rem;
 `;
 
 const FeatureDescription = styled.p`
   font-size: 1rem;
-  color: #bfdbfe;
+  color: #333333; // Dark gray text
 `;
 
 const StatsSection = styled(Section)`
-  background-color: rgba(15, 23, 42, 0.9);
+  background-color: white; // Light gray background
 `;
 
 const StatCard = styled(Card)`
@@ -332,16 +327,16 @@ const StatCard = styled(Card)`
 const StatNumber = styled.h3`
   font-size: 3rem;
   margin: 1rem 0;
-  color: #60a5fa;
+  color: #000000; // Black text
 `;
 
 const StatLabel = styled.p`
   font-size: 1.1rem;
-  color: #bfdbfe;
+  color: #333333; // Dark gray text
 `;
 
 const TestimonialSection = styled(Section)`
-  background-color: rgba(30, 58, 138, 0.7);
+  background-color: #f9f9f9; // Light gray background
 `;
 
 const TestimonialCard = styled(Card)`
@@ -354,25 +349,26 @@ const QuoteIcon = styled.div`
   top: -1rem;
   left: -1rem;
   font-size: 3rem;
-  color: rgba(59, 130, 246, 0.3);
+  color: rgba(0, 0, 0, 0.3); // Soft gray
 `;
 
 const TestimonialText = styled.p`
   font-style: italic;
   margin-bottom: 1rem;
+  color: #000000; // Black text
 `;
 
 const TestimonialAuthor = styled.p`
   font-weight: bold;
-  color: #60a5fa;
+  color: #333333; // Dark gray text
 `;
 
 const FAQSection = styled(Section)`
-  background-color: rgba(15, 23, 42, 0.8);
+  background-color: white; // Light gray background
 `;
 
 const FAQItem = styled(motion.div)`
-  background-color: rgba(59, 130, 246, 0.1);
+  background-color: rgba(0, 0, 0, 0.05); // Very light gray background
   border-radius: 10px;
   padding: 1.5rem;
   margin-bottom: 1rem;
@@ -380,7 +376,7 @@ const FAQItem = styled(motion.div)`
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: rgba(59, 130, 246, 0.2);
+    background-color: rgba(0, 0, 0, 0.1); // Light gray on hover
   }
 `;
 
@@ -389,21 +385,21 @@ const FAQQuestion = styled.div`
   justify-content: space-between;
   align-items: center;
   font-size: 1.2rem;
-  color: #60a5fa;
+  color: #000000; // Black text
   font-weight: bold;
 `;
 
 const FAQAnswer = styled(motion.div)`
-  color: #bfdbfe;
+  color: #333333; // Dark gray text
   margin-top: 1rem;
 `;
 
 const FAQIcon = styled(motion.div)`
-  color: #60a5fa;
+  color: #000000; // Black text
 `;
 
 const NewsletterSection = styled(Section)`
-  background-color: rgba(30, 58, 138, 0.9);
+  background-color: #f9f9f9; // Light gray background
 `;
 
 const NewsletterForm = styled.form`
@@ -418,27 +414,51 @@ const NewsletterInput = styled.input`
   width: 100%;
   padding: 0.8rem 1rem;
   font-size: 1rem;
-  border: 2px solid rgba(59, 130, 246, 0.3);
+  border: 2px solid rgba(0, 0, 0, 0.3);
   border-radius: 50px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background-color: #ffffff; // White background
+  color: #000000; // Black text
   outline: none;
   transition: all 0.3s ease;
   margin-bottom: 1rem;
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.5); // Gray placeholder
   }
 
   &:focus {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: #3b82f6;
+    background-color: #f0f0f0; // Light gray on focus
+    border-color: #000000; // Black border on focus
   }
 `;
 
+const SpaceBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(ellipse at bottom, #1e293b 0%, #0f172a 100%); // Dark gradient
+  z-index: -1;
+`;
+
+const Star = styled.div`
+  position: absolute;
+  background: #ffffff; // White stars
+  border-radius: 50%;
+  animation: ${starTwinkle} ${props => props.duration}s ease-in-out infinite;
+`;
+
+const Nebula = styled.div`
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(30px);
+  animation: ${nebulaPulse} 10s ease-in-out infinite;
+`;
+
 const NewsletterButton = styled.button`
-  background-color: #3b82f6;
-  color: white;
+  background-color: #000000; // Black button
+  color: white; // White text
   border: none;
   padding: 0.8rem 2rem;
   font-size: 1rem;
@@ -447,7 +467,7 @@ const NewsletterButton = styled.button`
   transition: all 0.3s ease;
 
   &:hover {
-    background-color: #2563eb;
+    background-color: #333333; // Dark gray on hover
   }
 `;
 
@@ -522,9 +542,9 @@ const MinecraftSecurityPluginHomepage = () => {
 
   const createNebulas = () => {
     const nebulas = [
-      { color: '#60a5fa', top: '10%', left: '5%', size: '300px' },
-      { color: '#38bdf8', top: '60%', right: '10%', size: '250px' },
-      { color: '#2dd4bf', bottom: '15%', left: '15%', size: '200px' },
+      { color: '', top: '10%', left: '5%', size: '300px' },
+      { color: '', top: '60%', right: '10%', size: '250px' },
+      { color: '', bottom: '15%', left: '15%', size: '200px' },
     ];
 
     return nebulas.map((nebula, index) => (
@@ -648,7 +668,7 @@ s0.parentNode.insertBefore(s1,s0);
             >
               <SearchInput 
                 type="text" 
-                placeholder="Search for security plugins..." 
+                placeholder="Search for plugins..." 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -686,6 +706,10 @@ s0.parentNode.insertBefore(s1,s0);
                 </a>
               </MotionSocialIcon>
             </SocialIcons>
+              {/* Add the Creeper image */}
+            <CreeperImage src={creeperImage} alt="Creeper" />
+                          {/* Add the Creeper image */}
+                          <BeeImage src={beeImage} alt="bee" />
           </HeroSection>
 
           <FeaturesSection ref={featuresRef}>
