@@ -578,10 +578,10 @@ const MinecraftSecurityPluginHomepage = () => {
   ];
 
   const stats = [
-    { icon: <FaDownload />, number: "1M+", label: "Downloads" },
-    { icon: <FaUsers />, number: "500K+", label: "Active Users" },
-    { icon: <FaStar />, number: "4.8", label: "Average Rating" },
-    { icon: <FaServer />, number: "50K+", label: "Protected Servers" },
+    { icon: <FaDownload />, number: "385+", label: "Downloads" },
+    { icon: <FaUsers />, number: "200+", label: "Active Users" },
+    { icon: <FaStar />, number: "5.0", label: "Average Rating" },
+    { icon: <FaServer />, number: "300+", label: "Protected Servers" },
   ];
 
   const testimonials = [
@@ -617,6 +617,16 @@ const MinecraftSecurityPluginHomepage = () => {
       answer: "Absolutely! We provide customer support through our Discord server and email. Premium users also get access to priority support."
     },
   ];
+
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/66d01a6050c10f7a00a191c9/1i6eee2mi';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
 
   return (
     <>
@@ -852,6 +862,7 @@ const MinecraftSecurityPluginHomepage = () => {
         </AnimatePresence>
         <Footer />
       </PageContainer>
+      
     </>
   );
 };

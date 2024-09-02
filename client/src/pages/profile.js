@@ -4,6 +4,9 @@ import styled from 'styled-components';
 import HeaderComponent from '../components/header';
 import MobileHeader from '../components/mobileheader';
 
+import { FaDownload, FaTrash, FaRedo } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+
 const MainContent = styled.main`
   padding-top: 60px;
 `;
@@ -146,6 +149,19 @@ const PopupContent = styled.div`
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const StaffLink = styled(Link)`
+  color: #64ffda;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #4a90e2;
+  }
 `;
 
 const Profile = () => {
@@ -295,6 +311,35 @@ const Profile = () => {
           <ProfileContent>
             <h2>Profile</h2>
             {message && <Message success={isSuccess}>{message}</Message>}
+
+            <LatestDownloadsSection>
+              <h2>Latest Downloads</h2>
+              <ButtonContainer>
+                <ClearLogButton onClick={handleClearLog}>
+                  <FaTrash /> Clear Log
+                </ClearLogButton>
+              </ButtonContainer>
+              <DownloadGrid>
+                {latestDownloads.map((download, index) => (
+                  <DownloadCard key={index}>
+                    <DownloadInfo>
+                      <DownloadTitle>{download.title}</DownloadTitle>
+                      <DownloadType>{download.pluginType}</DownloadType>
+                      <DownloadDate>
+                        Last downloaded: {new Date(download.downloadedAt).toLocaleString()}
+                      </DownloadDate>
+                      <ButtonContainer>
+                        <RedownloadButton onClick={() => handleRedownload(download)}>
+                          <FaRedo /> Redownload
+                        </RedownloadButton>
+                      </ButtonContainer>
+                    </DownloadInfo>
+                  </DownloadCard>
+                ))}
+              </DownloadGrid>
+              {latestDownloads.length === 0 && <p>No downloads found.</p>}
+            </LatestDownloadsSection>
+            <StaffLink to="/staffpage">Go to Staff Page</StaffLink>
           </ProfileContent>
         </ProfileContainer>
       </MainContent>

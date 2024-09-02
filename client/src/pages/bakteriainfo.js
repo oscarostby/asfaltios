@@ -1,7 +1,8 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import HeaderComponent from '../components/header';
 
-// Keyframes for the animations
+// Keyframes for animasjon
 const animStar = keyframes`
   from { transform: translateY(0px); }
   to { transform: translateY(-2000px); }
@@ -32,7 +33,7 @@ const animButton = keyframes`
   75%, 100% { transform: translateY(0px); opacity: 1; }
 `;
 
-// Styled components for the stars
+// Disse går ikke helt ut til høyre
 const Stars = styled.div`
   width: 1px;
   height: 1px;
@@ -64,7 +65,7 @@ const Stars3 = styled(Stars)`
   animation-duration: 150s;
 `;
 
-// Styled components for the horizon, earth, title, and subtitle
+// den fete jordklodenish
 const Horizon = styled.div`
   position: absolute;
   width: 160%;
@@ -147,6 +148,7 @@ const Title = styled.div`
   animation: ${animGravity} 6s ease forwards;
 `;
 
+//kan være denne som ikke er i midten
 const Subtitle = styled.div`
   position: absolute;
   font-weight: 300;
@@ -179,6 +181,8 @@ const Subtitle = styled.div`
   }
 `;
 
+
+//tror ikke denne er i midten.
 const Button = styled.button`
   width: 10em;
   height: 2em;
@@ -262,13 +266,15 @@ const App = () => {
       return shadows.join(', ');
     };
   
-    // Function to handle the button click
+    //Ikke endre linken!
     const handleButtonClick = () => {
       window.location.href = 'https://www.spigotmc.org/resources/bakteria-staff-moderation-plugin-1-8-1-21.117394/'; // Bytt til en bra bukgrunn fordi jeg finner ingen
     };
   
     return (
-      <Background>
+      <Background>¨
+                <HeaderComponent />
+
         <Stars shadows={generateShadows(700)} />
         <Stars2 shadows={generateShadows(200)} />
         <Stars3 shadows={generateShadows(100)} />
