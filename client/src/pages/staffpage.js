@@ -14,76 +14,83 @@ const StaffContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+  text-align: center;
+`;
+
+const ProfileSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+`;
+
+const ProfilePicture = styled.img`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #64ffda;
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(100, 255, 218, 0.3);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 30px rgba(100, 255, 218, 0.5);
+  }
+`;
+
+const InfoText = styled.p`
+  font-size: 1.5em;
+  color: #e6f1ff;
+  margin: 10px 0;
 `;
 
 const Title = styled.h1`
   color: #64ffda;
-  text-align: center;
   margin-bottom: 40px;
 `;
 
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  background-color: #1a1a2e;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+const LinkList = styled.ul`
+  list-style-type: none;
+  padding: 0;
 `;
 
-const TableHeader = styled.th`
-  border: 1px solid #e0e0e0;
-  padding: 10px;
-  background-color: #172a45;
-  color: #e6f1ff;
+const LinkItem = styled.li`
+  margin: 10px 0;
 `;
 
-const TableRow = styled.tr`
-  &:nth-child(even) {
-    background-color: #112240;
-  }
-
-  &:nth-child(odd) {
-    background-color: #0a192f;
-  }
+const StyledLink = styled.a`
+  color: #64ffda;
+  text-decoration: none;
+  font-size: 1.2em;
 
   &:hover {
-    background-color: #243b55;
+    color: #e6f1ff;
+    text-decoration: underline;
   }
-`;
-
-const TableCell = styled.td`
-  border: 1px solid #e0e0e0;
-  padding: 10px;
-  color: #e6f1ff;
 `;
 
 const StaffPage = () => {
-  const [staffData, setStaffData] = useState([]);
   const [username, setUsername] = useState('');
+  const [userId, setUserId] = useState('');
+  const [profilePictureUrl, setProfilePictureUrl] = useState('');
 
   useEffect(() => {
     fetchProfileData();
-    fetchStaffData();
   }, []);
 
   const fetchProfileData = async () => {
-    const userId = getCookie('userId');
-    if (userId) {
+    const userIdFromCookie = getCookie('userId');
+    if (userIdFromCookie) {
       try {
-        const response = await axios.get(`https://api.asfaltios.com/api/users/${userId}`);
+        const response = await axios.get(`https://api.asfaltios.com/api/users/${userIdFromCookie}`);
         setUsername(response.data.username);
+        setUserId(userIdFromCookie);
+        setProfilePictureUrl(response.data.profilePictureUrl);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
-    }
-  };
-
-  const fetchStaffData = async () => {
-    try {
-      const response = await axios.get('https://api.asfaltios.com/staff');
-      setStaffData(response.data);
-    } catch (error) {
-      console.error('Error fetching staff data:', error);
     }
   };
 
@@ -103,23 +110,29 @@ const StaffPage = () => {
       <HeaderComponent />
       <MainContent>
         <StaffContainer>
-          <Title>Welcome, {username}! Here is the Staff Information</Title>
-          <Table>
-            <thead>
-              <tr>
-                <TableHeader>Username</TableHeader>
-                <TableHeader>Password</TableHeader>
-              </tr>
-            </thead>
-            <tbody>
-              {staffData.map((staff, index) => (
-                <TableRow key={index}>
-                  <TableCell>{staff.username}</TableCell>
-                  <TableCell>{staff.password}</TableCell>
-                </TableRow>
-              ))}
-            </tbody>
-          </Table>
+          <ProfileSection>
+            <ProfilePicture src={profilePictureUrl} alt="Profile Picture" />
+            <InfoText>Username: {username}</InfoText>
+            <InfoText>Staff ID: {userId}</InfoText>
+          </ProfileSection>
+          <Title>Here are some useful links:</Title>
+          <LinkList>
+            <LinkItem>
+              <StyledLink href="https://github.com/oscarostby/asfaltios" target="_blank" rel="noopener noreferrer">
+                Asfaltios GitHub Repository
+              </StyledLink>
+            </LinkItem>
+            <LinkItem>
+              <StyledLink href="https://github.com/Secker17/Bakteria" target="_blank" rel="noopener noreferrer">
+                Bakteria GitHub Repository
+              </StyledLink>
+            </LinkItem>
+            <LinkItem>
+              <StyledLink href="https://dashboard.tawk.to/#/dashboard/66d01a6050c10f7a00a191c9" target="_blank" rel="noopener noreferrer">
+                Tawk.to Dashboard
+              </StyledLink>
+            </LinkItem>
+          </LinkList>
         </StaffContainer>
       </MainContent>
     </>
