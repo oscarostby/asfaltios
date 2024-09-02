@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import logo from '../bilder/logo2.png';
 
 const FooterContainer = styled.footer`
-  background-color: rgba(15, 23, 42, 0.8);
-  color: #93c5fd;
+  background-color: #ffffff; /* Changed to white */
+  color: #000000; /* Changed text color to black */
   padding: 2rem;
 
   @media (min-width: 768px) {
@@ -41,7 +41,7 @@ const FooterLogo = styled.div`
 
   span {
     font-size: 1.5rem;
-    color: #3b82f6;
+    color: #000000; /* Changed to black */
   }
 
   @media (min-width: 768px) {
@@ -66,14 +66,14 @@ const FooterLinks = styled.div`
   margin-bottom: 1.5rem;
 
   a {
-    color: #93c5fd;
+    color: #000000; /* Changed to black */
     text-decoration: none;
     margin: 0 0.5rem;
     font-size: 1rem;
     transition: color 0.3s ease;
 
     &:hover {
-      color: #3b82f6;
+      color: #3b82f6; /* Keep blue hover effect */
     }
   }
 
@@ -93,14 +93,14 @@ const FooterSocial = styled.div`
   margin-bottom: 1.5rem;
 
   a {
-    color: #93c5fd;
+    color: #000000; /* Changed to black */
     text-decoration: none;
     margin: 0 0.5rem;
     font-size: 1.5rem;
     transition: color 0.3s ease, transform 0.3s ease;
 
     &:hover {
-      color: #3b82f6;
+      color: #3b82f6; /* Keep blue hover effect */
       transform: scale(1.1);
     }
   }
@@ -118,7 +118,7 @@ const FooterSocial = styled.div`
 const FooterCopyright = styled.div`
   font-size: 0.875rem;
   text-align: center;
-  color: rgba(147, 197, 253, 0.7);
+  color: rgba(0, 0, 0, 0.7); /* Changed to a lighter black color */
 
   @media (min-width: 768px) {
     font-size: 1rem;
@@ -131,7 +131,7 @@ const Footer = () => {
       <FooterContent>
         <FooterLogo>
           <img src={logo} alt="Asfaltios Logo" />
-          <span>Asfaltios</span>
+          <span></span>
         </FooterLogo>
 
         <FooterLinks>
