@@ -102,6 +102,94 @@ const PluginList = () => {
   return (
     <Container>
       <HeaderComponent />
+      <Header className="header">
+        <Circle top="calc(50% - 10vw)" left="calc(50% - 50vw)" size="200vw" gradient="linear-gradient(45deg, rgba(255,255,255, .75), rgba(0,0,0, .75))" delay=".7s" />
+        <Circle top="calc(50% - 1vw)" left="calc(50% - 90vw)" size="250vw" gradient="linear-gradient(45deg, rgba(255,255,255, .75), rgba(0,0,0, .75))" delay=".5s" />
+        <Logo className="Brackets">
+          <Brackets className="arrow" />
+        </Logo>
+        
+        <Slogan className="slogan">
+          World Global <PS>and the most secure and efficient plugins!</PS>
+        </Slogan>
+        
+        <Buttons className="btns">
+          <Button className="btn">Contact</Button>
+          <Button className="btn">Discord</Button>
+        </Buttons>
+        
+        <Hill className="hill" />
+      </Header>
+      <Wrapper>
+        <div style={{ paddingTop: '6rem', textAlign: 'center' }}>
+          <h1>Our Minecraft Plugins</h1>
+          <p>Discover our amazing collection of Minecraft plugins designed to enhance your gaming experience.</p>
+        </div>
+        <Layout>
+          <Main>
+            {/* Removed GlowWrapper components */}
+          </Main>
+        </Layout>
+
+        <BannerSection>
+          <Container>
+            <BannerText>
+              <h1>Optimize</h1>
+              <p>
+                <strong>We make it easy to maximize your gaming experience.</strong> Our plugins provide robust features to enhance your server's performance and ensure seamless gameplay for all users.
+              </p>
+              <button>Get Started</button>
+            </BannerText>
+          </Container>
+          <BannerImage src="https://preview.ibb.co/bMi5Y6/banner_img.png" alt="monitoring" />
+        </BannerSection>
+
+        <Container>
+          <Row>
+            <Card>
+              <CardIcon src="https://i.ibb.co/rdLyxmf/3dgif-Simplegold.gif" alt="monitoring" />
+              <CardTitle>SimpleGold</CardTitle>
+              <CardText>Efficient gold management to keep your economy balanced and fair for all players on your server.</CardText>
+              <CardLink href="https://www.spigotmc.org/resources/simple-gold-1-20-1-21-vault-towny.115987/">Learn more</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://i.ibb.co/V9wby5w/3dgifmaker37576.gif" alt="cloud firewalls" />
+              <CardTitle>Bakteria Staff Plugin</CardTitle>
+              <CardText>Monitor staff activities and ensure a healthy and productive server environment. We give you all the tools your staff member need!</CardText>
+              <CardLink href="https://asfaltios.vercel.app/bakteriainfo">Learn more</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/fcnzt6/team_management.png" alt="team management" />
+              <CardTitle>Asfaltios Basic</CardTitle>
+              <CardText>Basic tools to get your server up and running with essential features and easy management.</CardText>
+              <CardLink href="#">Coming soon!</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/evyiLm/backups.png" alt="backups" />
+              <CardTitle>AutoBackup</CardTitle>
+              <CardText>Automatic backups to ensure your server data is always secure and can be restored easily.</CardText>
+              <CardLink href="#">Coming soon!</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/g9bERR/snapshots.png" alt="snapshots" />
+              <CardTitle>Asfaltios AFK</CardTitle>
+              <CardText>Stops automated systems when players go AFK, preventing unfair AFK farming in Minecraft.</CardText>
+              <CardLink href="#">Coming soon!</CardLink>
+            </Card>
+            <Card>
+              <CardIcon src="https://image.ibb.co/cFV8mR/monitoring.png" alt="monitoring" />
+              <CardTitle>Asfaltios Firewall</CardTitle>
+              <CardText>Comprehensive security features to protect your server from threats and unauthorized access.</CardText>
+              <CardLink href="#">Coming soon!</CardLink>
+            </Card>
+          </Row>
+        </Container>
+      </Wrapper>
+      <br />
+      <br />
+
+    </>
+=======
       <Title>PLUGINS</Title>
       <TopImageGrid>
         <ImageWrapper>
