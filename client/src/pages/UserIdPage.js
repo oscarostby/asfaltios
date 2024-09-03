@@ -1,53 +1,78 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import axios from 'axios';
 
-const UserIdPage = () => {
-  const [message, setMessage] = useState('Loading...');
-  const [error, setError] = useState(null);
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+`;
+
+const Title = styled.h1`
+  color: #333;
+  margin-bottom: 20px;
+`;
+
+const Message = styled.p`
+  font-size: 24px;
+  font-weight: bold;
+  color: ${props => props.isAdmin ? '#4caf50' : '#f44336'};
+`;
+
+function App() {
+  const [isAdmin, setIsAdmin] = useState(null);
+  const [username, setUsername] = useState('');
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${name}=`)) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return null;
+  };
+
+  const checkAdminStatus = async () => {
+    const userId = getCookie('userId');
+    if (userId) {
+      try {
+        const response = await axios.get(`https://api.asfaltios.com/api/users/${userId}`);
+        setIsAdmin(response.data.admin);
+        setUsername(response.data.username);
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        setIsAdmin(null);
+      }
+    } else {
+      console.log('User ID not found in cookies');
+      setIsAdmin(null);
+    }
+  };
 
   useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const cookies = document.cookie.split('; ');
-        const userIdCookie = cookies.find(row => row.startsWith('userId='));
-        
-        if (!userIdCookie) {
-          setMessage('No user ID found in cookies');
-          return;
-        }
-
-        const userId = userIdCookie.split('=')[1];
-        
-        // Log the userId for debugging
-        console.log('User ID from cookie:', userId);
-
-        const response = await axios.get(`https://api.asfaltios.com/api/users/${userId}`);
-        
-        // Log the response for debugging
-        console.log('API Response:', response.data);
-
-        if (userId === 'admin') {
-          setMessage('Makka Pakka, you are admin');
-        } else {
-          setMessage(`Your user ID is: ${userId}`);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        setError(error.message || 'An unknown error occurred');
-        setMessage('Error fetching user data');
-      }
-    };
-
-    fetchUserId();
+    checkAdminStatus();
   }, []);
 
   return (
-    <div>
-      <h1>User ID Page</h1>
-      <p>{message}</p>
-      {error && <p style={{color: 'red'}}>Error details: {error}</p>}
-    </div>
+    <AppContainer>
+      <Title>Admin Check</Title>
+      {isAdmin !== null ? (
+        <Message isAdmin={isAdmin}>
+          {isAdmin
+            ? `Wow, ${username}, you are admin, great!`
+            : `${username}, you are not an admin, noob.`}
+        </Message>
+      ) : (
+        <Message>Please log in to check your admin status.</Message>
+      )}
+    </AppContainer>
   );
-};
+}
 
-export default UserIdPage;
+export default App;
