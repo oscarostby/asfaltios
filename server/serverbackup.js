@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
-const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
 
@@ -12,7 +11,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: 'https://api.asfaltios.com/', // Replace with your client-side URL
+  origin: '*', // Allow requests from all origins
   credentials: true, // Allow sending cookies
 }));
 
@@ -33,6 +32,7 @@ db.once('open', () => {
 const userSchema = new mongoose.Schema({
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
+  profilePictureUrl: { type: String, default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Osama_bin_Laden_portrait.jpg/250px-Osama_bin_Laden_portrait.jpg' },
 });
 
 const User = mongoose.model('User', userSchema);
@@ -40,13 +40,11 @@ const User = mongoose.model('User', userSchema);
 const itemSchema = new mongoose.Schema({
   title: { type: String, required: true },
   mainText: { type: String, required: true },
-  fileUrl: { type: String, required: true },
-  iconImageUrl: { type: String, required: true },
+  fileUrl: { type: String },
+  iconImageUrl: { type: String, required: true }, // Make iconImageUrl required
 });
 
 const Item = mongoose.model('Item', itemSchema);
-
-const upload = multer({ dest: 'uploads/' }); // Configure multer for file uploads
 
 app.post('/register', async (req, res) => {
   const { username, password, confirmPassword } = req.body;
@@ -100,48 +98,74 @@ app.get('/api/users/:userId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.status(200).json({ username: user.username });
+    res.status(200).json({ username: user.username, profilePictureUrl: user.profilePictureUrl });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the user' });
   }
 });
 
-////////////////////////////////////////////////////////////////////////
+app.post('/api/users/:userId/updateProfilePicture', async (req, res) => {
+  const { userId } = req.params;
+  const { profilePictureUrl } = req.body;
 
-app.post('/api/upload', upload.fields([{ name: 'file' }, { name: 'iconImage' }]), async (req, res) => {
-  const { title, mainText } = req.body;
-  const file = req.files['file'][0];
-  const iconImage = req.files['iconImage'][0];
-
-  // Save the uploaded data to the database
   try {
-    const newItem = new Item({
-      title,
-      mainText,
-      fileUrl: file.path,
-      iconImageUrl: iconImage.path,
-    });
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    user.profilePictureUrl = profilePictureUrl;
+    await user.save();
+    res.status(200).json({ message: 'Profile picture updated successfully', profilePictureUrl });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while updating the profile picture' });
+  }
+});
+
+app.post('/upload', async (req, res) => {
+  try {
+    const { title, mainText, fileUrl, iconImageUrl } = req.body;
+    if (!iconImageUrl) {
+      return res.status(400).json({ error: 'iconImageUrl is required' });
+    }
+    const newItem = new Item({ title, mainText, fileUrl, iconImageUrl });
     await newItem.save();
-    res.status(200).json({ message: 'Upload successful' });
+    res.status(200).json({ message: 'Item uploaded successfully' });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while uploading data' });
+    console.log(error);
+    res.status(500).json({ error: 'An error occurred while processing your request' });
   }
 });
 
-// Route for fetching items based on search term
-app.get('/api/items', async (req, res) => {
-  const { searchTerm } = req.query;
-
+app.get('/list/:searchTerm', async (req, res) => {
+  const { searchTerm } = req.params;
+  const { sort, category } = req.query;
   try {
-    const regex = new RegExp(searchTerm, 'i'); // Create a case-insensitive regular expression
-    const items = await Item.find({ $or: [{ title: regex }, { mainText: regex }] });
-    res.status(200).json(items);
+    const query = { title: { $regex: searchTerm, $options: 'i' } };
+    if (category) {
+      query.category = category;
+    }
+    const items = await Item.find(query).sort(sort ? { downloads: sort === 'desc' ? -1 : 1 } : {});
+    res.status(200).json({ items });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while fetching items' });
+    res.status(500).json({ error: 'An error occurred while fetching the items' });
   }
 });
 
+let message = '';
 
+app.post('/api/message', async (req, res) => {
+  const { newMessage } = req.body;
+  if (!newMessage) {
+    return res.status(400).json({ error: 'Message content is required' });
+  }
+  message = newMessage;
+  res.status(200).json({ message: 'Message saved successfully' });
+});
+
+app.get('/api/message', (req, res) => {
+  res.status(200).json({ message });
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
