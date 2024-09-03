@@ -2,17 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import HeaderComponent from '../components/header';
+import ASPA from '../components/Aspa';
 
 const MainContent = styled.main`
-  padding-top: 200px;
+  padding-top: 100px;
   background-color: #0a192f;
   color: #e6f1ff;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const StaffContainer = styled.div`
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
@@ -23,6 +27,10 @@ const ProfileSection = styled.div`
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
+  background-color: #112240;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 `;
 
 const ProfilePicture = styled.img`
@@ -72,6 +80,15 @@ const StyledLink = styled.a`
   }
 `;
 
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #64ffda;
+  font-size: 1.5em;
+`;
+
 const StaffPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState('');
@@ -117,12 +134,11 @@ const StaffPage = () => {
   };
 
   if (isLoading) {
-    return null; // Don't render anything while loading or redirecting
+    return <LoadingContainer>Loading...</LoadingContainer>;
   }
 
   return (
     <>
-      <HeaderComponent />
       <MainContent>
         <StaffContainer>
           <ProfileSection>
@@ -149,6 +165,7 @@ const StaffPage = () => {
             </LinkItem>
           </LinkList>
         </StaffContainer>
+        <ASPA />
       </MainContent>
     </>
   );
