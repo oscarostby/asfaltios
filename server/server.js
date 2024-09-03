@@ -4,6 +4,7 @@ const cors = require('cors');
 const bcrypt = require('bcrypt');
 const path = require('path');
 const crypto = require('crypto');
+const crypto = require('crypto'); // Import crypto for generating random IDs
 require('dotenv').config();
 
 const app = express();
@@ -32,6 +33,7 @@ db.once('open', () => {
 
 const userSchema = new mongoose.Schema({
   userId: { type: String, unique: true, required: true },
+  userId: { type: String, unique: true, required: true }, // Add userId field
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, default: false },
@@ -65,7 +67,10 @@ app.post('/register', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const randomUserId = crypto.randomBytes(16).toString('hex');
     const newUser = new User({ userId: randomUserId, username, password: hashedPassword, isAdmin: false });
+    const randomUserId = crypto.randomBytes(16).toString('hex'); // Generate a random user ID
+    const newUser = new User({ userId: randomUserId, username, password: hashedPassword });
     await newUser.save();
+    // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
     res.cookie('userId', newUser.userId, { httpOnly: true, sameSite: 'strict' });
     res.status(200).json({ message: 'User registered successfully', userId: newUser.userId });
@@ -85,6 +90,7 @@ app.post('/login', async (req, res) => {
     if (!passwordMatch) {
       return res.status(400).json({ error: 'Incorrect password' });
     }
+    // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
     res.cookie('userId', user.userId, { httpOnly: true, sameSite: 'strict' });
     res.status(200).json({ message: 'User logged in successfully', userId: user.userId });
@@ -173,6 +179,7 @@ app.get('/api/message', (req, res) => {
   res.status(200).json({ message });
 });
 
+// New endpoint to fetch user ID by username
 app.get('/api/userId/:username', async (req, res) => {
   const { username } = req.params;
   try {
