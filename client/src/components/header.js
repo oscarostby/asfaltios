@@ -41,7 +41,7 @@ const LogoVideo = styled.video`
   display: block;
 `;
 
-const NavLinks = styled.div`
+const NavLinks = styled(motion.div)`
   display: flex;
   align-items: center;
   margin-left: 20px;
@@ -242,6 +242,7 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [videoCompleted, setVideoCompleted] = useState(false);
   const videoRef = useRef(null);
   const dropdownRef = useRef(null);
   const lastScrollTop = useRef(0);
@@ -269,22 +270,26 @@ const Header = () => {
       if (st > lastScrollTop.current) {
         // Scrolling down
         if (video.currentTime < video.duration) {
-          video.playbackRate = 1.2; // Play at 1.2x speed when scrolling down
+          video.playbackRate = 1.2;
           video.play();
         }
       } else if (st < lastScrollTop.current) {
         // Scrolling up
         if (video.currentTime > 0) {
-          video.playbackRate = -1.2; // Play in reverse at 1.2x speed when scrolling up
-          video.play();
+          // Instead of setting a negative playback rate, we'll manually decrease the currentTime
+          video.currentTime = Math.max(0, video.currentTime - 0.1);
         }
       }
       lastScrollTop.current = st <= 0 ? 0 : st;
     };
 
     const handleVideoUpdate = () => {
-      if (video.currentTime <= 0 || video.currentTime >= video.duration) {
+      if (video.currentTime >= video.duration - 0.1) {
         video.pause();
+        setVideoCompleted(true);
+      } else if (video.currentTime <= 0.1) {
+        video.pause();
+        setVideoCompleted(false);
       }
     };
 
@@ -368,7 +373,12 @@ const Header = () => {
             preload="auto"
           />
         </NavLogo>
-        <NavLinks>
+        <NavLinks
+          animate={{
+            x: videoCompleted ? '-10rem' : '0rem',
+          }}
+          transition={{ duration: 0.5 }}
+        >
           <NavLink href="#">Server.Jar</NavLink>
           <NavLink href="#">Paper</NavLink>
           <NavLink href="#">Discord</NavLink>
