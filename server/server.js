@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const path = require('path');
+const crypto = require('crypto');
+const crypto = require('crypto'); // Import crypto for generating random IDs
 require('dotenv').config();
 
 const app = express();
@@ -30,6 +32,8 @@ db.once('open', () => {
 });
 
 const userSchema = new mongoose.Schema({
+  userId: { type: String, unique: true, required: true },
+  userId: { type: String, unique: true, required: true }, // Add userId field
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   profilePictureUrl: { type: String, default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Osama_bin_Laden_portrait.jpg/250px-Osama_bin_Laden_portrait.jpg' },
@@ -65,6 +69,10 @@ app.post('/register', async (req, res) => {
       password: hashedPassword,
       admin: false // Set admin to false by default
     });
+    const randomUserId = crypto.randomBytes(16).toString('hex');
+    const newUser = new User({ userId: randomUserId, username, password: hashedPassword, isAdmin: false });
+    const randomUserId = crypto.randomBytes(16).toString('hex'); // Generate a random user ID
+    const newUser = new User({ userId: randomUserId, username, password: hashedPassword });
     await newUser.save();
     // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
@@ -170,6 +178,22 @@ app.post('/api/message', async (req, res) => {
 app.get('/api/message', (req, res) => {
   res.status(200).json({ message });
 });
+
+
+// New endpoint to fetch user ID by username
+app.get('/api/userId/:username', async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json({ userId: user.userId });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the user ID' });
+  }
+});
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
