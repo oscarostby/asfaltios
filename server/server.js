@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const path = require('path');
+const crypto = require('crypto'); // Import crypto for generating random IDs
 require('dotenv').config();
 
 const app = express();
@@ -30,6 +31,7 @@ db.once('open', () => {
 });
 
 const userSchema = new mongoose.Schema({
+  userId: { type: String, unique: true, required: true }, // Add userId field
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   profilePictureUrl: { type: String, default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Osama_bin_Laden_portrait.jpg/250px-Osama_bin_Laden_portrait.jpg' },
@@ -60,11 +62,13 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Username already taken' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, password: hashedPassword });
+    const randomUserId = crypto.randomBytes(16).toString('hex'); // Generate a random user ID
+    const newUser = new User({ userId: randomUserId, username, password: hashedPassword });
     await newUser.save();
+    // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
-    res.cookie('userId', newUser._id, { httpOnly: true, sameSite: 'strict' });
-    res.status(200).json({ message: 'User registered successfully', userId: newUser._id });
+    res.cookie('userId', newUser.userId, { httpOnly: true, sameSite: 'strict' });
+    res.status(200).json({ message: 'User registered successfully', userId: newUser.userId });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while processing your request' });
   }
@@ -81,9 +85,10 @@ app.post('/login', async (req, res) => {
     if (!passwordMatch) {
       return res.status(400).json({ error: 'Incorrect password' });
     }
+    // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
-    res.cookie('userId', user._id, { httpOnly: true, sameSite: 'strict' });
-    res.status(200).json({ message: 'User logged in successfully', userId: user._id });
+    res.cookie('userId', user.userId, { httpOnly: true, sameSite: 'strict' });
+    res.status(200).json({ message: 'User logged in successfully', userId: user.userId });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while processing your request' });
   }
@@ -92,7 +97,7 @@ app.post('/login', async (req, res) => {
 app.get('/api/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({ userId });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -107,7 +112,7 @@ app.post('/api/users/:userId/updateProfilePicture', async (req, res) => {
   const { profilePictureUrl } = req.body;
 
   try {
-    const user = await User.findById(userId);
+    const user = await User.findOne({ userId });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -150,21 +155,6 @@ app.get('/list/:searchTerm', async (req, res) => {
   }
 });
 
-// New delete endpoint
-app.delete('/items/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deletedItem = await Item.findByIdAndDelete(id);
-    if (!deletedItem) {
-      return res.status(404).json({ error: 'Item not found' });
-    }
-    res.status(200).json({ message: 'Item deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting item:', error);
-    res.status(500).json({ error: 'An error occurred while deleting the item' });
-  }
-});
-
 let message = '';
 
 app.post('/api/message', async (req, res) => {
@@ -178,6 +168,20 @@ app.post('/api/message', async (req, res) => {
 
 app.get('/api/message', (req, res) => {
   res.status(200).json({ message });
+});
+
+// New endpoint to fetch user ID by username
+app.get('/api/userId/:username', async (req, res) => {
+  const { username } = req.params;
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.status(200).json({ userId: user.userId });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while fetching the user ID' });
+  }
 });
 
 app.listen(port, () => {
