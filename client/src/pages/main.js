@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 import Header from '../components/header';
 import Footer from "../components/footer";
+import ASPA from '../components/Aspa';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&display=swap');
@@ -618,19 +619,13 @@ const MinecraftSecurityPluginHomepage = () => {
     },
   ];
 
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/66d01a6050c10f7a00a191c9/1i6eee2mi';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
 
   return (
     <>
+          <ASPA />
+
       <GlobalStyle />
+      
       <PageContainer>
         <SpaceBackground>
           {createStars()}
