@@ -13,8 +13,8 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: '*',
-  credentials: true,
+  origin: '*', // Allow requests from all origins
+  credentials: true, // Allow sending cookies
 }));
 
 const connectionString = process.env.MONGODB_URI;
@@ -36,7 +36,6 @@ const userSchema = new mongoose.Schema({
   userId: { type: String, unique: true, required: true }, // Add userId field
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  isAdmin: { type: Boolean, default: false },
   profilePictureUrl: { type: String, default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Osama_bin_Laden_portrait.jpg/250px-Osama_bin_Laden_portrait.jpg' },
 });
 
@@ -46,7 +45,7 @@ const itemSchema = new mongoose.Schema({
   title: { type: String, required: true },
   mainText: { type: String, required: true },
   fileUrl: { type: String },
-  iconImageUrl: { type: String, required: true },
+  iconImageUrl: { type: String, required: true }, // Make iconImageUrl required
 });
 
 const Item = mongoose.model('Item', itemSchema);
@@ -65,6 +64,11 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Username already taken' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ 
+      username, 
+      password: hashedPassword,
+      admin: false // Set admin to false by default
+    });
     const randomUserId = crypto.randomBytes(16).toString('hex');
     const newUser = new User({ userId: randomUserId, username, password: hashedPassword, isAdmin: false });
     const randomUserId = crypto.randomBytes(16).toString('hex'); // Generate a random user ID
@@ -72,8 +76,8 @@ app.post('/register', async (req, res) => {
     await newUser.save();
     // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
-    res.cookie('userId', newUser.userId, { httpOnly: true, sameSite: 'strict' });
-    res.status(200).json({ message: 'User registered successfully', userId: newUser.userId });
+    res.cookie('userId', newUser._id, { httpOnly: true, sameSite: 'strict' });
+    res.status(200).json({ message: 'User registered successfully', userId: newUser._id });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while processing your request' });
   }
@@ -92,8 +96,8 @@ app.post('/login', async (req, res) => {
     }
     // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
-    res.cookie('userId', user.userId, { httpOnly: true, sameSite: 'strict' });
-    res.status(200).json({ message: 'User logged in successfully', userId: user.userId });
+    res.cookie('userId', user._id, { httpOnly: true, sameSite: 'strict' });
+    res.status(200).json({ message: 'User logged in successfully', userId: user._id });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while processing your request' });
   }
@@ -102,15 +106,11 @@ app.post('/login', async (req, res) => {
 app.get('/api/users/:userId', async (req, res) => {
   const { userId } = req.params;
   try {
-    const user = await User.findOne({ userId });
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.status(200).json({ 
-      username: user.username, 
-      profilePictureUrl: user.profilePictureUrl,
-      isAdmin: user.isAdmin
-    });
+    res.status(200).json({ username: user.username, profilePictureUrl: user.profilePictureUrl });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the user' });
   }
@@ -121,7 +121,7 @@ app.post('/api/users/:userId/updateProfilePicture', async (req, res) => {
   const { profilePictureUrl } = req.body;
 
   try {
-    const user = await User.findOne({ userId });
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -179,6 +179,7 @@ app.get('/api/message', (req, res) => {
   res.status(200).json({ message });
 });
 
+
 // New endpoint to fetch user ID by username
 app.get('/api/userId/:username', async (req, res) => {
   const { username } = req.params;
@@ -192,6 +193,7 @@ app.get('/api/userId/:username', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching the user ID' });
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
