@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import HeaderComponent from '../components/header';
-import MobileHeader from '../components/mobileheader';
-
-import { FaDownload, FaTrash, FaRedo } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import MobileHeader from '../components/mobileheader';
 
 const MainContent = styled.main`
   padding-top: 60px;
@@ -311,34 +309,6 @@ const Profile = () => {
           <ProfileContent>
             <h2>Profile</h2>
             {message && <Message success={isSuccess}>{message}</Message>}
-
-            <LatestDownloadsSection>
-              <h2>Latest Downloads</h2>
-              <ButtonContainer>
-                <ClearLogButton onClick={handleClearLog}>
-                  <FaTrash /> Clear Log
-                </ClearLogButton>
-              </ButtonContainer>
-              <DownloadGrid>
-                {latestDownloads.map((download, index) => (
-                  <DownloadCard key={index}>
-                    <DownloadInfo>
-                      <DownloadTitle>{download.title}</DownloadTitle>
-                      <DownloadType>{download.pluginType}</DownloadType>
-                      <DownloadDate>
-                        Last downloaded: {new Date(download.downloadedAt).toLocaleString()}
-                      </DownloadDate>
-                      <ButtonContainer>
-                        <RedownloadButton onClick={() => handleRedownload(download)}>
-                          <FaRedo /> Redownload
-                        </RedownloadButton>
-                      </ButtonContainer>
-                    </DownloadInfo>
-                  </DownloadCard>
-                ))}
-              </DownloadGrid>
-              {latestDownloads.length === 0 && <p>No downloads found.</p>}
-            </LatestDownloadsSection>
             <StaffLink to="/staffpage">Go to Staff Page</StaffLink>
           </ProfileContent>
         </ProfileContainer>
