@@ -136,7 +136,7 @@ const ASPA = () => {
   });
   const [input, setInput] = useState('');
   const [minimized, setMinimized] = useState(true); // Starts minimized
-  const [estimatedWaitTime, setEstimatedWaitTime] = useState('1-2 minutes');
+  const [estimatedWaitTime, setEstimatedWaitTime] = useState('1-2 years');
 
   useEffect(() => {
     const fetchMessages = async () => {
