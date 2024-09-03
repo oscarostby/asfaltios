@@ -118,7 +118,7 @@ const Register = () => {
       const response = await axios.post('https://api.asfaltios.com/register', registerData);
       if (response && response.data && response.data.userId) {
         // Store the user ID in a cookie upon successful registration
-        document.cookie = `userId=${response.data.userId}`;
+        document.cookie = `userId=${response.data.userId}; path=/; max-age=86400;`;
         setFeedback('Registration successful');
         // Redirect to '/'
         window.location.href = '/';

@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const path = require('path');
+const crypto = require('crypto');
 const crypto = require('crypto'); // Import crypto for generating random IDs
 require('dotenv').config();
 
@@ -12,8 +13,8 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: '*', // Allow requests from all origins
-  credentials: true, // Allow sending cookies
+  origin: '*',
+  credentials: true,
 }));
 
 const connectionString = process.env.MONGODB_URI;
@@ -31,9 +32,11 @@ db.once('open', () => {
 });
 
 const userSchema = new mongoose.Schema({
+  userId: { type: String, unique: true, required: true },
   userId: { type: String, unique: true, required: true }, // Add userId field
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
+  isAdmin: { type: Boolean, default: false },
   profilePictureUrl: { type: String, default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Osama_bin_Laden_portrait.jpg/250px-Osama_bin_Laden_portrait.jpg' },
 });
 
@@ -62,6 +65,8 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Username already taken' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    const randomUserId = crypto.randomBytes(16).toString('hex');
+    const newUser = new User({ userId: randomUserId, username, password: hashedPassword, isAdmin: false });
     const randomUserId = crypto.randomBytes(16).toString('hex'); // Generate a random user ID
     const newUser = new User({ userId: randomUserId, username, password: hashedPassword });
     await newUser.save();
@@ -101,7 +106,11 @@ app.get('/api/users/:userId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.status(200).json({ username: user.username, profilePictureUrl: user.profilePictureUrl });
+    res.status(200).json({ 
+      username: user.username, 
+      profilePictureUrl: user.profilePictureUrl,
+      isAdmin: user.isAdmin
+    });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the user' });
   }
