@@ -10,6 +10,8 @@ import Profile from './pages/profile';
 import BakteriaInfo from './pages/bakteriainfo'; // Import the BakteriaInfo component
 import SimpleGoldInfo from './pages/simplegoldinfo'; // Import the SimpleGoldInfo component
 import StaffPage from './pages/staffpage';
+import UserIdPage from './pages/UserIdPage';
+
 
 
 function App() {
@@ -42,6 +44,7 @@ function App() {
         <Route path="/BakteriaInfo" element={<BakteriaInfo />} /> {/* Add the new route */}
         <Route path="/SimpleGoldInfo" element={<SimpleGoldInfo />} /> {/* Add the new route */}
         <Route path="/staffpage" element={<StaffPage />} />
+        <Route path="/adtest" element={<UserIdPage />} />
 
       </Routes>
     </BrowserRouter>

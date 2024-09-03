@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const path = require('path');
-const crypto = require('crypto'); // Import crypto for generating random IDs
+const crypto = require('crypto');
 require('dotenv').config();
 
 const app = express();
@@ -12,8 +12,8 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  origin: '*', // Allow requests from all origins
-  credentials: true, // Allow sending cookies
+  origin: '*',
+  credentials: true,
 }));
 
 const connectionString = process.env.MONGODB_URI;
@@ -31,9 +31,10 @@ db.once('open', () => {
 });
 
 const userSchema = new mongoose.Schema({
-  userId: { type: String, unique: true, required: true }, // Add userId field
+  userId: { type: String, unique: true, required: true },
   username: { type: String, unique: true, required: true },
   password: { type: String, required: true },
+  isAdmin: { type: Boolean, default: false },
   profilePictureUrl: { type: String, default: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Osama_bin_Laden_portrait.jpg/250px-Osama_bin_Laden_portrait.jpg' },
 });
 
@@ -62,10 +63,9 @@ app.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Username already taken' });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const randomUserId = crypto.randomBytes(16).toString('hex'); // Generate a random user ID
-    const newUser = new User({ userId: randomUserId, username, password: hashedPassword });
+    const randomUserId = crypto.randomBytes(16).toString('hex');
+    const newUser = new User({ userId: randomUserId, username, password: hashedPassword, isAdmin: false });
     await newUser.save();
-    // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
     res.cookie('userId', newUser.userId, { httpOnly: true, sameSite: 'strict' });
     res.status(200).json({ message: 'User registered successfully', userId: newUser.userId });
@@ -85,7 +85,6 @@ app.post('/login', async (req, res) => {
     if (!passwordMatch) {
       return res.status(400).json({ error: 'Incorrect password' });
     }
-    // Set cookies on the client-side
     res.cookie('isLoggedIn', true, { httpOnly: true, sameSite: 'strict' });
     res.cookie('userId', user.userId, { httpOnly: true, sameSite: 'strict' });
     res.status(200).json({ message: 'User logged in successfully', userId: user.userId });
@@ -101,7 +100,11 @@ app.get('/api/users/:userId', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.status(200).json({ username: user.username, profilePictureUrl: user.profilePictureUrl });
+    res.status(200).json({ 
+      username: user.username, 
+      profilePictureUrl: user.profilePictureUrl,
+      isAdmin: user.isAdmin
+    });
   } catch (error) {
     res.status(500).json({ error: 'An error occurred while fetching the user' });
   }
@@ -170,7 +173,6 @@ app.get('/api/message', (req, res) => {
   res.status(200).json({ message });
 });
 
-// New endpoint to fetch user ID by username
 app.get('/api/userId/:username', async (req, res) => {
   const { username } = req.params;
   try {
