@@ -11,6 +11,8 @@ import BakteriaInfo from './pages/bakteriainfo'; // Import the BakteriaInfo comp
 import SimpleGoldInfo from './pages/simplegoldinfo'; // Import the SimpleGoldInfo component
 import StaffPage from './pages/staffpage';
 import UserIdPage from './pages/UserIdPage';
+import NotFound from './pages/NotFound'; // Import the NotFound component
+
 
 
 
@@ -45,6 +47,9 @@ function App() {
         <Route path="/SimpleGoldInfo" element={<SimpleGoldInfo />} /> {/* Add the new route */}
         <Route path="/staffpage" element={<StaffPage />} />
         <Route path="/adtest" element={<UserIdPage />} />
+        
+                {/* 404 route, always placed at the end */}
+        <Route path="*" element={<NotFound />} /> 
 
       </Routes>
     </BrowserRouter>
