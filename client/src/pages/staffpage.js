@@ -71,7 +71,8 @@ const InfoText = styled.p`
 
 const Title = styled.h1`
   color: #0a192f;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
+  text-align: center; /* Center the heading */
 `;
 
 const LinkList = styled.ul`
@@ -128,160 +129,60 @@ const Box = styled.div`
   }
 `;
 
-const TasksContainer = styled.div`
-  background-color: #ffffff;
+const PrioritizedTasksContainer = styled.div`
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
+  align-items: center; /* Center the content */
   gap: 20px;
+  width: 100%; /* Ensure full width */
 `;
 
-const TaskInput = styled.input`
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  flex: 1;
-  margin-right: 10px;
+const RedBox = styled.div`
+  background-color: white; /* White background */
+  color: #e74c3c; /* Red text color */
+  padding: 40px; /* Increase padding for a larger box */
+  border-radius: 10px;
+  border: 4px solid #e74c3c; /* Red border */
+  width: 80%; /* Adjust width */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+`;
+
+const TaskCreator = styled.span`
+  display: block;
+  margin-top: 10px;
+  font-size: 0.8em;
+  color: #333;
 `;
 
 const AddTaskButton = styled.button`
-  background-color: #0078d7;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  cursor: pointer;
-  
-  &:hover {
-    background-color: #005fa3;
-  }
-`;
-
-const TaskList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-  max-height: 400px;
-  overflow-y: auto;
-`;
-
-const TaskItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-radius: 5px;
-  margin-bottom: 10px;
-`;
-
-const ClaimButton = styled.button`
-  background-color: #64ffda;
-  color: #0a192f;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #52e6c4;
-  }
-`;
-
-const DeleteButton = styled.button`
   background-color: #e74c3c;
   color: white;
   border: none;
   border-radius: 5px;
-  padding: 5px 10px;
+  padding: 10px 15px;
+  margin-bottom: 20px;
   cursor: pointer;
-
+  
   &:hover {
     background-color: #c0392b;
   }
 `;
-
-const ActiveTasks = ({ username }) => {
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get('https://api.asfaltios.com/api/tasks');
-        setTasks(response.data);
-      } catch (error) {
-        console.error('Error fetching tasks:', error);
-      }
-    };
-
-    fetchTasks();
-  }, []);
-
-  const addTask = async () => {
-    if (newTask.trim()) {
-      try {
-        const response = await axios.post('https://api.asfaltios.com/api/tasks', { task: newTask });
-        setTasks([...tasks, response.data]);
-        setNewTask('');
-      } catch (error) {
-        console.error('Error adding task:', error);
-      }
-    }
-  };
-
-  const deleteTask = async (taskId) => {
-    try {
-      await axios.delete(`https://api.asfaltios.com/api/tasks/${taskId}`);
-      setTasks(tasks.filter((task) => task.id !== taskId));
-    } catch (error) {
-      console.error('Error deleting task:', error);
-    }
-  };
-
-  const claimTask = async (taskId) => {
-    try {
-      const response = await axios.put(`https://api.asfaltios.com/api/tasks/${taskId}`, { claimedBy: username });
-      setTasks(tasks.map((task) => (task.id === taskId ? response.data : task)));
-    } catch (error) {
-      console.error('Error claiming task:', error);
-    }
-  };
-
-  return (
-    <TasksContainer>
-      <h2>Active Tasks</h2>
-      <div style={{ display: 'flex', marginBottom: '20px' }}>
-        <TaskInput
-          type="text"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          placeholder="Add a new task"
-        />
-        <AddTaskButton onClick={addTask}>Add Task</AddTaskButton>
-      </div>
-      <TaskList>
-        {tasks.map((task) => (
-          <TaskItem key={task.id}>
-            <span>{task.task} {task.claimedBy && `(Claimed by: ${task.claimedBy})`}</span>
-            <div>
-              {!task.claimedBy && <ClaimButton onClick={() => claimTask(task.id)}>Claim</ClaimButton>}
-              <DeleteButton onClick={() => deleteTask(task.id)}>Delete</DeleteButton>
-            </div>
-          </TaskItem>
-        ))}
-      </TaskList>
-    </TasksContainer>
-  );
-};
 
 const StaffPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [userId, setUserId] = useState('');
   const [profilePictureUrl, setProfilePictureUrl] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);  // New state to track admin status
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [tasks, setTasks] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -293,22 +194,32 @@ const StaffPage = () => {
           setUsername(response.data.username);
           setUserId(userIdFromCookie);
           setProfilePictureUrl(response.data.profilePictureUrl);
-          setIsAdmin(response.data.admin);  // Set admin status
-          setIsLoading(false); // Data fetched successfully
+          setIsAdmin(response.data.admin);
+          setIsLoading(false);
 
           if (!response.data.admin) {
-            navigate('/no-access'); // Redirect to a no-access page if not admin
+            navigate('/no-access');
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
-          navigate('/login'); // Redirect to login on error
+          navigate('/login');
         }
       } else {
-        navigate('/login'); // Redirect to login if no userId cookie found
+        navigate('/login');
+      }
+    };
+
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get('https://api.asfaltios.com/api/prioritized-tasks');
+        setTasks(response.data);
+      } catch (error) {
+        console.error('Error fetching prioritized tasks:', error);
       }
     };
 
     fetchProfileData();
+    fetchTasks();
   }, [navigate]);
 
   const getCookie = (name) => {
@@ -320,6 +231,32 @@ const StaffPage = () => {
       }
     }
     return null;
+  };
+
+  const addTask = async () => {
+    const taskDescription = prompt('Enter the task description:');
+    if (taskDescription && window.confirm('Are you sure you want to add this task?')) {
+      try {
+        const response = await axios.post('https://api.asfaltios.com/api/prioritized-tasks', {
+          task: taskDescription,
+          createdBy: username,
+        });
+        setTasks([...tasks, response.data]);
+      } catch (error) {
+        console.error('Error adding task:', error);
+      }
+    }
+  };
+
+  const deleteTask = async (taskId) => {
+    if (window.confirm('Are you sure you want to delete this task?')) {
+      try {
+        await axios.delete(`https://api.asfaltios.com/api/prioritized-tasks/${taskId}`);
+        setTasks(tasks.filter((task) => task.id !== taskId));
+      } catch (error) {
+        console.error('Error deleting task:', error);
+      }
+    }
   };
 
   if (isLoading) {
@@ -343,6 +280,17 @@ const StaffPage = () => {
             <Box>Unanswered Chats</Box>
           </BoxContainer>
         </StaffContainer>
+
+        <PrioritizedTasksContainer>
+          <Title>Prioritized Tasks</Title>
+          <AddTaskButton onClick={addTask}>Add New Task</AddTaskButton>
+          {tasks.map((task) => (
+            <RedBox key={task.id} onDoubleClick={() => deleteTask(task.id)}>
+              {task.task}
+              <TaskCreator>Created by: {task.createdBy}</TaskCreator>
+            </RedBox>
+          ))}
+        </PrioritizedTasksContainer>
         
         <Sidebar>
           <Title>Useful Links</Title>
@@ -363,8 +311,6 @@ const StaffPage = () => {
               </StyledLink>
             </LinkItem>
           </LinkList>
-
-          <ActiveTasks username={username} />
         </Sidebar>
       </MainContent>
       <ASPA />
