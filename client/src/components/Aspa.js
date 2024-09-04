@@ -105,6 +105,8 @@ const ASPA = () => {
   const [input, setInput] = useState('');
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState('');
+  const [minimized, setMinimized] = useState(true); // Starts minimized
+  const [estimatedWaitTime, setEstimatedWaitTime] = useState('1-2 years');
 
   useEffect(() => {
     const fetchUserInfo = async () => {

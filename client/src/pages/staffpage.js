@@ -1,190 +1,188 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import styled from 'styled-components';
+import axios from 'axios';
 
-const StaffPageContainer = styled.div`
-  padding: 20px;
+const ChatContainer = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 350px;
+  height: 500px;
   background-color: #0a192f;
-  color: #e6f1ff;
-  min-height: 100vh;
-`;
-
-const Title = styled.h1`
-  color: #64ffda;
-  margin-bottom: 20px;
-`;
-
-const Section = styled.div`
-  background-color: #112240;
   border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 1000;
 `;
 
-const SectionTitle = styled.h2`
-  color: #64ffda;
-  margin-bottom: 10px;
-`;
-
-const ChatList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
-
-const ChatItem = styled.li`
-  background-color: #1d2d50;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  &:hover {
-    background-color: #233554;
-  }
-`;
-
-const ChatWindow = styled.div`
-  background-color: #1d2d50;
-  border-radius: 5px;
-  padding: 10px;
-  height: 300px;
-  overflow-y: auto;
-`;
-
-const MessageList = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
-
-const Message = styled.li`
-  background-color: ${props => props.isStaff ? '#64ffda' : '#233554'};
-  color: ${props => props.isStaff ? '#0a192f' : '#e6f1ff'};
-  border-radius: 5px;
-  padding: 5px 10px;
-  margin-bottom: 5px;
-  max-width: 70%;
-  align-self: ${props => props.isStaff ? 'flex-end' : 'flex-start'};
-`;
-
-const Input = styled.input`
+const ChatHeader = styled.div`
+  background-color: #0078d7;
+  color: white;
+  padding: 15px;
   width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  margin-top: 10px;
+  border-radius: 10px 10px 0 0;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const Button = styled.button`
-  background-color: #64ffda;
-  color: #0a192f;
+const CloseButton = styled.button`
+  background: none;
   border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
+  color: white;
+  font-size: 1.2em;
   cursor: pointer;
-  margin-top: 10px;
   &:hover {
-    background-color: #45c3a8;
+    color: #ffcc00;
   }
 `;
 
-const StaffPage = () => {
-  const [activeChats, setActiveChats] = useState([]);
-  const [selectedChat, setSelectedChat] = useState(null);
+const ChatMessages = styled.div`
+  padding: 15px;
+  flex: 1;
+  overflow-y: auto;
+  width: 100%;
+  color: #e6f1ff;
+  display: flex;
+  flex-direction: column;
+`;
+
+const MessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: ${(props) => (props.isStaff ? 'flex-start' : 'flex-end')};
+  margin-bottom: 10px;
+`;
+
+const MessageSender = styled.div`
+  font-size: 0.8em;
+  color: #64ffda;
+  margin-bottom: 5px;
+`;
+
+const MessageBubble = styled.div`
+  background-color: ${(props) => (props.isStaff ? 'white' : '#0078d7')};
+  color: ${(props) => (props.isStaff ? '#0a192f' : 'white')};
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 70%;
+  align-self: ${(props) => (props.isStaff ? 'flex-start' : 'flex-end')};
+`;
+
+const ChatInputContainer = styled.div`
+  display: flex;
+  padding: 15px;
+  border-top: 1px solid #ccc;
+  width: 100%;
+`;
+
+const ChatInput = styled.input`
+  flex: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-right: 10px;
+`;
+
+const SendButton = styled.button`
+  background-color: #0078d7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  &:hover {
+    background-color: #005fa3;
+  }
+`;
+
+const ASPA = () => {
   const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
+  const [input, setInput] = useState('');
+  const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
-    fetchActiveChats();
-    const interval = setInterval(fetchActiveChats, 30000); // Refresh every 30 seconds
-    return () => clearInterval(interval);
+    const fetchUserInfo = async () => {
+      const userIdFromCookie = getCookie('userId');
+      if (userIdFromCookie) {
+        setUserId(userIdFromCookie);
+        try {
+          const response = await axios.get(`https://api.asfaltios.com/api/users/${userIdFromCookie}`);
+          setUsername(response.data.username);
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      }
+    };
+
+    fetchUserInfo();
   }, []);
 
-  const fetchActiveChats = async () => {
-    try {
-      const response = await axios.get('https://api.asfaltios.com/api/chat/active');
-      setActiveChats(response.data);
-    } catch (error) {
-      console.error('Error fetching active chats:', error);
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (userId) {
+        try {
+          const response = await axios.get(`https://api.asfaltios.com/api/chat/messages/${userId}`);
+          setMessages(response.data);
+        } catch (error) {
+          console.error('Error fetching messages:', error);
+        }
+      }
+    };
+
+    fetchMessages();
+    const intervalId = setInterval(fetchMessages, 5000);
+    return () => clearInterval(intervalId);
+  }, [userId]);
+
+  const handleSendMessage = async () => {
+    if (input.trim() && userId) {
+      const newMessage = { text: input, userId, isStaff: false };
+      try {
+        await axios.post('https://api.asfaltios.com/api/chat/send', newMessage);
+        setMessages([...messages, newMessage]);
+        setInput('');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   };
 
-  const selectChat = async (userId) => {
-    setSelectedChat(userId);
-    try {
-      const response = await axios.get(`https://api.asfaltios.com/api/chat/messages/${userId}`);
-      setMessages(response.data);
-    } catch (error) {
-      console.error('Error fetching messages:', error);
-    }
-  };
-
-  const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedChat) return;
-
-    try {
-      await axios.post('https://api.asfaltios.com/api/chat/send', {
-        userId: selectedChat,
-        text: newMessage,
-        isStaff: true
-      });
-      setMessages([...messages, { text: newMessage, isStaff: true }]);
-      setNewMessage('');
-    } catch (error) {
-      console.error('Error sending message:', error);
-    }
-  };
-
-  const closeChat = async () => {
-    if (!selectedChat) return;
-
-    try {
-      await axios.delete(`https://api.asfaltios.com/api/chat/${selectedChat}`);
-      setActiveChats(activeChats.filter(chat => chat._id !== selectedChat));
-      setSelectedChat(null);
-      setMessages([]);
-    } catch (error) {
-      console.error('Error closing chat:', error);
-    }
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
   return (
-    <StaffPageContainer>
-      <Title>Staff Dashboard</Title>
-
-      <Section>
-        <SectionTitle>Active Chats</SectionTitle>
-        <ChatList>
-          {activeChats.map(chat => (
-            <ChatItem key={chat._id} onClick={() => selectChat(chat._id)}>
-              Chat - {chat.username || chat._id}
-            </ChatItem>
-          ))}
-        </ChatList>
-      </Section>
-
-      {selectedChat && (
-        <Section>
-          <SectionTitle>Chat Window</SectionTitle>
-          <ChatWindow>
-            <MessageList>
-              {messages.map((message, index) => (
-                <Message key={index} isStaff={message.isStaff}>
-                  {message.text}
-                </Message>
-              ))}
-            </MessageList>
-          </ChatWindow>
-          <Input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type your message..."
-          />
-          <Button onClick={sendMessage}>Send</Button>
-          <Button onClick={closeChat}>Close Chat</Button>
-        </Section>
-      )}
-    </StaffPageContainer>
+    <ChatContainer>
+      <ChatHeader>
+        Aspa Live Chat
+        <CloseButton onClick={() => setMessages([])}>×</CloseButton>
+      </ChatHeader>
+      <ChatMessages>
+        {messages.map((msg, index) => (
+          <MessageContainer key={index} isStaff={msg.isStaff}>
+            <MessageSender>{msg.isStaff ? 'Staff' : username}</MessageSender>
+            <MessageBubble isStaff={msg.isStaff}>{msg.text}</MessageBubble>
+          </MessageContainer>
+        ))}
+      </ChatMessages>
+      <ChatInputContainer>
+        <ChatInput
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type a message..."
+        />
+        <SendButton onClick={handleSendMessage}>Send</SendButton>
+      </ChatInputContainer>
+    </ChatContainer>
   );
 };
 
-export default StaffPage;
+export default ASPA;
