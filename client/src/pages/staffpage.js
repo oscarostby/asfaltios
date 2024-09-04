@@ -56,13 +56,13 @@ const MessageList = styled.ul`
 `;
 
 const Message = styled.li`
-  background-color: ${props => props.isStaff ? '#64ffda' : '#233554'};
-  color: ${props => props.isStaff ? '#0a192f' : '#e6f1ff'};
+  background-color: ${props => props.isStaff ? '#64ffda' : '#0078d7'};
+  color: ${props => props.isStaff ? '#0a192f' : 'white'};
   border-radius: 5px;
   padding: 5px 10px;
   margin-bottom: 5px;
   max-width: 70%;
-  align-self: ${props => props.isStaff ? 'flex-end' : 'flex-start'};
+  align-self: ${props => props.isStaff ? 'flex-start' : 'flex-end'};
 `;
 
 const Input = styled.input`
@@ -119,15 +119,16 @@ const StaffPage = () => {
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedChat) return;
-
     try {
-      await axios.post('https://api.asfaltios.com/api/chat/send', {
+      const response = await axios.post('https://api.asfaltios.com/api/chat/send', {
         userId: selectedChat,
         text: newMessage,
         isStaff: true
       });
-      setMessages([...messages, { text: newMessage, isStaff: true }]);
-      setNewMessage('');
+      if (response.status === 200) {
+        setMessages([...messages, { text: newMessage, isStaff: true }]);
+        setNewMessage('');
+      }
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -135,7 +136,6 @@ const StaffPage = () => {
 
   const closeChat = async () => {
     if (!selectedChat) return;
-
     try {
       await axios.delete(`https://api.asfaltios.com/api/chat/${selectedChat}`);
       setActiveChats(activeChats.filter(chat => chat._id !== selectedChat));
@@ -149,7 +149,6 @@ const StaffPage = () => {
   return (
     <StaffPageContainer>
       <Title>Staff Dashboard</Title>
-
       <Section>
         <SectionTitle>Active Chats</SectionTitle>
         <ChatList>
@@ -160,7 +159,6 @@ const StaffPage = () => {
           ))}
         </ChatList>
       </Section>
-
       {selectedChat && (
         <Section>
           <SectionTitle>Chat Window</SectionTitle>

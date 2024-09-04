@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 
@@ -13,7 +13,6 @@ const ChatContainer = styled.div`
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   z-index: 1000;
 `;
 
@@ -46,7 +45,6 @@ const ChatMessages = styled.div`
   flex: 1;
   overflow-y: auto;
   width: 100%;
-  color: #e6f1ff;
   display: flex;
   flex-direction: column;
 `;
@@ -54,23 +52,16 @@ const ChatMessages = styled.div`
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: ${(props) => (props.isStaff ? 'flex-start' : 'flex-end')};
+  align-items: ${props => props.isUser ? 'flex-end' : 'flex-start'};
   margin-bottom: 10px;
 `;
 
-const MessageSender = styled.div`
-  font-size: 0.8em;
-  color: #64ffda;
-  margin-bottom: 5px;
-`;
-
 const MessageBubble = styled.div`
-  background-color: ${(props) => (props.isStaff ? 'white' : '#0078d7')};
-  color: ${(props) => (props.isStaff ? '#0a192f' : 'white')};
+  background-color: ${props => props.isUser ? '#0078d7' : 'white'};
+  color: ${props => props.isUser ? 'white' : '#0a192f'};
   border-radius: 10px;
   padding: 10px;
   max-width: 70%;
-  align-self: ${(props) => (props.isStaff ? 'flex-start' : 'flex-end')};
 `;
 
 const ChatInputContainer = styled.div`
@@ -104,51 +95,53 @@ const ASPA = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [userId, setUserId] = useState(null);
-  const [username, setUsername] = useState('');
-  const [minimized, setMinimized] = useState(true); // Starts minimized
-  const [estimatedWaitTime, setEstimatedWaitTime] = useState('1-2 years');
+  const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      const userIdFromCookie = getCookie('userId');
-      if (userIdFromCookie) {
-        setUserId(userIdFromCookie);
-        try {
-          const response = await axios.get(`https://api.asfaltios.com/api/users/${userIdFromCookie}`);
-          setUsername(response.data.username);
-        } catch (error) {
-          console.error('Error fetching user info:', error);
-        }
-      }
-    };
-
-    fetchUserInfo();
+    const userIdFromCookie = getCookie('userId');
+    if (userIdFromCookie) {
+      setUserId(userIdFromCookie);
+      fetchMessages(userIdFromCookie);
+    }
   }, []);
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      if (userId) {
-        try {
-          const response = await axios.get(`https://api.asfaltios.com/api/chat/messages/${userId}`);
-          setMessages(response.data);
-        } catch (error) {
-          console.error('Error fetching messages:', error);
-        }
-      }
-    };
+  const fetchMessages = async (id) => {
+    try {
+      const response = await axios.get(`https://api.asfaltios.com/api/chat/messages/${id}`);
+      setMessages(response.data);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+    }
+  };
 
-    fetchMessages();
-    const intervalId = setInterval(fetchMessages, 5000);
-    return () => clearInterval(intervalId);
+  useEffect(() => {
+    if (userId) {
+      const intervalId = setInterval(() => fetchMessages(userId), 5000);
+      return () => clearInterval(intervalId);
+    }
   }, [userId]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const handleSendMessage = async () => {
     if (input.trim() && userId) {
-      const newMessage = { text: input, userId, isStaff: false };
+      const newMessage = { 
+        text: input, 
+        userId, 
+        isStaff: false, // Mark as user message
+        timestamp: new Date().toISOString()
+      };
+      setMessages(prevMessages => [...prevMessages, newMessage]);
+      setInput('');
+
       try {
         await axios.post('https://api.asfaltios.com/api/chat/send', newMessage);
-        setMessages([...messages, newMessage]);
-        setInput('');
       } catch (error) {
         console.error('Error sending message:', error);
       }
@@ -161,19 +154,30 @@ const ASPA = () => {
     if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
+  const handleCloseChat = async () => {
+    if (userId) {
+      try {
+        await axios.delete(`https://api.asfaltios.com/api/chat/${userId}`);
+        setMessages([]);
+      } catch (error) {
+        console.error('Error closing chat:', error);
+      }
+    }
+  };
+
   return (
     <ChatContainer>
       <ChatHeader>
         Aspa Live Chat
-        <CloseButton onClick={() => setMessages([])}>×</CloseButton>
+        <CloseButton onClick={handleCloseChat}>×</CloseButton>
       </ChatHeader>
       <ChatMessages>
         {messages.map((msg, index) => (
-          <MessageContainer key={index} isStaff={msg.isStaff}>
-            <MessageSender>{msg.isStaff ? 'Staff' : username}</MessageSender>
-            <MessageBubble isStaff={msg.isStaff}>{msg.text}</MessageBubble>
+          <MessageContainer key={index} isUser={!msg.isStaff}>
+            <MessageBubble isUser={!msg.isStaff}>{msg.text}</MessageBubble>
           </MessageContainer>
         ))}
+        <div ref={messagesEndRef} />
       </ChatMessages>
       <ChatInputContainer>
         <ChatInput
