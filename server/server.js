@@ -38,8 +38,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // Use TLS
   auth: {
-    user: 'uwish@gmail.com',
-    pass: 'ikke for deg',
+    user: 'ikkeforedeg@gmail.com',
+    pass: 'lol',
   },
 });
 
@@ -96,6 +96,14 @@ app.post('/register', async (req, res) => {
       password: hashedPassword,
       admin: false
     });
+
+    const taskSchema = new mongoose.Schema({
+      title: { type: String, required: true },
+      createdAt: { type: Date, default: Date.now },
+    });
+    
+    const Task = mongoose.model('Task', taskSchema);
+    
 
     const savedUser = await newUser.save();
     console.log('User saved:', savedUser);
@@ -448,6 +456,31 @@ app.delete('/api/chat/:userId', async (req, res) => {
   }
 });
 
+
+    // Fetch all tasks
+    app.get('/api/tasks', async (req, res) => {
+      try {
+        const tasks = await Task.find().sort({ createdAt: -1 });
+        res.status(200).json(tasks);
+      } catch (error) {
+        res.status(500).json({ error: 'An error occurred while fetching tasks' });
+      }
+    });
+    
+    // Add a new task
+    app.post('/api/tasks', async (req, res) => {
+      const { title } = req.body;
+    
+      try {
+        const newTask = new Task({ title });
+        await newTask.save();
+        res.status(200).json(newTask);
+      } catch (error) {
+        res.status(500).json({ error: 'An error occurred while saving the task' });
+      }
+    });
+
+    
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
