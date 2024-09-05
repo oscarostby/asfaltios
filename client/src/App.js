@@ -16,6 +16,7 @@ import NotFound from './pages/NotFound'; // Import the NotFound component
 
 
 
+
 function App() {
   useEffect(() => {
     // Create a script element
@@ -47,7 +48,7 @@ function App() {
         <Route path="/SimpleGoldInfo" element={<SimpleGoldInfo />} /> {/* Add the new route */}
         <Route path="/staffpage" element={<StaffPage />} />
         <Route path="/adtest" element={<UserIdPage />} />
-        
+
                 {/* 404 route, always placed at the end */}
         <Route path="*" element={<NotFound />} /> 
 
