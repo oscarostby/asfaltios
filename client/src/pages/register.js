@@ -83,7 +83,7 @@ const Button = styled.button`
 
 const Feedback = styled.div`
   margin-top: 10px;
-  color: red;
+  color: white;
   font-size: 0.9rem;
 `;
 
@@ -109,7 +109,7 @@ const Title = styled.h2`
 `;
 
 const Register = () => {
-  const [registerData, setRegisterData] = useState({ username: '', password: '', confirmPassword: '' });
+  const [registerData, setRegisterData] = useState({ email: '', password: '', confirmPassword: '' });
   const [feedback, setFeedback] = useState('');
 
   const handleRegisterSubmit = async (e) => {
@@ -119,9 +119,11 @@ const Register = () => {
       if (response && response.data && response.data.userId) {
         // Store the user ID in a cookie upon successful registration
         document.cookie = `userId=${response.data.userId}`;
-        setFeedback('Registration successful');
-        // Redirect to '/'
-        window.location.href = '/';
+        setFeedback('Registration successful. Please check your email for confirmation.');
+        // Redirect to '/' after a short delay
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 3000);
       } else {
         setFeedback('Unexpected response from server');
       }
@@ -146,10 +148,10 @@ const Register = () => {
         <Logo src={logo} alt="Logo" />
         <Title>Register</Title>
         <Input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={registerData.username}
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={registerData.email}
           onChange={handleRegisterInputChange}
         />
         <Input
