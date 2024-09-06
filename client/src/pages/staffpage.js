@@ -158,6 +158,21 @@ const StaffPage = () => {
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    fetchActiveChats();
+    fetchTasks();
+    const interval = setInterval(() => {
+      fetchActiveChats();
+      fetchTasks();
+    }, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await axios.get('https://api.asfaltios.com/tasks');
   const [tasks, setTasks] = useState([]);  // Store tasks from MongoDB
 
   // Fetch active chats
@@ -234,6 +249,9 @@ const StaffPage = () => {
           <TaskTitle>Prioritized Tasks</TaskTitle>
           {tasks.length > 0 ? (
             tasks.map((task, index) => (
+              <TaskItem key={index}>
+                <strong>{task.header}</strong>: {task.text}
+              </TaskItem>
               <TaskItem key={index}>{task.title}</TaskItem>
             ))
           ) : (
