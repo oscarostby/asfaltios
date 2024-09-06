@@ -173,20 +173,6 @@ const StaffPage = () => {
   const fetchTasks = async () => {
     try {
       const response = await axios.get('https://api.asfaltios.com/tasks');
-  const [tasks, setTasks] = useState([]);  // Store tasks from MongoDB
-
-  // Fetch active chats
-  useEffect(() => {
-    fetchActiveChats();
-    fetchTasks();  // Fetch prioritized tasks from MongoDB
-    const interval = setInterval(fetchActiveChats, 30000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Fetch tasks from the database
-  const fetchTasks = async () => {
-    try {
-      const response = await axios.get('https://api.asfaltios.com/api/tasks');
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -252,7 +238,6 @@ const StaffPage = () => {
               <TaskItem key={index}>
                 <strong>{task.header}</strong>: {task.text}
               </TaskItem>
-              <TaskItem key={index}>{task.title}</TaskItem>
             ))
           ) : (
             <TaskItem>No tasks available</TaskItem>
