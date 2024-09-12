@@ -175,13 +175,18 @@ const Button = styled(motion.button)`
   }
 `;
 
-// Shortcut buttons styled component
 const ShortcutButton = styled(Button)`
   margin-top: 10px;
   background-color: #48bb78;
 `;
 
-// Shortcuts List component in Sidebar
+const DeleteButton = styled(Button)`
+  background-color: #e53e3e;
+  &:hover {
+    background-color: #c53030;
+  }
+`;
+
 const ShortcutsList = styled.div`
   margin-top: 20px;
   background-color: ${({ theme }) => theme.sidebarBg};
@@ -261,20 +266,21 @@ const StaffPage = () => {
     }
   };
 
-  const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedChat) return;
+  const sendMessage = async (messageToSend = newMessage) => {
+    if (!messageToSend.trim() || !selectedChat) return;
 
-    const shortcutMessage = messageShortcuts[newMessage.trim()];
-    const finalMessage = shortcutMessage || newMessage;
+    const shortcutMessage = messageShortcuts[messageToSend.trim()];
+    const finalMessage = shortcutMessage || messageToSend;
 
     try {
       const response = await axios.post('https://api.asfaltios.com/api/chat/send', {
         userId: selectedChat,
         text: finalMessage,
-        isStaff: true
+        isStaff: true, // Mark as staff message
+        sender: 'Staff', // Mark who sent the message
       });
       if (response.status === 200) {
-        setMessages([...messages, { text: finalMessage, isStaff: true }]);
+        setMessages([...messages, { text: finalMessage, isStaff: true, sender: 'Staff' }]);
         setNewMessage('');
         scrollToBottom();
       }
@@ -288,13 +294,33 @@ const StaffPage = () => {
   };
 
   const insertShortcut = (shortcut) => {
-    setNewMessage(shortcut);
+    sendMessage(shortcut);
   };
 
   const markImportant = (index) => {
     const updatedMessages = [...messages];
     updatedMessages[index].isImportant = !updatedMessages[index].isImportant;
     setMessages(updatedMessages);
+  };
+
+  const deleteChat = async (e, userId) => {
+    e.stopPropagation(); // Prevent click event from selecting the chat
+    try {
+      console.log(`Attempting to delete chat with ID: ${userId}`);
+      const response = await axios.delete(`https://api.asfaltios.com/api/chat/delete/${userId}`);
+      if (response.status === 200) {
+        console.log(`Successfully deleted chat with ID: ${userId}`);
+        // Remove chat from activeChats list
+        const updatedChats = activeChats.filter(chat => chat._id !== userId);
+        setActiveChats(updatedChats);
+        // Deselect the deleted chat if it was selected
+        if (selectedChat === userId) setSelectedChat(null);
+      } else {
+        console.error(`Failed to delete chat with ID: ${userId}. Status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error(`Error deleting chat with ID: ${userId}`, error);
+    }
   };
 
   return (
@@ -338,7 +364,8 @@ const StaffPage = () => {
             <ChatList>
               {activeChats.map(chat => (
                 <ChatItem key={chat._id} onClick={() => selectChat(chat._id)}>
-                  {chat.username || `User ${chat._id.slice(0, 8)}`}
+                  {chat.username || `Anonymous User`}
+                  <DeleteButton onClick={(e) => deleteChat(e, chat._id)}>Delete</DeleteButton>
                 </ChatItem>
               ))}
             </ChatList>
@@ -351,7 +378,7 @@ const StaffPage = () => {
                 <MessageList>
                   {messages.map((message, index) => (
                     <Message key={index} isStaff={message.isStaff} isImportant={message.isImportant}>
-                      {message.text}
+                      {message.text} <em>({message.sender})</em>
                       <span
                         onClick={() => markImportant(index)}
                         style={{ cursor: 'pointer', marginLeft: '10px' }}
@@ -376,17 +403,17 @@ const StaffPage = () => {
               {/* Shortcut buttons */}
               <div>
                 {Object.keys(messageShortcuts.greetings).map((shortcut, index) => (
-                  <ShortcutButton key={index} onClick={() => insertShortcut(shortcut)}>
+                  <ShortcutButton key={index} onClick={() => insertShortcut(messageShortcuts.greetings[shortcut])}>
                     {messageShortcuts.greetings[shortcut]}
                   </ShortcutButton>
                 ))}
                 {Object.keys(messageShortcuts.troubleshooting).map((shortcut, index) => (
-                  <ShortcutButton key={index} onClick={() => insertShortcut(shortcut)}>
+                  <ShortcutButton key={index} onClick={() => insertShortcut(messageShortcuts.troubleshooting[shortcut])}>
                     {messageShortcuts.troubleshooting[shortcut]}
                   </ShortcutButton>
                 ))}
                 {Object.keys(messageShortcuts.closing).map((shortcut, index) => (
-                  <ShortcutButton key={index} onClick={() => insertShortcut(shortcut)}>
+                  <ShortcutButton key={index} onClick={() => insertShortcut(messageShortcuts.closing[shortcut])}>
                     {messageShortcuts.closing[shortcut]}
                   </ShortcutButton>
                 ))}
