@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import styled, { ThemeProvider } from 'styled-components';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 // Themes for Light/Dark mode
 const lightTheme = {
@@ -219,6 +220,8 @@ const TaskItem = styled.div`
 `;
 
 const StaffPage = () => {
+  const [isAdmin, setIsAdmin] = useState(null);
+  const [username, setUsername] = useState('');
   const [activeChats, setActiveChats] = useState([]);
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -226,16 +229,57 @@ const StaffPage = () => {
   const [tasks, setTasks] = useState([]);
   const [theme, setTheme] = useState(lightTheme);
   const chatWindowRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetchActiveChats();
-    fetchTasks();
-    const interval = setInterval(() => {
+    checkAdminStatus();
+  }, []);
+
+  useEffect(() => {
+    if (isAdmin === false) {
+      navigate('/404');
+    }
+  }, [isAdmin, navigate]);
+
+  useEffect(() => {
+    if (isAdmin) {
       fetchActiveChats();
       fetchTasks();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
+      const interval = setInterval(() => {
+        fetchActiveChats();
+        fetchTasks();
+      }, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isAdmin]);
+
+  const getCookie = (name) => {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(`${name}=`)) {
+        return cookie.substring(name.length + 1);
+      }
+    }
+    return null;
+  };
+
+  const checkAdminStatus = async () => {
+    const userId = getCookie('userId');
+    if (userId) {
+      try {
+        const response = await axios.get(`https://api.asfaltios.com/api/users/${userId}`);
+        setIsAdmin(response.data.admin);
+        setUsername(response.data.username);
+      } catch (error) {
+        console.error('Error checking admin status:', error);
+        setIsAdmin(false);
+      }
+    } else {
+      console.log('User ID not found in cookies');
+      setIsAdmin(false);
+    }
+  };
 
   const fetchTasks = async () => {
     try {
@@ -260,7 +304,7 @@ const StaffPage = () => {
     try {
       const response = await axios.get(`https://api.asfaltios.com/api/chat/messages/${userId}`);
       setMessages(response.data);
-      setNewMessage(''); // Reset draft when switching chats
+      setNewMessage('');
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
@@ -269,18 +313,14 @@ const StaffPage = () => {
   const sendMessage = async (messageToSend = newMessage) => {
     if (!messageToSend.trim() || !selectedChat) return;
 
-    const shortcutMessage = messageShortcuts[messageToSend.trim()];
-    const finalMessage = shortcutMessage || messageToSend;
-
     try {
       const response = await axios.post('https://api.asfaltios.com/api/chat/send', {
         userId: selectedChat,
-        text: finalMessage,
-        isStaff: true, // Mark as staff message
-        sender: 'Staff', // Mark who sent the message
+        text: messageToSend,
+        isStaff: true,
       });
       if (response.status === 200) {
-        setMessages([...messages, { text: finalMessage, isStaff: true, sender: 'Staff' }]);
+        setMessages([...messages, { text: messageToSend, isStaff: true }]);
         setNewMessage('');
         scrollToBottom();
       }
@@ -304,16 +344,12 @@ const StaffPage = () => {
   };
 
   const deleteChat = async (e, userId) => {
-    e.stopPropagation(); // Prevent click event from selecting the chat
+    e.stopPropagation();
     try {
-      console.log(`Attempting to delete chat with ID: ${userId}`);
-      const response = await axios.delete(`https://api.asfaltios.com/api/chat/delete/${userId}`);
+      const response = await axios.delete(`https://api.asfaltios.com/api/chat/${userId}`);
       if (response.status === 200) {
-        console.log(`Successfully deleted chat with ID: ${userId}`);
-        // Remove chat from activeChats list
-        const updatedChats = activeChats.filter(chat => chat._id !== userId);
+        const updatedChats = activeChats.filter((chat) => chat._id !== userId);
         setActiveChats(updatedChats);
-        // Deselect the deleted chat if it was selected
         if (selectedChat === userId) setSelectedChat(null);
       } else {
         console.error(`Failed to delete chat with ID: ${userId}. Status: ${response.status}`);
@@ -362,7 +398,7 @@ const StaffPage = () => {
           <Section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
             <SectionTitle>Active Chats</SectionTitle>
             <ChatList>
-              {activeChats.map(chat => (
+              {activeChats.map((chat) => (
                 <ChatItem key={chat._id} onClick={() => selectChat(chat._id)}>
                   {chat.username || `Anonymous User`}
                   <DeleteButton onClick={(e) => deleteChat(e, chat._id)}>Delete</DeleteButton>
@@ -378,7 +414,7 @@ const StaffPage = () => {
                 <MessageList>
                   {messages.map((message, index) => (
                     <Message key={index} isStaff={message.isStaff} isImportant={message.isImportant}>
-                      {message.text} <em>({message.sender})</em>
+                      {message.text} <em>({message.sender || 'User'})</em>
                       <span
                         onClick={() => markImportant(index)}
                         style={{ cursor: 'pointer', marginLeft: '10px' }}
@@ -397,7 +433,7 @@ const StaffPage = () => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Type your message (or use shortcuts)..."
                 />
-                <Button onClick={sendMessage}>Send</Button>
+                <Button onClick={() => sendMessage(newMessage)}>Send</Button>
               </InputContainer>
 
               {/* Shortcut buttons */}
