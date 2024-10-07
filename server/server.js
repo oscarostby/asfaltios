@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001; // Change to 5001 or any other available port
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,10 +19,9 @@ app.use(cors({
 const connectionString = process.env.MONGODB_URI;
 console.log('Connecting to MongoDB with URI:', connectionString.replace(/\/\/.*@/, '//****:****@'));
 
-mongoose.connect(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(connectionString)
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 // Task Schema
 const taskSchema = new mongoose.Schema({
@@ -46,8 +45,8 @@ const transporter = nodemailer.createTransport({
   port: 587,
   secure: false, // Use TLS
   auth: {
-    user: 'iwush@gmail.com',
-    pass: 'lol gvse',
+    user: 'poscarspotify@gmail.com',
+    pass: 'brxf geze iwbd qwcl',
   },
 });
 
