@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001; // Change to 5001 or any other available port
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,10 +19,17 @@ app.use(cors({
 const connectionString = process.env.MONGODB_URI;
 console.log('Connecting to MongoDB with URI:', connectionString.replace(/\/\/.*@/, '//****:****@'));
 
-mongoose.connect(connectionString, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+mongoose.connect(connectionString)
+  .then(() => console.log('MongoDB connected successfully'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+// Task Schema
+const taskSchema = new mongoose.Schema({
+  header: String,
+  text: String
 });
+
+const Task = mongoose.model('Task', taskSchema);
 
 const db = mongoose.connection;
 db.on('error', (error) => {
@@ -39,7 +46,7 @@ const transporter = nodemailer.createTransport({
   secure: false, // Use TLS
   auth: {
     user: 'poscarspotify@gmail.com',
-    pass: 'bbks duxa vnze gvse',
+    pass: 'brxf geze iwbd qwcl',
   },
 });
 
@@ -97,12 +104,6 @@ app.post('/register', async (req, res) => {
       admin: false
     });
 
-    const taskSchema = new mongoose.Schema({
-      title: { type: String, required: true },
-      createdAt: { type: Date, default: Date.now },
-    });
-    
-    const Task = mongoose.model('Task', taskSchema);
     
 
     const savedUser = await newUser.save();
@@ -457,87 +458,42 @@ app.delete('/api/chat/:userId', async (req, res) => {
 });
 
 
-// Create a new task
-app.post('/api/tasks', async (req, res) => {
-  const { title } = req.body;
 
-  if (!title) {
-    return res.status(400).json({ error: 'Title is required' });
-  }
+//tasks
+app.post('/tasks', async (req, res) => {
+  const { header, text } = req.body;
 
   try {
-    const newTask = new Task({ title });
+    const newTask = new Task({ header, text });
     await newTask.save();
-    res.status(201).json({ message: 'Task created successfully', task: newTask });
+    res.status(201).json(newTask);
   } catch (error) {
-    console.error('Error creating task:', error);
-    res.status(500).json({ error: 'An error occurred while creating the task' });
+    res.status(500).json({ message: 'Error creating task', error });
   }
 });
 
-// Get all tasks
-app.get('/api/tasks', async (req, res) => {
+// Fetch all tasks
+app.get('/tasks', async (req, res) => {
   try {
     const tasks = await Task.find();
-    res.status(200).json(tasks);
+    res.json(tasks);
   } catch (error) {
-    console.error('Error fetching tasks:', error);
-    res.status(500).json({ error: 'An error occurred while fetching the tasks' });
+    res.status(500).json({ message: 'Error fetching tasks', error });
   }
 });
 
-// Get a specific task by ID
-app.get('/api/tasks/:taskId', async (req, res) => {
-  const { taskId } = req.params;
+// Delete a task
+app.delete('/tasks/:id', async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const task = await Task.findById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: 'Task not found' });
-    }
-    res.status(200).json(task);
-  } catch (error) {
-    console.error('Error fetching task:', error);
-    res.status(500).json({ error: 'An error occurred while fetching the task' });
-  }
-});
-
-// Update a task by ID
-app.put('/api/tasks/:taskId', async (req, res) => {
-  const { taskId } = req.params;
-  const { title } = req.body;
-
-  try {
-    const task = await Task.findById(taskId);
-    if (!task) {
-      return res.status(404).json({ error: 'Task not found' });
-    }
-
-    if (title) {
-      task.title = title;
-    }
-
-    await task.save();
-    res.status(200).json({ message: 'Task updated successfully', task });
-  } catch (error) {
-    console.error('Error updating task:', error);
-    res.status(500).json({ error: 'An error occurred while updating the task' });
-  }
-});
-
-// Delete a task by ID
-app.delete('/api/tasks/:taskId', async (req, res) => {
-  const { taskId } = req.params;
-
-  try {
-    const task = await Task.findByIdAndDelete(taskId);
-    if (!task) {
-      return res.status(404).json({ error: 'Task not found' });
+    const deletedTask = await Task.findByIdAndDelete(id);
+    if (!deletedTask) {
+      return res.status(404).json({ message: 'Task not found' });
     }
     res.status(200).json({ message: 'Task deleted successfully' });
   } catch (error) {
-    console.error('Error deleting task:', error);
-    res.status(500).json({ error: 'An error occurred while deleting the task' });
+    res.status(500).json({ message: 'Error deleting task', error });
   }
 });
 
