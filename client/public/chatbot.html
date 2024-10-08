@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+    }
+  </style>
+  <script>
+    // Function to send the height of the chatbot content back to the parent window
+    function sendHeightToParent() {
+      const height = document.documentElement.scrollHeight;
+      window.parent.postMessage({ type: 'resize-iframe', height: height }, '*');
+    }
+
+    // Call the function when the chatbot loads or resizes
+    window.onload = sendHeightToParent;
+    window.onresize = sendHeightToParent;
+
+    // Set an interval to check for height changes regularly (in case of dynamic content)
+    setInterval(sendHeightToParent, 500);
+  </script>
+</head>
+<body>
+  <iframe src="https://ai-chat-et8r.vercel.app/" title="Chatbot"></iframe>
+</body>
+</html>

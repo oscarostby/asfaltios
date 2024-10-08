@@ -14,11 +14,14 @@ import {
 import Header from '../components/header';
 import Footer from "../components/footer";
 import ASPA from '../components/Aspa';
+import ChatbotIframe from '../components/ChatbotIframe'; // Husk å justere stien om nødvendig
+
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&display=swap');
 
   body {
+    z-index: 1000;
     margin: 0;
     padding: 0;
     font-family: 'Exo 2', sans-serif;
@@ -82,6 +85,18 @@ const HeroSection = styled(motion.section)`
   position: relative; // Add this to allow absolute positioning of the image
 `;
 
+const ChatbotSection = styled.div`
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  height: 500px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+`;
+
 const CreeperImage = styled.img`
   position: absolute;
   bottom: 10%;
@@ -124,6 +139,7 @@ const SearchBar = styled(motion.form)`
   width: 100%;
   max-width: 500px;
   margin-bottom: 2rem;
+  z-index: 1000;
 `;
 
 const SearchInput = styled.input`
@@ -173,7 +189,7 @@ const PluginButton = styled(motion.button)`
   transition: all 0.3s ease, width 0.3s ease;
   margin-top: 1rem;
   width: 18rem; // Set an initial width
-
+z-index: 1000;
   &:hover {
     background-color: black; // Light gray background on hover
     color: white; // Keep text black
@@ -184,9 +200,12 @@ const PluginButton = styled(motion.button)`
 const Section = styled(motion.section)`
   padding: 5rem 2rem;
   background-color: #ffffff; // White background
+  z-index: 1000;
+
 `;
 
 const SectionTitle = styled(motion.h2)`
+z-index: 1000;
   text-align: center;
   margin-bottom: 3rem;
   font-size: 2.5rem;
@@ -202,6 +221,7 @@ const Grid = styled(motion.div)`
 `;
 
 const Card = styled(motion.div)`
+z-index: 1000;
   background-color: rgba(0, 0, 0, 0.05); // Very light gray background
   border-radius: 20px;
   padding: 2rem;
@@ -216,6 +236,7 @@ const Card = styled(motion.div)`
 `;
 
 const IconWrapper = styled.div`
+z-index: 1000;
   font-size: 3rem;
   margin-bottom: 1rem;
   color: #000000; // Black icons
@@ -256,6 +277,7 @@ const RocketIcon = styled(motion.div)`
 `;
 
 const SocialIcons = styled.div`
+z-index: 1000;
   margin-top: 2rem;
   display: flex;
   gap: 2rem;
@@ -273,6 +295,7 @@ const SocialIcons = styled.div`
 `;
 
 const MotionSocialIcon = styled(motion.div)`
+z-index: 1000;
   color: #000000; // Black text
   transition: color 0.3s ease;
 
@@ -291,6 +314,7 @@ const FeatureGrid = styled(Grid)`
 `;
 
 const FeatureCard = styled(Card)`
+z-index: 1000;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -319,6 +343,7 @@ const StatsSection = styled(Section)`
 `;
 
 const StatCard = styled(Card)`
+z-index: 1000;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -365,10 +390,12 @@ const TestimonialAuthor = styled.p`
 `;
 
 const FAQSection = styled(Section)`
+z-index: 1000;
   background-color: white; // Light gray background
 `;
 
 const FAQItem = styled(motion.div)`
+z-index: 1000;
   background-color: rgba(0, 0, 0, 0.05); // Very light gray background
   border-radius: 10px;
   padding: 1.5rem;
@@ -382,6 +409,7 @@ const FAQItem = styled(motion.div)`
 `;
 
 const FAQQuestion = styled.div`
+z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -391,11 +419,13 @@ const FAQQuestion = styled.div`
 `;
 
 const FAQAnswer = styled(motion.div)`
+z-index: 1000;
   color: #333333; // Dark gray text
   margin-top: 1rem;
 `;
 
 const FAQIcon = styled(motion.div)`
+z-index: 1000;
   color: #000000; // Black text
 `;
 
@@ -412,6 +442,7 @@ const NewsletterForm = styled.form`
 `;
 
 const NewsletterInput = styled.input`
+z-index: 1000;
   width: 100%;
   padding: 0.8rem 1rem;
   font-size: 1rem;
@@ -458,6 +489,7 @@ const Nebula = styled.div`
 `;
 
 const NewsletterButton = styled.button`
+z-index: 1000;
   background-color: #000000; // Black button
   color: white; // White text
   border: none;
@@ -622,7 +654,7 @@ const MinecraftSecurityPluginHomepage = () => {
 
   return (
     <>
-          <ASPA />
+
 
       <GlobalStyle />
       
@@ -655,6 +687,7 @@ const MinecraftSecurityPluginHomepage = () => {
                 Join thousands of server owners in building safer Minecraft communities.
               </HeroSubtitle>
             </motion.div>
+            
             <SearchBar
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -706,6 +739,8 @@ const MinecraftSecurityPluginHomepage = () => {
                           {/* Add the Creeper image */}
                           <BeeImage src={beeImage} alt="bee" />
           </HeroSection>
+          <ChatbotIframe />
+       
 
           <FeaturesSection ref={featuresRef}>
             <SectionTitle
