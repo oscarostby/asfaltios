@@ -4,25 +4,25 @@ import styled, { ThemeProvider } from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
-// Themes for Light/Dark mode
+// Themes for Space-Themed Light/Dark mode
 const lightTheme = {
-  background: '#f9fafc',
-  textColor: '#333',
-  sidebarBg: '#fff',
-  chatBg: '#f7fafc',
-  messageBg: '#3182ce',
-  staffMessageBg: '#48bb78',
-  importantBg: '#ecc94b',
+  background: '#0b3d91',
+  textColor: '#ffffff',
+  sidebarBg: '#0d47a1',
+  chatBg: '#1a237e',
+  messageBg: '#3949ab',
+  staffMessageBg: '#5c6bc0',
+  importantBg: '#ffca28',
 };
 
 const darkTheme = {
-  background: '#1a202c',
-  textColor: '#f9fafc',
-  sidebarBg: '#2d3748',
-  chatBg: '#2d3748',
-  messageBg: '#48bb78',
-  staffMessageBg: '#3182ce',
-  importantBg: '#d69e2e',
+  background: '#000000',
+  textColor: '#ffffff',
+  sidebarBg: '#1a237e',
+  chatBg: '#0d47a1',
+  messageBg: '#3949ab',
+  staffMessageBg: '#5c6bc0',
+  importantBg: '#ffca28',
 };
 
 // Predefined Message Shortcuts
@@ -44,16 +44,18 @@ const messageShortcuts = {
   },
 };
 
-// Styled Components
+// Styled Components with Space Theme
 const StaffPageContainer = styled.div`
   display: flex;
   padding: 40px;
+  padding-top: 240px; /* Ensures content is at least 200px down */
   background-color: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.textColor};
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
   gap: 30px;
   transition: background-color 0.5s ease;
+  background-image: url('https://www.transparenttextures.com/patterns/dark-matter.png');
 `;
 
 const Sidebar = styled.div`
@@ -62,6 +64,7 @@ const Sidebar = styled.div`
   background-color: ${({ theme }) => theme.sidebarBg};
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  height: fit-content;
 `;
 
 const ContentArea = styled.div`
@@ -100,14 +103,17 @@ const ChatList = styled.div`
 `;
 
 const ChatItem = styled(motion.div)`
-  background-color: #e2e8f0;
+  background-color: #3949ab;
+  color: #ffffff;
   border-radius: 12px;
   padding: 20px;
   cursor: pointer;
   flex: 1;
   transition: all 0.3s ease;
+  position: relative;
+
   &:hover {
-    background-color: #cbd5e0;
+    background-color: #303f9f;
     transform: translateY(-5px);
   }
 `;
@@ -139,6 +145,7 @@ const Message = styled(motion.div)`
   max-width: 70%;
   align-self: ${({ isStaff }) => (isStaff ? 'flex-end' : 'flex-start')};
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
 `;
 
 const InputContainer = styled.div`
@@ -150,18 +157,21 @@ const Input = styled.input`
   flex-grow: 1;
   padding: 14px;
   border-radius: 25px;
-  border: 2px solid #3182ce;
+  border: 2px solid #5c6bc0;
   font-size: 16px;
   transition: all 0.3s ease;
+  background-color: #1a237e;
+  color: #ffffff;
+
   &:focus {
     outline: none;
-    border-color: #2b6cb0;
-    box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.5);
+    border-color: #3949ab;
+    box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.5);
   }
 `;
 
 const Button = styled(motion.button)`
-  background-color: #3182ce;
+  background-color: #5c6bc0;
   color: #ffffff;
   border: none;
   border-radius: 25px;
@@ -171,20 +181,22 @@ const Button = styled(motion.button)`
   font-weight: 600;
   margin-left: 10px;
   transition: background-color 0.3s ease;
+
   &:hover {
-    background-color: #2b6cb0;
+    background-color: #3949ab;
   }
 `;
 
 const ShortcutButton = styled(Button)`
   margin-top: 10px;
-  background-color: #48bb78;
+  background-color: #3949ab;
 `;
 
 const DeleteButton = styled(Button)`
-  background-color: #e53e3e;
+  background-color: #e53935;
+
   &:hover {
-    background-color: #c53030;
+    background-color: #d32f2f;
   }
 `;
 
@@ -211,18 +223,62 @@ const TaskTitle = styled.h3`
 `;
 
 const TaskItem = styled.div`
-  background-color: #edf2f7;
+  background-color: #283593;
   border-radius: 10px;
   padding: 10px 15px;
   margin-bottom: 10px;
-  color: #2d3748;
+  color: #ffffff;
   font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const AssignButton = styled(Button)`
+  background-color: #00acc1;
+
+  &:hover {
+    background-color: #00838f;
+  }
+`;
+
+const NotificationBadge = styled.div`
+  background-color: #ff5722;
+  color: #ffffff;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+`;
+
+// New features for staff assistance
+const SearchInput = styled.input`
+  padding: 10px;
+  border-radius: 20px;
+  border: 2px solid #5c6bc0;
+  width: 100%;
+  margin-bottom: 20px;
+  background-color: #1a237e;
+  color: #ffffff;
+
+  &:focus {
+    outline: none;
+    border-color: #3949ab;
+    box-shadow: 0 0 0 2px rgba(92, 107, 192, 0.5);
+  }
 `;
 
 const StaffPage = () => {
   const [isAdmin, setIsAdmin] = useState(null);
   const [username, setUsername] = useState('');
   const [activeChats, setActiveChats] = useState([]);
+  const [filteredChats, setFilteredChats] = useState([]);
+  const [chatSearch, setChatSearch] = useState('');
   const [selectedChat, setSelectedChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
@@ -252,6 +308,10 @@ const StaffPage = () => {
       return () => clearInterval(interval);
     }
   }, [isAdmin]);
+
+  useEffect(() => {
+    filterChats();
+  }, [chatSearch, activeChats]);
 
   const getCookie = (name) => {
     const cookies = document.cookie.split(';');
@@ -294,6 +354,7 @@ const StaffPage = () => {
     try {
       const response = await axios.get('https://api.asfaltios.com/api/chat/active');
       setActiveChats(response.data);
+      setFilteredChats(response.data);
     } catch (error) {
       console.error('Error fetching active chats:', error);
     }
@@ -305,6 +366,7 @@ const StaffPage = () => {
       const response = await axios.get(`https://api.asfaltios.com/api/chat/messages/${userId}`);
       setMessages(response.data);
       setNewMessage('');
+      scrollToBottom();
     } catch (error) {
       console.error('Error fetching messages:', error);
     }
@@ -350,6 +412,7 @@ const StaffPage = () => {
       if (response.status === 200) {
         const updatedChats = activeChats.filter((chat) => chat._id !== userId);
         setActiveChats(updatedChats);
+        setFilteredChats(updatedChats);
         if (selectedChat === userId) setSelectedChat(null);
       } else {
         console.error(`Failed to delete chat with ID: ${userId}. Status: ${response.status}`);
@@ -357,6 +420,26 @@ const StaffPage = () => {
     } catch (error) {
       console.error(`Error deleting chat with ID: ${userId}`, error);
     }
+  };
+
+  const filterChats = () => {
+    const filtered = activeChats.filter((chat) =>
+      (chat.username || 'Anonymous User').toLowerCase().includes(chatSearch.toLowerCase())
+    );
+    setFilteredChats(filtered);
+  };
+
+  const markTaskCompleted = (taskId) => {
+    const updatedTasks = tasks.filter((task) => task._id !== taskId);
+    setTasks(updatedTasks);
+    // Optionally, send a request to update the task status on the server
+  };
+
+  const assignChat = (e, userId) => {
+    e.stopPropagation();
+    // Logic to assign chat to the staff member
+    console.log(`Chat with user ${userId} assigned to ${username}`);
+    // Optionally, send a request to the server to update the assignment
   };
 
   return (
@@ -369,7 +452,10 @@ const StaffPage = () => {
             {tasks.length > 0 ? (
               tasks.map((task, index) => (
                 <TaskItem key={index}>
-                  <strong>{task.header}</strong>: {task.text}
+                  <div>
+                    <strong>{task.header}</strong>: {task.text}
+                  </div>
+                  <Button onClick={() => markTaskCompleted(task._id)}>Complete</Button>
                 </TaskItem>
               ))
             ) : (
@@ -385,7 +471,9 @@ const StaffPage = () => {
                   <strong>{category}</strong>
                   <ul>
                     {Object.entries(messageShortcuts[category]).map(([shortcut, message]) => (
-                      <li key={shortcut}>{shortcut}: {message}</li>
+                      <li key={shortcut}>
+                        {shortcut}: {message}
+                      </li>
                     ))}
                   </ul>
                 </li>
@@ -397,24 +485,44 @@ const StaffPage = () => {
         <ContentArea>
           <Section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
             <SectionTitle>Active Chats</SectionTitle>
+            <SearchInput
+              type="text"
+              placeholder="Search chats..."
+              value={chatSearch}
+              onChange={(e) => setChatSearch(e.target.value)}
+            />
             <ChatList>
-              {activeChats.map((chat) => (
+              {filteredChats.map((chat) => (
                 <ChatItem key={chat._id} onClick={() => selectChat(chat._id)}>
                   {chat.username || `Anonymous User`}
-                  <DeleteButton onClick={(e) => deleteChat(e, chat._id)}>Delete</DeleteButton>
+                  {/* Notification Badge for new messages */}
+                  {chat.hasNewMessages && <NotificationBadge>!</NotificationBadge>}
+                  <div style={{ marginTop: '10px' }}>
+                    <AssignButton onClick={(e) => assignChat(e, chat._id)}>Assign to Me</AssignButton>
+                    <DeleteButton onClick={(e) => deleteChat(e, chat._id)}>Delete</DeleteButton>
+                  </div>
                 </ChatItem>
               ))}
             </ChatList>
           </Section>
 
           {selectedChat && (
-            <Section initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5, delay: 0.2 }}>
-              <SectionTitle>Chat Window</SectionTitle>
+            <Section
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <SectionTitle>Chat with {selectedChat}</SectionTitle>
               <ChatWindow>
                 <MessageList>
                   {messages.map((message, index) => (
-                    <Message key={index} isStaff={message.isStaff} isImportant={message.isImportant}>
-                      {message.text} <em>({message.sender || 'User'})</em>
+                    <Message
+                      key={index}
+                      isStaff={message.isStaff}
+                      isImportant={message.isImportant}
+                    >
+                      {message.text}
+                      <em> ({message.sender || 'User'})</em>
                       <span
                         onClick={() => markImportant(index)}
                         style={{ cursor: 'pointer', marginLeft: '10px' }}
@@ -439,17 +547,28 @@ const StaffPage = () => {
               {/* Shortcut buttons */}
               <div>
                 {Object.keys(messageShortcuts.greetings).map((shortcut, index) => (
-                  <ShortcutButton key={index} onClick={() => insertShortcut(messageShortcuts.greetings[shortcut])}>
+                  <ShortcutButton
+                    key={index}
+                    onClick={() => insertShortcut(messageShortcuts.greetings[shortcut])}
+                  >
                     {messageShortcuts.greetings[shortcut]}
                   </ShortcutButton>
                 ))}
                 {Object.keys(messageShortcuts.troubleshooting).map((shortcut, index) => (
-                  <ShortcutButton key={index} onClick={() => insertShortcut(messageShortcuts.troubleshooting[shortcut])}>
+                  <ShortcutButton
+                    key={index}
+                    onClick={() =>
+                      insertShortcut(messageShortcuts.troubleshooting[shortcut])
+                    }
+                  >
                     {messageShortcuts.troubleshooting[shortcut]}
                   </ShortcutButton>
                 ))}
                 {Object.keys(messageShortcuts.closing).map((shortcut, index) => (
-                  <ShortcutButton key={index} onClick={() => insertShortcut(messageShortcuts.closing[shortcut])}>
+                  <ShortcutButton
+                    key={index}
+                    onClick={() => insertShortcut(messageShortcuts.closing[shortcut])}
+                  >
                     {messageShortcuts.closing[shortcut]}
                   </ShortcutButton>
                 ))}

@@ -14,6 +14,8 @@ import {
 import Header from '../components/header';
 import Footer from "../components/footer";
 import ASPA from '../components/Aspa';
+import ChatbotIframe from '../components/ChatbotIframe'; // Husk å justere stien om nødvendig
+
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;700&display=swap');
@@ -80,6 +82,18 @@ const HeroSection = styled(motion.section)`
   padding: 5rem 2rem;
   background: white;
   position: relative; // Add this to allow absolute positioning of the image
+`;
+
+const ChatbotSection = styled.div`
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 400px;
+  height: 500px;
+  border: 1px solid #ccc;
+  background-color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 100;
 `;
 
 const CreeperImage = styled.img`
@@ -622,7 +636,7 @@ const MinecraftSecurityPluginHomepage = () => {
 
   return (
     <>
-          <ASPA />
+
 
       <GlobalStyle />
       
@@ -655,6 +669,7 @@ const MinecraftSecurityPluginHomepage = () => {
                 Join thousands of server owners in building safer Minecraft communities.
               </HeroSubtitle>
             </motion.div>
+            
             <SearchBar
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -706,6 +721,8 @@ const MinecraftSecurityPluginHomepage = () => {
                           {/* Add the Creeper image */}
                           <BeeImage src={beeImage} alt="bee" />
           </HeroSection>
+          <ChatbotIframe />
+       
 
           <FeaturesSection ref={featuresRef}>
             <SectionTitle

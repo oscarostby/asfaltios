@@ -13,6 +13,7 @@ import StaffPage from './pages/staffpage';
 import UserIdPage from './pages/UserIdPage';
 import NotFound from './pages/NotFound';
 import Header from './components/header';
+import ChatbotIframe from './components/ChatbotIframe'; // Juster stien hvis nødvendig
 
 function App() {
   return (
@@ -30,6 +31,9 @@ function App() {
         <Route path="/SimpleGoldInfo" element={<SimpleGoldInfo />} />
         <Route path="/staffpage" element={<StaffPage />} />
         <Route path="/adtest" element={<UserIdPage />} />
+
+        {/* Chatbot route */}
+        <Route path="/chatbot" element={<ChatbotIframe />} />
 
         {/* 404 route, alltid plassert på slutten */}
         <Route path="*" element={<NotFound />} />
