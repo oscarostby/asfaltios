@@ -1,16 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const ChatbotSection = styled.div`
+const ChatbotWrapper = styled.div`
   position: fixed;
-  bottom: 10px; /* Move the chat section up so that the button stays visible below */
-  right: 20px;
+  bottom: 0;
+  right: 0;
+  width: 100%; /* Tar opp hele bredden */
+  height: 100%; /* Tar opp hele høyden */
+  z-index: 100;
+  pointer-events: none; /* Ignorerer klikk på wrapper */
+`;
+
+const ChatbotSection = styled.div`
   width: 100%;
   height: 100%;
   background-color: transparent;
-  z-index: 100; /* Ensure chat section is above the button */
-  border-radius: 20px;
-  box-shadow: 0  rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  pointer-events: auto; /* Tillater klikk kun her */
 `;
 
 const ChatbotIframe = styled.iframe`
@@ -23,13 +31,15 @@ const ChatbotIframe = styled.iframe`
 
 const ChatbotContainer = () => {
   return (
-    <ChatbotSection>
-      <ChatbotIframe
-        src="https://ai-chat-et8r.vercel.app/"
-        title="Chatbot"
-        allowTransparency="true"
-      />
-    </ChatbotSection>
+    <ChatbotWrapper>
+      <ChatbotSection>
+        <ChatbotIframe
+          src="https://ai-chat-et8r.vercel.app/"
+          title="Chatbot"
+          allowTransparency="true"
+        />
+      </ChatbotSection>
+    </ChatbotWrapper>
   );
 };
 
