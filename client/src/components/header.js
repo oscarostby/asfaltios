@@ -379,9 +379,9 @@ const Header = () => {
           }}
           transition={{ duration: 0.5 }}
         >
-          <NavLink href="#">Server.Jar</NavLink>
-          <NavLink href="#">Paper</NavLink>
-          <NavLink href="#">Discord</NavLink>
+          <NavLink href="https://asfaltios.com/plugins">Plugins</NavLink>
+          <NavLink href="https://www.spigotmc.org/resources/authors/asfaltios.2112342/">Spigot</NavLink>
+          <NavLink href="https://discord.gg/ESZtT2aDS3">Discord</NavLink>
         </NavLinks>
       </LogoAndLinks>
 
@@ -449,9 +449,9 @@ const Header = () => {
             <CloseButton onClick={toggleMobileMenu}>
               <FaTimes />
             </CloseButton>
-            <MobileNavLink href="#">Server.Jar</MobileNavLink>
-            <MobileNavLink href="#">Paper</MobileNavLink>
-            <MobileNavLink href="#">Discord</MobileNavLink>
+            <MobileNavLink href="https://asfaltios.com/plugins">Plugins</MobileNavLink>
+            <MobileNavLink href="https://www.spigotmc.org/resources/authors/asfaltios.2112342/">Spigot</MobileNavLink>
+            <MobileNavLink href="https://discord.gg/ESZtT2aDS3">Discord</MobileNavLink>
             <MobileNavLink onClick={handleLoginClick}>Login</MobileNavLink>
             <MobileNavLink onClick={handleRegisterClick}>Register</MobileNavLink>
           </MobileMenu>
