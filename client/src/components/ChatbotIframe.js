@@ -34,7 +34,7 @@ const ChatbotContainer = () => {
     <ChatbotWrapper>
       <ChatbotSection>
         <ChatbotIframe
-          src="https://ai-chat-et8r.vercel.app/"
+          src="https://aspa-ai.vercel.app/"
           title="Chatbot"
           allowTransparency="true"
         />
