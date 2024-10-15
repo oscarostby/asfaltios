@@ -9,30 +9,25 @@ import {
   FaUserFriends,
   FaWrench,
   FaQuestionCircle,
-  FaEnvelope,
-  FaPhone,
   FaArrowUp,
   FaChevronDown,
-  FaSun,
-  FaMoon,
 } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ParallaxProvider, Parallax } from 'react-scroll-parallax';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import Particles from 'react-tsparticles';
 import { animateScroll as scrollTo } from 'react-scroll';
 import emailjs from 'emailjs-com';
 
 // Import images from src/bilder
-import spaceBackground from '../bilder/space-1.gif';
-import simplegoldImg from '../bilder/archonAdminGuiImg.png';
-import archonAdminGuiImg from '../bilder/archonAdminGuiImg.png';
-import bacteriaStaffPluginImg from '../bilder/archonAdminGuiImg.png';
-import fireballPluginImg from '../bilder/archonAdminGuiImg.png';
-import basicPluginImg from '../bilder/archonAdminGuiImg.png';
-import pluginsDemoVideo from '../bilder/archonAdminGuiImg.png';
+import simplegoldImg from '../bilder/logo2.png';
+import archonAdminGuiImg from '../bilder/logo2.png';
+import bacteriaStaffPluginImg from '../bilder/logo2.png';
+import fireballPluginImg from '../bilder/logo2.png';
+
+// Import video from src/bilder
+import pluginsDemoVideo from '../bilder/logo2.png';
 
 // Keyframe animations
 const fadeInUp = keyframes`
@@ -48,25 +43,10 @@ const fadeInUp = keyframes`
 
 const float = keyframes`
   0%, 100% {
-    transform: translateY(0);
+    transform: translateY(-5px);
   }
   50% {
-    transform: translateY(-10px);
-  }
-`;
-
-const pulse = keyframes`
-  0% {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 0.7;
+    transform: translateY(5px);
   }
 `;
 
@@ -82,6 +62,26 @@ const bounce = keyframes`
   }
 `;
 
+const planetMove = keyframes`
+  from {
+    transform: translateX(-10%) translateY(0%);
+  }
+  to {
+    transform: translateX(110%) translateY(0%);
+  }
+`;
+
+const rocketFly = keyframes`
+  0% {
+    bottom: -20%;
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    bottom: 120%;
+    transform: translateX(-50%) translateY(0);
+  }
+`;
+
 // Theme Definitions
 const lightTheme = {
   background: '#ffffff',
@@ -89,7 +89,6 @@ const lightTheme = {
   cardBackground: '#f9f9f9',
   buttonBackground: '#000000',
   buttonText: '#ffffff',
-  overlay: 'rgba(255, 255, 255, 0.6)',
 };
 
 const darkTheme = {
@@ -98,7 +97,6 @@ const darkTheme = {
   cardBackground: '#1a1a1a',
   buttonBackground: '#ffffff',
   buttonText: '#000000',
-  overlay: 'rgba(0, 0, 0, 0.6)',
 };
 
 // Styled Components
@@ -111,60 +109,261 @@ const GlobalStyle = styled.div`
   color: ${({ theme }) => theme.text};
 `;
 
-// Particle Background Configuration
-const particlesConfig = {
-  background: {
-    color: {
-      value: 'transparent',
-    },
-  },
-  fpsLimit: 60,
-  interactivity: {
-    detectsOn: 'canvas',
-    events: {
-      resize: true,
-    },
-  },
-  particles: {
-    color: {
-      value: '#ffffff',
-    },
-    links: {
-      color: '#ffffff',
-      distance: 150,
-      enable: true,
-      opacity: 0.1,
-      width: 1,
-    },
-    move: {
-      enable: true,
-      speed: 0.3,
-    },
-    number: {
-      density: {
-        enable: true,
-        area: 800,
-      },
-      value: 50,
-    },
-    opacity: {
-      value: 0.2,
-    },
-    shape: {
-      type: 'circle',
-    },
-    size: {
-      random: true,
-      value: 3,
-    },
-  },
-  detectRetina: true,
-};
+// Stars and Planets Background
+const StarsBackground = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  background: radial-gradient(circle at bottom, #020111 0%, #000000 80%);
 
-// Hero Section
+  /* Stars */
+  .stars {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow:
+      /* Multiple positions for stars */
+      1vw 10vh #ffffff,
+      3vw 20vh #ffffff,
+      5vw 30vh #ffffff,
+      7vw 40vh #ffffff,
+      9vw 50vh #ffffff,
+      11vw 60vh #ffffff,
+      13vw 70vh #ffffff,
+      15vw 80vh #ffffff,
+      17vw 90vh #ffffff,
+      19vw 100vh #ffffff,
+      21vw 15vh #ffffff,
+      23vw 25vh #ffffff,
+      25vw 35vh #ffffff,
+      27vw 45vh #ffffff,
+      29vw 55vh #ffffff,
+      31vw 65vh #ffffff,
+      33vw 75vh #ffffff,
+      35vw 85vh #ffffff,
+      37vw 95vh #ffffff,
+      39vw 5vh #ffffff,
+      41vw 15vh #ffffff,
+      43vw 25vh #ffffff,
+      45vw 35vh #ffffff,
+      47vw 45vh #ffffff,
+      49vw 55vh #ffffff,
+      51vw 65vh #ffffff,
+      53vw 75vh #ffffff,
+      55vw 85vh #ffffff,
+      57vw 95vh #ffffff,
+      59vw 5vh #ffffff,
+      61vw 15vh #ffffff,
+      63vw 25vh #ffffff,
+      65vw 35vh #ffffff,
+      67vw 45vh #ffffff,
+      69vw 55vh #ffffff,
+      71vw 65vh #ffffff,
+      73vw 75vh #ffffff,
+      75vw 85vh #ffffff,
+      77vw 95vh #ffffff,
+      79vw 5vh #ffffff,
+      81vw 15vh #ffffff,
+      83vw 25vh #ffffff,
+      85vw 35vh #ffffff,
+      87vw 45vh #ffffff,
+      89vw 55vh #ffffff,
+      91vw 65vh #ffffff,
+      93vw 75vh #ffffff,
+      95vw 85vh #ffffff,
+      97vw 95vh #ffffff,
+      99vw 5vh #ffffff;
+
+    animation: animStar 150s linear infinite;
+  }
+
+  .stars:after {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow:
+      /* Additional stars */
+      2vw 12vh #ffffff,
+      4vw 22vh #ffffff,
+      6vw 32vh #ffffff,
+      8vw 42vh #ffffff,
+      10vw 52vh #ffffff,
+      12vw 62vh #ffffff,
+      14vw 72vh #ffffff,
+      16vw 82vh #ffffff,
+      18vw 92vh #ffffff,
+      20vw 2vh #ffffff,
+      22vw 12vh #ffffff,
+      24vw 22vh #ffffff,
+      26vw 32vh #ffffff,
+      28vw 42vh #ffffff,
+      30vw 52vh #ffffff,
+      32vw 62vh #ffffff,
+      34vw 72vh #ffffff,
+      36vw 82vh #ffffff,
+      38vw 92vh #ffffff,
+      40vw 2vh #ffffff,
+      42vw 12vh #ffffff,
+      44vw 22vh #ffffff,
+      46vw 32vh #ffffff,
+      48vw 42vh #ffffff,
+      50vw 52vh #ffffff,
+      52vw 62vh #ffffff,
+      54vw 72vh #ffffff,
+      56vw 82vh #ffffff,
+      58vw 92vh #ffffff,
+      60vw 2vh #ffffff,
+      62vw 12vh #ffffff,
+      64vw 22vh #ffffff,
+      66vw 32vh #ffffff,
+      68vw 42vh #ffffff,
+      70vw 52vh #ffffff,
+      72vw 62vh #ffffff,
+      74vw 72vh #ffffff,
+      76vw 82vh #ffffff,
+      78vw 92vh #ffffff,
+      80vw 2vh #ffffff;
+
+    animation: animStar 200s linear infinite;
+  }
+
+  @keyframes animStar {
+    from {
+      transform: translateY(0px);
+    }
+    to {
+      transform: translateY(-2000px);
+    }
+  }
+
+  /* Planets */
+  .planet {
+    position: absolute;
+    border-radius: 50%;
+    animation: ${planetMove} infinite linear;
+  }
+
+  .planet1 {
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle at 30% 30%, #ffcc00, #cc9900);
+    top: 20%;
+    left: -10%;
+    animation-duration: 100s;
+  }
+
+  .planet2 {
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle at 30% 30%, #00ccff, #0066cc);
+    top: 60%;
+    left: -15%;
+    animation-duration: 120s;
+    animation-delay: 30s;
+  }
+
+  /* Rocket */
+  .rocket {
+    position: absolute;
+    width: 60px;
+    height: 120px;
+    bottom: -20%; /* Start from below the screen */
+    left: ${({ rocketPosition }) => rocketPosition}%;
+    transform: translateX(-50%);
+    animation: ${rocketFly} 15s linear infinite;
+    z-index: 2;
+  }
+
+  .rocket-body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #e6e6e6, #bfbfbf);
+    border-radius: 30px;
+    overflow: hidden;
+    border: 2px solid #999999;
+  }
+
+  .nose-cone {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 30px solid transparent;
+    border-right: 30px solid transparent;
+    border-bottom: 20px solid #e6e6e6;
+  }
+
+  .window {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: #1a73e8;
+    border-radius: 50%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
+    border: 2px solid #ffffff;
+  }
+
+  .fin {
+    position: absolute;
+    bottom: 0;
+    width: 50%;
+    height: 30px;
+    background: #ff4d4d;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .fin-left {
+    left: 0;
+    transform: rotate(-45deg);
+    transform-origin: top left;
+  }
+
+  .fin-right {
+    right: 0;
+    transform: rotate(45deg);
+    transform-origin: top right;
+  }
+
+  .fire {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 50px;
+    background: radial-gradient(circle at 50% 0%, #ff8c00, rgba(255, 140, 0, 0));
+    border-radius: 50%;
+    animation: fire 0.5s infinite;
+  }
+
+  @keyframes fire {
+    0% {
+      height: 40px;
+      opacity: 1;
+    }
+    100% {
+      height: 50px;
+      opacity: 0;
+    }
+  }
+`;
+
+// Hero Section without Background Image
 const HeroSection = styled.section`
   height: 100vh;
-  background: url(${spaceBackground}) no-repeat center center/cover;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -205,9 +404,10 @@ const HeroSubtitle = styled(motion.p)`
 // Scroll Down Button
 const ScrollDownButton = styled(motion.div)`
   position: absolute;
-  bottom: -60px;
+  bottom: -90px;
+  left: 50%;
+  transform: translateX(-50%);
   cursor: pointer;
-  margin-left: 50%;
   z-index: 1;
   animation: ${bounce} 2s infinite;
 
@@ -216,7 +416,6 @@ const ScrollDownButton = styled(motion.div)`
     font-size: 2rem;
   }
 `;
-
 // Plugin Showcase
 const PluginSection = styled.section`
   padding: 100px 80px;
@@ -254,10 +453,10 @@ const SearchInput = styled.input`
   border: none;
   font-size: 1rem;
   outline: none;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
   &:focus {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   }
 `;
 
@@ -399,7 +598,7 @@ const VideoPlayer = styled.video`
   width: 80%;
   max-width: 800px;
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   margin-bottom: 30px;
   transition: transform 0.3s;
 
@@ -425,10 +624,11 @@ const Button = styled.a`
   text-decoration: none;
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 
   &:hover {
-    background-color: ${({ theme }) => theme.buttonBackground === '#ffffff' ? '#dddddd' : '#333333'};
+    background-color: ${({ theme }) =>
+      theme.buttonBackground === '#ffffff' ? '#dddddd' : '#333333'};
     transform: scale(1.05);
   }
 
@@ -471,13 +671,13 @@ const TestimonialCard = styled.div`
   border-radius: 15px;
   padding: 30px;
   text-align: center;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s, box-shadow 0.3s;
   backdrop-filter: blur(5px);
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 15px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
   }
 `;
 
@@ -521,7 +721,7 @@ const FAQItem = styled.div`
   background: ${({ theme }) => theme.background};
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(5px);
 `;
 
@@ -552,17 +752,6 @@ const PricingSection = styled.section`
   }
 `;
 
-const PricingTitle = styled.h2`
-  font-size: 3rem;
-  text-align: center;
-  margin-bottom: 60px;
-  color: ${({ theme }) => theme.text};
-
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-  }
-`;
-
 const PricingGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -571,18 +760,18 @@ const PricingGrid = styled.div`
   margin: 0 auto;
 `;
 
-const PricingCard = styled.div`
+const PricingCard = styled(motion.div)`
   background: ${({ theme }) => theme.cardBackground};
   border-radius: 15px;
   padding: 30px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   backdrop-filter: blur(5px);
 
   &:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -632,10 +821,11 @@ const PricingButton = styled.a`
   font-size: 1rem;
   transition: background-color 0.3s ease, transform 0.3s ease;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 
   &:hover {
-    background-color: ${({ theme }) => theme.buttonBackground === '#ffffff' ? '#dddddd' : '#333333'};
+    background-color: ${({ theme }) =>
+      theme.buttonBackground === '#ffffff' ? '#dddddd' : '#333333'};
     transform: scale(1.05);
   }
 
@@ -714,10 +904,11 @@ const SubmitButton = styled.button`
   font-size: 1.2rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 
   &:hover {
-    background-color: ${({ theme }) => theme.buttonBackground === '#ffffff' ? '#dddddd' : '#333333'};
+    background-color: ${({ theme }) =>
+      theme.buttonBackground === '#ffffff' ? '#dddddd' : '#333333'};
     transform: scale(1.05);
   }
 `;
@@ -734,12 +925,13 @@ const BackToTop = styled(motion.button)`
   padding: 15px;
   font-size: 1.5rem;
   cursor: pointer;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   transition: background-color 0.3s ease, transform 0.3s ease;
   z-index: 1000;
 
   &:hover {
-    background-color: ${({ theme }) => theme.buttonBackground === '#ffffff' ? '#dddddd' : '#333333'};
+    background-color: ${({ theme }) =>
+      theme.buttonBackground === '#ffffff' ? '#dddddd' : '#333333'};
     transform: scale(1.2);
   }
 `;
@@ -802,7 +994,7 @@ const ModalContent = styled(motion.div)`
   width: 90%;
   position: relative;
   color: ${({ theme }) => theme.text};
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(5px);
 `;
 
@@ -815,20 +1007,6 @@ const CloseButton = styled.button`
   font-size: 1.5rem;
   color: ${({ theme }) => theme.text};
   cursor: pointer;
-`;
-
-// Theme Toggle Button
-const ThemeToggle = styled.button`
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: ${({ theme }) => theme.text};
-  font-size: 1.5rem;
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: scale(1.2);
-  }
 `;
 
 // Search Bar Component
@@ -847,34 +1025,35 @@ const SearchBar = ({ searchTerm, setSearchTerm }) => (
 // Plugin data
 const plugins = [
   {
-    name: "SimpleGold",
-    description: "Gold-based economy plugin for seamless integration with Vault and Towny.",
+    name: 'SimpleGold',
+    description:
+      'Gold-based economy plugin for seamless integration with Vault and Towny.',
     image: simplegoldImg,
-    details: "SimpleGold offers a robust economy system for your Minecraft server, perfectly integrated with Vault and Towny. It provides a seamless experience for both players and administrators, with easy configuration and reliable performance.",
+    details:
+      'SimpleGold offers a robust economy system for your Minecraft server, perfectly integrated with Vault and Towny. It provides a seamless experience for both players and administrators, with easy configuration and reliable performance.',
   },
   {
-    name: "Archon Admin GUI",
-    description: "Powerful GUI plugin for server admins to manage the game environment efficiently.",
+    name: 'Archon Admin GUI',
+    description:
+      'Powerful GUI plugin for server admins to manage the game environment efficiently.',
     image: archonAdminGuiImg,
-    details: "Archon Admin GUI provides a powerful and user-friendly graphical interface for server administrators. Manage players, regions, and settings with ease, all from a centralized dashboard.",
+    details:
+      'Archon Admin GUI provides a powerful and user-friendly graphical interface for server administrators. Manage players, regions, and settings with ease, all from a centralized dashboard.',
   },
   {
-    name: "Bakteria Staff Plugin",
-    description: "Enhanced tools for staff to keep servers secure from unwanted threats.",
+    name: 'Bakteria Staff Plugin',
+    description:
+      'Enhanced tools for staff to keep servers secure from unwanted threats.',
     image: bacteriaStaffPluginImg,
-    details: "Bacteria Staff Plugin offers advanced tools for server staff, including anti-grief mechanisms, monitoring tools, and automated security protocols to protect your server from unwanted threats.",
+    details:
+      'Bakteria Staff Plugin offers advanced tools for server staff, including anti-grief mechanisms, monitoring tools, and automated security protocols to protect your server from unwanted threats.',
   },
   {
-    name: "Asfaltios Firewall",
-    description: "Fun firewall plugin that helps you keep your server secure.",
+    name: 'Asfaltios Firewall',
+    description: 'Fun firewall plugin that helps you keep your server secure.',
     image: fireballPluginImg,
-    details: "Asfaltios Firewall gives you the perfect server protection. It will stop ddos attacks, lag machines and much more!",
-  },
-  {
-    name: "Asfaltios Basic",
-    description: "A simple plugin with essential commands and tools for small servers.",
-    image: basicPluginImg,
-    details: "Asfaltios Basic is the perfect solution for small servers needing essential commands and tools. Easy to install and configure, providing a solid foundation for your Minecraft experience.",
+    details:
+      'Asfaltios Firewall gives you the perfect server protection. It will stop DDoS attacks, lag machines, and much more!',
   },
 ];
 
@@ -882,87 +1061,94 @@ const plugins = [
 const features = [
   {
     icon: <FaShieldAlt />,
-    title: "Seamless Integration",
-    description: "Our plugins integrate smoothly with existing server setups, ensuring minimal downtime.",
+    title: 'Seamless Integration',
+    description:
+      'Our plugins integrate smoothly with existing server setups, ensuring minimal downtime.',
   },
   {
     icon: <FaCogs />,
-    title: "Enhanced Security",
-    description: "Protect your servers with advanced security features that guard against threats.",
+    title: 'Enhanced Security',
+    description:
+      'Protect your servers with advanced security features that guard against threats.',
   },
   {
     icon: <FaUserFriends />,
-    title: "User-Friendly",
-    description: "Intuitive interfaces and easy-to-use commands make managing plugins a breeze.",
+    title: 'User-Friendly',
+    description:
+      'Intuitive interfaces and easy-to-use commands make managing plugins a breeze.',
   },
   {
     icon: <FaWrench />,
-    title: "Customizable",
-    description: "Tailor plugins to fit your server's unique needs with extensive customization options.",
+    title: 'Customizable',
+    description:
+      "Tailor plugins to fit your server's unique needs with extensive customization options.",
   },
 ];
 
 // Testimonials data
 const testimonials = [
   {
-    text: "Asfaltios plugins have transformed our server's performance and security. Highly recommend!",
-    author: "Minecraft Server Admin, XYZ",
+    text: 'Asfaltios plugins have transformed our server’s performance and security. Highly recommend!',
+    author: 'Minecraft Server Admin, XYZ',
   },
   {
-    text: "The Archon Admin GUI is a game-changer. Managing our server has never been easier.",
-    author: "Server Owner, ABC",
+    text: 'The Archon Admin GUI is a game-changer. Managing our server has never been easier.',
+    author: 'Server Owner, ABC',
   },
   {
-    text: "Excellent support and top-notch plugins. Our players love the enhanced experience.",
-    author: "Community Manager, DEF",
+    text: 'Excellent support and top-notch plugins. Our players love the enhanced experience.',
+    author: 'Community Manager, DEF',
   },
 ];
 
 // FAQ data
 const faqs = [
   {
-    question: "How do I install a plugin?",
-    answer: "To install a plugin, download the plugin file and place it in the 'plugins' folder on your server. Restart or start the server to activate the plugin.",
+    question: 'How do I install a plugin?',
+    answer:
+      "To install a plugin, download the plugin file and place it in the 'plugins' folder on your server. Restart or start the server to activate the plugin.",
   },
   {
-    question: "Are the plugins compatible with all server versions?",
-    answer: "Our plugins are developed to be compatible with the latest versions of Minecraft. Check each plugin's specifications for details.",
+    question: 'Are the plugins compatible with all server versions?',
+    answer:
+      "Our plugins are developed to be compatible with the latest versions of Minecraft. Check each plugin's specifications for details.",
   },
   {
-    question: "Do you offer support for the plugins?",
-    answer: "Yes, we provide comprehensive support for all our plugins. Contact our support team via the contact section for assistance.",
+    question: 'Do you offer support for the plugins?',
+    answer:
+      'Yes, we provide comprehensive support for all our plugins. Contact our support team via the contact section for assistance.',
   },
 ];
 
 // Pricing data
 const pricingPlans = [
   {
-    name: "Basic",
-    price: "$0",
+    name: 'Basic',
+    price: '$0',
     features: [
-      "All of our plugins",
-      "Basic setup and configuration support",
-      "Basic security and server support",
+      'All of our plugins',
+      'Basic setup and configuration support',
+      'Basic security and server support',
     ],
   },
   {
-    name: "Pro",
-    price: "$49",
+    name: 'Pro',
+    price: '$49',
     features: [
-      "Custom plugin requests",
-      "Multiple addon tools",
-      "Everything in Basic",
-      "Priority support",
+      'Custom plugin requests',
+      'Multiple addon tools',
+      'Everything in Basic',
+      'Priority support',
     ],
   },
   {
-    name: "Enterprise",
-    price: "$99",
+    name: 'Enterprise',
+    price: '$99',
     features: [
-      "Fully customizable solutions",
-      "Unlimited plugins",
-      "Dedicated support",
-      "Regular updates",
+      'Fully customizable solutions',
+      'Unlimited plugins',
+      'Dedicated support',
+      'Regular updates',
     ],
   },
 ];
@@ -989,9 +1175,19 @@ const PluginModal = ({ show, onClose, plugin }) => {
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <CloseButton onClick={onClose} aria-label="Close Modal"><FaTimes /></CloseButton>
-            <h2 style={{ color: '#ffffff', marginBottom: '20px' }}>{plugin.name}</h2>
-            <img src={plugin.image} alt={plugin.name} style={{ width: '100%', borderRadius: '10px', marginBottom: '20px' }} />
+            <CloseButton onClick={onClose} aria-label="Close Modal">
+              <FaTimes />
+            </CloseButton>
+            <h2 style={{ marginBottom: '20px' }}>{plugin.name}</h2>
+            <img
+              src={plugin.image}
+              alt={plugin.name}
+              style={{
+                width: '100%',
+                borderRadius: '10px',
+                marginBottom: '20px',
+              }}
+            />
             <p>{plugin.details}</p>
           </ModalContent>
         </ModalOverlay>
@@ -1005,7 +1201,29 @@ const PluginList = () => {
   const [selectedPlugin, setSelectedPlugin] = useState(null);
   const [activeFAQ, setActiveFAQ] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [theme, setTheme] = useState('dark');
+  const [theme] = useState('dark');
+
+  // State for rocket position
+  const [rocketPosition, setRocketPosition] = useState(50);
+
+  // Function to generate random rocket position
+  const generateRandomPosition = () => {
+    const min = 10;
+    const max = 90;
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  useEffect(() => {
+    // Set initial random position
+    setRocketPosition(generateRandomPosition());
+
+    // Set interval to update rocket position after each animation cycle
+    const interval = setInterval(() => {
+      setRocketPosition(generateRandomPosition());
+    }, 15000); // Match the duration of the rocketFly animation (15s)
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Slider settings for testimonials
   const sliderSettings = {
@@ -1036,45 +1254,58 @@ const PluginList = () => {
   }, []);
 
   // Filtered plugins based on search term
-  const filteredPlugins = plugins.filter(plugin =>
-    plugin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    plugin.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredPlugins = plugins.filter(
+    (plugin) =>
+      plugin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      plugin.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Handle form submission
   const sendEmail = (e) => {
     e.preventDefault();
 
-    emailjs.sendForm('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', e.target, 'YOUR_USER_ID')
-      .then((result) => {
+    emailjs
+      .sendForm(
+        'YOUR_SERVICE_ID',
+        'YOUR_TEMPLATE_ID',
+        e.target,
+        'YOUR_USER_ID'
+      )
+      .then(
+        (result) => {
           console.log(result.text);
           alert('Message Sent Successfully!');
           e.target.reset();
-      }, (error) => {
+        },
+        (error) => {
           console.log(error.text);
           alert('An error occurred, please try again.');
-      });
+        }
+      );
   };
 
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <ParallaxProvider>
         <GlobalStyle>
-          {/* Particle Background */}
-          <Particles
-            params={particlesConfig}
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              zIndex: 0,
-            }}
-          />
-
           {/* Hero Section */}
           <HeroSection>
+            {/* Stars and Planets Background */}
+            <StarsBackground rocketPosition={rocketPosition}>
+              <div className="stars"></div>
+              <div className="planet planet1"></div>
+              <div className="planet planet2"></div>
+              {/* Rocket */}
+              <div className="rocket">
+                <div className="rocket-body">
+                  <div className="nose-cone"></div>
+                  <div className="window"></div>
+                  <div className="fin fin-left"></div>
+                  <div className="fin fin-right"></div>
+                </div>
+                <div className="fire"></div>
+              </div>
+            </StarsBackground>
             <HeroContent>
               <Parallax y={[-20, 20]} tagOuter="div">
                 <HeroTitle
@@ -1091,7 +1322,8 @@ const PluginList = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 1.5 }}
                 >
-                  Enhance your Minecraft server with Asfaltios' powerful and user-friendly plugins.
+                  Enhance your Minecraft server with Asfaltios' powerful and
+                  user-friendly plugins.
                 </HeroSubtitle>
               </Parallax>
               {/* Scroll Down Button */}
@@ -1099,10 +1331,10 @@ const PluginList = () => {
                 onClick={() => {
                   const nextSection = document.getElementById('plugins');
                   if (nextSection) {
-                    scrollTo.scrollTo(nextSection.offsetTop - 70, { // Adjusted offset for better positioning
+                    scrollTo.scrollTo(nextSection.offsetTop - 70, {
                       duration: 800,
                       delay: 0,
-                      smooth: 'easeInOutQuart'
+                      smooth: 'easeInOutQuart',
                     });
                   }
                 }}
@@ -1112,6 +1344,7 @@ const PluginList = () => {
               </ScrollDownButton>
             </HeroContent>
           </HeroSection>
+
 
           {/* Plugin Showcase */}
           <PluginSection id="plugins">
@@ -1126,7 +1359,7 @@ const PluginList = () => {
                   initial={{ opacity: 0, y: 50 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.2, duration: 0.6 }}
-                  tabIndex={0} // Make focusable for accessibility
+                  tabIndex={0}
                   role="button"
                   aria-pressed={selectedPlugin === plugin}
                   onKeyPress={(e) => {
@@ -1135,7 +1368,11 @@ const PluginList = () => {
                     }
                   }}
                 >
-                  <PluginImage src={plugin.image} alt={plugin.name} loading="lazy" />
+                  <PluginImage
+                    src={plugin.image}
+                    alt={plugin.name}
+                    loading="lazy"
+                  />
                   <PluginContent>
                     <PluginName>{plugin.name}</PluginName>
                     <PluginDescription>{plugin.description}</PluginDescription>
@@ -1200,11 +1437,13 @@ const PluginList = () => {
             {faqs.map((faq, index) => (
               <FAQItem key={index}>
                 <FAQQuestion
-                  onClick={() => setActiveFAQ(activeFAQ === index ? null : index)}
+                  onClick={() =>
+                    setActiveFAQ(activeFAQ === index ? null : index)
+                  }
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: index * 0.2, duration: 0.6 }}
-                  tabIndex={0} // Make focusable for accessibility
+                  tabIndex={0}
                   role="button"
                   aria-expanded={activeFAQ === index}
                   onKeyPress={(e) => {
@@ -1251,7 +1490,9 @@ const PluginList = () => {
                       <PricingFeature key={idx}>{feature}</PricingFeature>
                     ))}
                   </PricingFeatures>
-                  <PricingButton href="#contact">Choose Plan <FaArrowRight /></PricingButton>
+                  <PricingButton href="#contact">
+                    Choose Plan <FaArrowRight />
+                  </PricingButton>
                 </PricingCard>
               ))}
             </PricingGrid>
@@ -1261,10 +1502,25 @@ const PluginList = () => {
           <ContactSectionStyled id="contact">
             <ContactTitle>Contact Us</ContactTitle>
             <ContactForm onSubmit={sendEmail}>
-              <Input type="text" placeholder="Name" name="user_name" required />
-              <Input type="email" placeholder="Email" name="user_email" required />
+              <Input
+                type="text"
+                placeholder="Name"
+                name="user_name"
+                required
+              />
+              <Input
+                type="email"
+                placeholder="Email"
+                name="user_email"
+                required
+              />
               <Input type="text" placeholder="Subject" name="subject" required />
-              <TextArea rows="5" placeholder="Your Message" name="message" required />
+              <TextArea
+                rows="5"
+                placeholder="Your Message"
+                name="message"
+                required
+              />
               <SubmitButton type="submit">Send Message</SubmitButton>
             </ContactForm>
           </ContactSectionStyled>
@@ -1290,7 +1546,9 @@ const PluginList = () => {
               <FooterLink href="#">Terms of Service</FooterLink>
               <FooterLink href="#">Contact</FooterLink>
             </FooterLinks>
-            <FooterText>&copy; {new Date().getFullYear()} Asfaltios. All rights reserved.</FooterText>
+            <FooterText>
+              &copy; {new Date().getFullYear()} Asfaltios. All rights reserved.
+            </FooterText>
           </Footer>
 
           {/* Plugin Modal */}
