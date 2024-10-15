@@ -29,6 +29,9 @@ import fireballPluginImg from '../bilder/logo2.png';
 // Import video from src/bilder
 import pluginsDemoVideo from '../bilder/logo2.png';
 
+// Import Astronaut component
+import Astronaut from '../components/Astronaut';
+
 // Keyframe animations
 const fadeInUp = keyframes`
   from {
@@ -62,26 +65,6 @@ const bounce = keyframes`
   }
 `;
 
-const planetMove = keyframes`
-  from {
-    transform: translateX(-10%) translateY(0%);
-  }
-  to {
-    transform: translateX(110%) translateY(0%);
-  }
-`;
-
-const rocketFly = keyframes`
-  0% {
-    bottom: -20%;
-    transform: translateX(-50%) translateY(0);
-  }
-  100% {
-    bottom: 120%;
-    transform: translateX(-50%) translateY(0);
-  }
-`;
-
 // Theme Definitions
 const lightTheme = {
   background: '#ffffff',
@@ -107,9 +90,28 @@ const GlobalStyle = styled.div`
   font-family: 'Roboto', sans-serif;
   background-color: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
+  position: relative;
+  overflow-x: hidden;
 `;
 
-// Stars and Planets Background
+// Stars Component
+const twinkle = keyframes`
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.2; }
+`;
+
+const Star = styled.div`
+  position: absolute;
+  background: ${({ theme }) => theme.text};
+  border-radius: 50%;
+  opacity: 0.8;
+  animation: ${twinkle} ${({ delay }) => delay}s infinite;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
+  top: ${({ top }) => top}%;
+  left: ${({ left }) => left}%;
+`;
+
 const StarsBackground = styled.div`
   position: absolute;
   width: 100%;
@@ -117,249 +119,31 @@ const StarsBackground = styled.div`
   overflow: hidden;
   z-index: 0;
   background: radial-gradient(circle at bottom, #020111 0%, #000000 80%);
-
-  /* Stars */
-  .stars {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    background: transparent;
-    box-shadow:
-      /* Multiple positions for stars */
-      1vw 10vh #ffffff,
-      3vw 20vh #ffffff,
-      5vw 30vh #ffffff,
-      7vw 40vh #ffffff,
-      9vw 50vh #ffffff,
-      11vw 60vh #ffffff,
-      13vw 70vh #ffffff,
-      15vw 80vh #ffffff,
-      17vw 90vh #ffffff,
-      19vw 100vh #ffffff,
-      21vw 15vh #ffffff,
-      23vw 25vh #ffffff,
-      25vw 35vh #ffffff,
-      27vw 45vh #ffffff,
-      29vw 55vh #ffffff,
-      31vw 65vh #ffffff,
-      33vw 75vh #ffffff,
-      35vw 85vh #ffffff,
-      37vw 95vh #ffffff,
-      39vw 5vh #ffffff,
-      41vw 15vh #ffffff,
-      43vw 25vh #ffffff,
-      45vw 35vh #ffffff,
-      47vw 45vh #ffffff,
-      49vw 55vh #ffffff,
-      51vw 65vh #ffffff,
-      53vw 75vh #ffffff,
-      55vw 85vh #ffffff,
-      57vw 95vh #ffffff,
-      59vw 5vh #ffffff,
-      61vw 15vh #ffffff,
-      63vw 25vh #ffffff,
-      65vw 35vh #ffffff,
-      67vw 45vh #ffffff,
-      69vw 55vh #ffffff,
-      71vw 65vh #ffffff,
-      73vw 75vh #ffffff,
-      75vw 85vh #ffffff,
-      77vw 95vh #ffffff,
-      79vw 5vh #ffffff,
-      81vw 15vh #ffffff,
-      83vw 25vh #ffffff,
-      85vw 35vh #ffffff,
-      87vw 45vh #ffffff,
-      89vw 55vh #ffffff,
-      91vw 65vh #ffffff,
-      93vw 75vh #ffffff,
-      95vw 85vh #ffffff,
-      97vw 95vh #ffffff,
-      99vw 5vh #ffffff;
-
-    animation: animStar 150s linear infinite;
-  }
-
-  .stars:after {
-    content: ' ';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 1px;
-    background: transparent;
-    box-shadow:
-      /* Additional stars */
-      2vw 12vh #ffffff,
-      4vw 22vh #ffffff,
-      6vw 32vh #ffffff,
-      8vw 42vh #ffffff,
-      10vw 52vh #ffffff,
-      12vw 62vh #ffffff,
-      14vw 72vh #ffffff,
-      16vw 82vh #ffffff,
-      18vw 92vh #ffffff,
-      20vw 2vh #ffffff,
-      22vw 12vh #ffffff,
-      24vw 22vh #ffffff,
-      26vw 32vh #ffffff,
-      28vw 42vh #ffffff,
-      30vw 52vh #ffffff,
-      32vw 62vh #ffffff,
-      34vw 72vh #ffffff,
-      36vw 82vh #ffffff,
-      38vw 92vh #ffffff,
-      40vw 2vh #ffffff,
-      42vw 12vh #ffffff,
-      44vw 22vh #ffffff,
-      46vw 32vh #ffffff,
-      48vw 42vh #ffffff,
-      50vw 52vh #ffffff,
-      52vw 62vh #ffffff,
-      54vw 72vh #ffffff,
-      56vw 82vh #ffffff,
-      58vw 92vh #ffffff,
-      60vw 2vh #ffffff,
-      62vw 12vh #ffffff,
-      64vw 22vh #ffffff,
-      66vw 32vh #ffffff,
-      68vw 42vh #ffffff,
-      70vw 52vh #ffffff,
-      72vw 62vh #ffffff,
-      74vw 72vh #ffffff,
-      76vw 82vh #ffffff,
-      78vw 92vh #ffffff,
-      80vw 2vh #ffffff;
-
-    animation: animStar 200s linear infinite;
-  }
-
-  @keyframes animStar {
-    from {
-      transform: translateY(0px);
-    }
-    to {
-      transform: translateY(-2000px);
-    }
-  }
-
-  /* Planets */
-  .planet {
-    position: absolute;
-    border-radius: 50%;
-    animation: ${planetMove} infinite linear;
-  }
-
-  .planet1 {
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle at 30% 30%, #ffcc00, #cc9900);
-    top: 20%;
-    left: -10%;
-    animation-duration: 100s;
-  }
-
-  .planet2 {
-    width: 80px;
-    height: 80px;
-    background: radial-gradient(circle at 30% 30%, #00ccff, #0066cc);
-    top: 60%;
-    left: -15%;
-    animation-duration: 120s;
-    animation-delay: 30s;
-  }
-
-  /* Rocket */
-  .rocket {
-    position: absolute;
-    width: 60px;
-    height: 120px;
-    bottom: -20%; /* Start from below the screen */
-    left: ${({ rocketPosition }) => rocketPosition}%;
-    transform: translateX(-50%);
-    animation: ${rocketFly} 15s linear infinite;
-    z-index: 2;
-  }
-
-  .rocket-body {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, #e6e6e6, #bfbfbf);
-    border-radius: 30px;
-    overflow: hidden;
-    border: 2px solid #999999;
-  }
-
-  .nose-cone {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 0;
-    border-left: 30px solid transparent;
-    border-right: 30px solid transparent;
-    border-bottom: 20px solid #e6e6e6;
-  }
-
-  .window {
-    position: absolute;
-    top: 25%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 20px;
-    background: #1a73e8;
-    border-radius: 50%;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.3);
-    border: 2px solid #ffffff;
-  }
-
-  .fin {
-    position: absolute;
-    bottom: 0;
-    width: 50%;
-    height: 30px;
-    background: #ff4d4d;
-    border-radius: 0 0 10px 10px;
-  }
-
-  .fin-left {
-    left: 0;
-    transform: rotate(-45deg);
-    transform-origin: top left;
-  }
-
-  .fin-right {
-    right: 0;
-    transform: rotate(45deg);
-    transform-origin: top right;
-  }
-
-  .fire {
-    position: absolute;
-    bottom: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 50px;
-    background: radial-gradient(circle at 50% 0%, #ff8c00, rgba(255, 140, 0, 0));
-    border-radius: 50%;
-    animation: fire 0.5s infinite;
-  }
-
-  @keyframes fire {
-    0% {
-      height: 40px;
-      opacity: 1;
-    }
-    100% {
-      height: 50px;
-      opacity: 0;
-    }
-  }
 `;
+
+const Stars = ({ count = 100 }) => {
+  const starsArray = Array.from({ length: count }, (_, i) => ({
+    id: i,
+    size: Math.random() * 2 + 1, // Size between 1px and 3px
+    top: Math.random() * 100, // Position between 0% and 100%
+    left: Math.random() * 100,
+    delay: Math.random() * 5, // Twinkle delay between 0s and 5s
+  }));
+
+  return (
+    <StarsBackground>
+      {starsArray.map((star) => (
+        <Star
+          key={star.id}
+          size={star.size}
+          top={star.top}
+          left={star.left}
+          delay={star.delay}
+        />
+      ))}
+    </StarsBackground>
+  );
+};
 
 // Hero Section without Background Image
 const HeroSection = styled.section`
@@ -416,6 +200,7 @@ const ScrollDownButton = styled(motion.div)`
     font-size: 2rem;
   }
 `;
+
 // Plugin Showcase
 const PluginSection = styled.section`
   padding: 100px 80px;
@@ -1201,29 +986,7 @@ const PluginList = () => {
   const [selectedPlugin, setSelectedPlugin] = useState(null);
   const [activeFAQ, setActiveFAQ] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [theme] = useState('dark');
-
-  // State for rocket position
-  const [rocketPosition, setRocketPosition] = useState(50);
-
-  // Function to generate random rocket position
-  const generateRandomPosition = () => {
-    const min = 10;
-    const max = 90;
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  };
-
-  useEffect(() => {
-    // Set initial random position
-    setRocketPosition(generateRandomPosition());
-
-    // Set interval to update rocket position after each animation cycle
-    const interval = setInterval(() => {
-      setRocketPosition(generateRandomPosition());
-    }, 15000); // Match the duration of the rocketFly animation (15s)
-
-    return () => clearInterval(interval);
-  }, []);
+  const [theme] = useState('dark'); // Change to 'light' if needed
 
   // Slider settings for testimonials
   const sliderSettings = {
@@ -1290,22 +1053,17 @@ const PluginList = () => {
         <GlobalStyle>
           {/* Hero Section */}
           <HeroSection>
-            {/* Stars and Planets Background */}
-            <StarsBackground rocketPosition={rocketPosition}>
-              <div className="stars"></div>
-              <div className="planet planet1"></div>
-              <div className="planet planet2"></div>
-              {/* Rocket */}
-              <div className="rocket">
-                <div className="rocket-body">
-                  <div className="nose-cone"></div>
-                  <div className="window"></div>
-                  <div className="fin fin-left"></div>
-                  <div className="fin fin-right"></div>
-                </div>
-                <div className="fire"></div>
-              </div>
-            </StarsBackground>
+            {/* Stars Background */}
+            <Stars count={150} />
+
+            {/* Astronaut */}
+            <Astronaut />
+
+            {/* Optional: Add more Astronauts */}
+            {/* <Astronaut style={{ top: '30%', left: '20%' }} />
+            <Astronaut style={{ top: '70%', left: '80%' }} />
+            <Astronaut style={{ top: '50%', left: '50%' }} /> */}
+
             <HeroContent>
               <Parallax y={[-20, 20]} tagOuter="div">
                 <HeroTitle
@@ -1344,7 +1102,6 @@ const PluginList = () => {
               </ScrollDownButton>
             </HeroContent>
           </HeroSection>
-
 
           {/* Plugin Showcase */}
           <PluginSection id="plugins">
