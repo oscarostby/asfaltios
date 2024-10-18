@@ -34,7 +34,7 @@ const ChatbotContainer = () => {
     <ChatbotWrapper>
       <ChatbotSection>
         <ChatbotIframe
-          src="https://aspa-ai.vercel.app/"
+          src="https://asfaltios-bot.vercel.app/"
           title="Chatbot"
           allowTransparency="true"
         />
