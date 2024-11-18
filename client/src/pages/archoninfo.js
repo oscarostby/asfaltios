@@ -269,7 +269,7 @@ const ArchonInfo = () => {
               <li>⚡ <GlitchText>Advanced game administration tools</GlitchText></li>
               <li>🌐 <GlitchText>World management and editing capabilities</GlitchText></li>
               <li>🎨 <GlitchText>User-friendly graphical interface</GlitchText></li>
-              <li>🛠️ <GlitchText>Support for Minecraft versions 1.20 - 1.21</GlitchText></li>
+              <li>🛠️ <GlitchText>Support for Minecraft versions 1.20 - 1.23</GlitchText></li>
               <li>🔧 <GlitchText>Extensive customization options</GlitchText></li>
               <li>📈 <GlitchText>Real-time server monitoring</GlitchText></li>
               <li>🔌 <GlitchText>Integrated plugin support</GlitchText></li>
