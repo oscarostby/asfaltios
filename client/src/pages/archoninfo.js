@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import smileGif from '../bilder/smile.gif'; // Import first GIF
 import glitchGif from '../bilder/afglitch.gif'; // Import second GIF
-import logoImage from '../bilder/logo.png'; // Import your logo image
+import logoImage from '../bilder/logoA.png'; // Import your logo image
 
 const Container = styled.div`
   padding-top: 200px;
