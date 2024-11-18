@@ -1,8 +1,5 @@
-// App.js
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-// Importer sidene
 import Home from './pages/main';
 import PluginsList from './pages/PluginsList';
 import Login from './pages/login';
@@ -15,7 +12,6 @@ import SimpleGoldInfo from './pages/simplegoldinfo';
 import StaffPage from './pages/staffpage';
 import UserIdPage from './pages/UserIdPage';
 import NotFound from './pages/NotFound';
-import ArchonInfo from './pages/archoninfo'; // Legg til ArchonInfo-siden
 import Header from './components/header';
 import ChatbotIframe from './components/ChatbotIframe'; // Juster stien hvis nødvendig
 
@@ -36,13 +32,10 @@ function App() {
         <Route path="/staffpage" element={<StaffPage />} />
         <Route path="/adtest" element={<UserIdPage />} />
 
-        {/* Legg til ArchonInfo-ruten */}
-        <Route path="/ArchonInfo" element={<ArchonInfo />} />
-
-        {/* Chatbot-rute */}
+        {/* Chatbot route */}
         <Route path="/chatbot" element={<ChatbotIframe />} />
 
-        {/* 404-rute, alltid plassert på slutten */}
+        {/* 404 route, alltid plassert på slutten */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
