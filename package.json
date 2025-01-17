@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "@barba/core": "^2.10.3",
+    "@react-spring/parallax": "^9.7.5",
+    "@studio-freight/lenis": "^1.0.42",
+    "framer-motion": "^11.11.9",
+    "gsap": "^3.12.5",
+    "react-spring": "^9.7.4",
+    "styled-components": "^6.1.13",
+    "three": "^0.169.0"
+  }
+}
